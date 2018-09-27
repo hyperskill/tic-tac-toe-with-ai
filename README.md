@@ -2,4 +2,4 @@
 
 Project: Tic-Tac-Toe with AI
 
-Create the *src* directory and put your *.java* file(s) in it.
+Go to the *src* directory, change *Main.java* and put your *.java* file(s) in it.
