@@ -2,8 +2,7 @@ package ticTacToe;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("X O X ");
-        System.out.println("O X O ");
-        System.out.println("X X O ");
+    	 char[] field = {'0', ' ', ' ', ' ', '0', '\n', 'X', ' ', 'X', ' ', '0', '\n', ' ', ' ', 'X', ' ', 'X' };
+	     System.out.println(field);
     }
 }
