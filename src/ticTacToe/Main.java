@@ -2,8 +2,13 @@ package ticTacToe;
 import java.util.*;
 public class TicTacToe {
      System.out.print("Welcome Tic-Tac-Toe");
-     static String[] board;
-     board = new String[9];
+	static Scanner in;
+	static String[] board;
+	static String turn;
+	in = new Scanner(System.in);
+	board = new String[9];
+	turn = "X";
+	String winner = null;
     Random generator = new Random();
     public static void main(String[] args) {
        for (int i=0;i<9;i++)
@@ -80,5 +85,14 @@ public class TicTacToe {
 			else if (a == 8) return "Draw";
 		}
 		return null;
+	}
+	static void printBoard() {
+		System.out.println("/---|---|---\\");
+		System.out.println("| " + board[0] + " | " + board[1] + " | " + board[2] + " |");
+		System.out.println("|-----------|");
+		System.out.println("| " + board[3] + " | " + board[4] + " | " + board[5] + " |");
+		System.out.println("|-----------|");
+		System.out.println("| " + board[6] + " | " + board[7] + " | " + board[8] + " |");
+		System.out.println("/---|---|---\\");
 	}
 }
