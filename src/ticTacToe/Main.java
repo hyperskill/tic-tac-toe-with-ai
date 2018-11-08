@@ -1,5 +1,6 @@
 package ticTacToe;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -68,11 +69,26 @@ public class Main {
         };
         printGamesState(field);
 //        checkGameState(field);
-        System.out.print("Enter the coordinates: ");
-        Scanner scanner = new Scanner(System.in);
-        int x = scanner.nextInt();
-        int y = scanner.nextInt();
-        field[y-1][x-1] = 'X';
+
+        while (true) {
+            System.out.print("Enter the coordinates: ");
+            Scanner scanner = new Scanner(System.in);
+            try {
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+
+                if (x > 3 || y > 3 || x < 1 || y < 1) {
+                    System.out.println("Coordinates should be from 1 to 3!");
+                } else if (field[y - 1][x - 1] != ' ') {
+                    System.out.println("This cell is occupied! Choose another one!");
+                } else {
+                    field[y - 1][x - 1] = 'X';
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("You should enter numbers!on");
+            }
+        }
         printGamesState(field);
     }
 }
