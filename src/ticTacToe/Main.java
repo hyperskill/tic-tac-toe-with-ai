@@ -1,12 +1,9 @@
 package ticTacToe;
 
+import java.util.Scanner;
+
 public class Main {
-    public static void main(String[] args) {
-        char[][] field = new char[][] {
-            {'O', 'X', 'O'},
-            {'O', 'X', 'X'},
-            {'O', 'O', 'X'}
-        };
+    private static void checkGameState(char[][] field) {
         int[][][] rows = {
                 {{0, 0}, {1, 1}, {2, 2}},
                 {{0, 2}, {1, 1}, {2, 0}},
@@ -53,5 +50,29 @@ public class Main {
                 System.out.println("Draw");
             }
         }
+    }
+
+    private static void printGamesState(char[][] field) {
+        System.out.println(" ------- ");
+        System.out.println(new char[] {'|', ' ', field[2][0], ' ', field[2][1], ' ', field[2][2], ' ','|'});
+        System.out.println(new char[] {'|', ' ', field[1][0], ' ', field[1][1], ' ', field[1][2], ' ','|'});
+        System.out.println(new char[] {'|', ' ', field[0][0], ' ', field[0][1], ' ', field[0][2], ' ','|'});
+        System.out.println(" ------- ");
+    }
+
+    public static void main(String[] args) {
+        char[][] field = new char[][] {
+            {'O', 'X', 'O'},
+            {' ', 'X', 'X'},
+            {' ', 'O', 'X'}
+        };
+        printGamesState(field);
+//        checkGameState(field);
+        System.out.print("Enter the coordinates: ");
+        Scanner scanner = new Scanner(System.in);
+        int x = scanner.nextInt();
+        int y = scanner.nextInt();
+        field[y-1][x-1] = 'X';
+        printGamesState(field);
     }
 }
