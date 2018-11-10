@@ -1,6 +1,7 @@
 package ticTacToe;
 
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -61,18 +62,11 @@ public class Main {
         System.out.println(" ------- ");
     }
 
-    public static void main(String[] args) {
-        char[][] field = new char[][] {
-            {'O', 'X', 'O'},
-            {' ', 'X', 'X'},
-            {' ', 'O', 'X'}
-        };
-        printGamesState(field);
-//        checkGameState(field);
-
+    private static void userMove(char[][] field) {
         while (true) {
             System.out.print("Enter the coordinates: ");
             Scanner scanner = new Scanner(System.in);
+
             try {
                 int x = scanner.nextInt();
                 int y = scanner.nextInt();
@@ -89,6 +83,36 @@ public class Main {
                 System.out.println("You should enter numbers!on");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        char[][] field = new char[][] {
+            {'O', 'X', 'O'},
+            {' ', 'X', 'X'},
+            {' ', 'O', 'X'}
+        };
         printGamesState(field);
+        makeEasyLevelMove(field);
+        printGamesState(field);
+//        checkGameState(field);
+//        userMove(field)
+    }
+
+    private static void makeEasyLevelMove(char[][] field) {
+        System.out.println("Making move level \"easy\"");
+        int c = 0;
+        int[][] freeCells = new int[9][2];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (field[i][j] == ' ') {
+                    freeCells[c] = new int[] {i, j};
+                    c++;
+                }
+            }
+        }
+        if (c > 0) {
+            int move = new Random().nextInt(c);
+            field[freeCells[move][0]][freeCells[move][1]] = 'X';
+        }
     }
 }
