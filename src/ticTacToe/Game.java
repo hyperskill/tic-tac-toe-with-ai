@@ -10,29 +10,74 @@ public class Game {
 
         printFightField(fightField);
 
-        String[] parametersAsStrings;
-        System.out.println("Enter the coordinates:");
-        Scanner scannerInput = new Scanner(System.in);
-        String parameters = scannerInput.nextLine();
-        parametersAsStrings = parameters.split(" ");
-
+        String[] parametersAsStrings = new String[0];
+        do {
+            System.out.println("Enter the coordinates (like 1 3):");
+            Scanner scannerInput = new Scanner(System.in);
+            String parameters = scannerInput.nextLine();
+            if(!inputIsValid(parameters))continue;
+            parametersAsStrings = parameters.split(" ");
+        }
+        while (parametersAsStrings.length < 2);
         int rowId = Integer.parseInt(parametersAsStrings[0]);
         int colId = Integer.parseInt(parametersAsStrings[1]);
 
-        setFightFieldValue(rowId, colId, fightField);
+        setFightFieldValue(rowId, colId);
 
         printFightField(fightField);
 
 
     }
 
-    private void setFightFieldValue(int row, int col, Matrix3d fightField) {
+    private boolean inputIsValid(String parameters) {
+
+        String [] parametersAsStrings = parameters.split(" ");
+
+        if (parametersAsStrings.length == 0 || parametersAsStrings.length!=2) {
+            System.out.println("You should enter 2 numbers splitted by space!");
+            return false;
+        }
+
+        int rowId;
+        int colId;
+
+        try{
+             rowId = Integer.parseInt(parametersAsStrings[0]);
+             colId = Integer.parseInt(parametersAsStrings[1]);
+        }catch (NumberFormatException e) {
+            System.out.println("You should enter numbers!");
+            return false;
+        }
+
+        if (rowId>Matrix3d.getDIMENSION() || colId>Matrix3d.getDIMENSION() || rowId<=0 || colId<=0){
+            System.out.println("Coordinates should be from 1 to 3!");
+            return false;
+        }
+
+        if(!getFightFieldValue(rowId, colId).equals(" ")){
+            System.out.println("This cell is occupied! Choose another one!");
+            return false;
+        }
+        return true;
+
+    }
+
+    private void setFightFieldValue(int row, int col) {
         //convert user input in digital system starts with 0
         row--;
         col--;
         //reverse original coordination to the down to up
         row = Matrix3d.getDIMENSION() - 1 - row;
         fightField.set(row, col, player);
+    }
+
+    private String getFightFieldValue(int row, int col) {
+        //convert user input in digital system starts with 0
+        row--;
+        col--;
+        //reverse original coordination to the down to up
+        row = Matrix3d.getDIMENSION() - 1 - row;
+        return fightField.get(row, col);
     }
 
     private void printFightField(Matrix3d fightField) {

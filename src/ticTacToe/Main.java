@@ -55,7 +55,7 @@ public class Main {
 //        System.out.println(Game.getState(fightDemo5Matrix));
 
         Game game = new Game();
-        game.makeTurn();
+            game.makeTurn();
 
     }
 
