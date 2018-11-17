@@ -12,9 +12,11 @@ public class Matrix3d {
         return values[i * DIMENSION + j];
     }
 
-    String[] set(final int i, final int j, final String val) {
+    void set(final int i, final int j, final String val) {
         values[i * DIMENSION + j] = val;
-        return values;
+    }
+
+    Matrix3d() {
     }
 
     Matrix3d(String[] matrixInStringArr) {
