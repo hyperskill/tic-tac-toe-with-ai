@@ -1,5 +1,6 @@
-package ticTacToe;
+package ticTacToe.utils;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Matrix3d {
@@ -8,33 +9,34 @@ public class Matrix3d {
     private final static String[] proto = new String[DIMENSION * DIMENSION];
     private String[] values = Collections.nCopies(DIMENSION * DIMENSION, " ").toArray(proto);
 
-    String get(int i, int j) {
+    public String get(int i, int j) {
         return values[i * DIMENSION + j];
     }
 
-    void set(final int i, final int j, final String val) {
+    public void set(final int i, final String val) {
+        values[i] = val;
+    }
+
+    public void set(final int i, final int j, final String val) {
         values[i * DIMENSION + j] = val;
     }
 
-    Matrix3d() {
+    public Matrix3d() {
     }
 
-    Matrix3d(String[] matrixInStringArr) {
-        values = matrixInStringArr;
-    }
-
-    static int getDIMENSION() {
+    public static int getDIMENSION() {
         return DIMENSION;
     }
 
-    String[] getValues() {
+    public String[] getValues() {
         return values;
     }
 
-    enum DiagonalType {
+    public enum DiagonalType {
         POSITIVE, NEGATIVE
     }
-    String[] getDiagonal(DiagonalType type) {
+
+    public String[] getDiagonal(DiagonalType type) {
 
         String[] values = new String[DIMENSION];
 
@@ -55,7 +57,7 @@ public class Matrix3d {
         }
     }
 
-    String[] getRow(int i) {
+    public String[] getRow(int i) {
         String[] rowElements = new String[DIMENSION];
         for (int j = 0; j < DIMENSION; j++) {
             rowElements[j] = get(i, j);
@@ -63,7 +65,7 @@ public class Matrix3d {
         return rowElements;
     }
 
-    String[] getColon(int i) {
+    public String[] getColon(int i) {
         String[] rowElements = new String[DIMENSION];
         for (int j = 0; j < DIMENSION; j++) {
             rowElements[j] = get(j, i);

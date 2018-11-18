@@ -1,4 +1,4 @@
-package ticTacToe;
+package ticTacToe.enums;
 
 public enum State {
     NOT_FINISHED, DRAW, X_WIN, O_WIN;
