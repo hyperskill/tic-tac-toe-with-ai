@@ -32,6 +32,8 @@ public class EasyPlayer implements Player {
         if (free.size() == 0 )
             throw new TicTakToeException("Failed to make turn: empty list of free cells");
 
+        System.out.println("Making move level \"easy\"");
+
         fightField.set(free.get(0), playerSign);
 
 

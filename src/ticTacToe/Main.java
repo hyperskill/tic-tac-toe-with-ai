@@ -7,7 +7,6 @@ public class Main {
         do {
             Game game = new Game();
             game.makeTurn();
-            System.out.println("New round");
         }while (true);
 
     }

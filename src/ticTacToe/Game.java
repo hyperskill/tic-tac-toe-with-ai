@@ -18,14 +18,13 @@ public class Game {
     public Game() {
         computer = new EasyPlayer("O");
         human = new HumanPlayer("X");
-        current = computer;
+        current = human;
+        printFightField(fightField);
     }
 
     public void makeTurn() {
 
         while (gameState==State.NOT_FINISHED) {
-            printFightField(fightField);
-            System.out.println("Now is " + current.getPlayerSign()+ " turn");
             current.makeTurn(fightField);
             printFightField(fightField);
             gameState = getState(fightField);
