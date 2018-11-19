@@ -6,14 +6,11 @@ import java.util.Scanner;
 
 public class HumanPlayer implements Player {
 
-    private final String playerSign;
+    private String playerSign;
 
-    public String getPlayerSign() {
-        return playerSign;
-    }
-
-    public HumanPlayer(String ps) {
-        playerSign = ps;
+    @Override
+    public void setPlayerSign(String sign) {
+        playerSign = sign;
     }
 
     @Override

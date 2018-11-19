@@ -10,15 +10,20 @@ import java.util.*;
 
 public class Game {
     private final Matrix3d fightField = new Matrix3d();
-    private final Player computer;
-    private final Player human;
+    private final Player secondPlayer;
+    private final Player firstPlayer;
     private Player current;
     private State gameState = State.NOT_FINISHED;
 
-    public Game() {
-        computer = new EasyPlayer("O");
-        human = new HumanPlayer("X");
-        current = human;
+    public Game(Player first,Player second) {
+        firstPlayer = first;
+        secondPlayer = second;
+
+        firstPlayer.setPlayerSign("X");
+        secondPlayer.setPlayerSign("O");
+
+        current = firstPlayer;
+
         printFightField(fightField);
     }
 
@@ -35,10 +40,10 @@ public class Game {
     }
 
     private Player switchCurrentPlayer(final Player current) {
-        if (current == human)
-            return computer;
+        if (current == firstPlayer)
+            return secondPlayer;
         else
-            return human;
+            return firstPlayer;
     }
 
     private void printFightField(Matrix3d fightField) {

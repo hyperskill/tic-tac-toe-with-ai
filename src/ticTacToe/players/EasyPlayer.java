@@ -8,15 +8,12 @@ import java.util.*;
 
 public class EasyPlayer implements Player {
 
-    public String getPlayerSign() {
-        return playerSign;
+    @Override
+    public void setPlayerSign(String sign) {
+        playerSign = sign;
     }
 
-    private final String playerSign;
-
-    public EasyPlayer(String ps) {
-        playerSign = ps;
-    }
+    private String playerSign;
 
     @Override
     public void makeTurn(Matrix3d fightField) {
