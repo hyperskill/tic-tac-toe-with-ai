@@ -1,19 +1,17 @@
 package ticTacToe.players;
 
 
+import ticTacToe.enums.PlayerSign;
 import ticTacToe.utils.Matrix3d;
 import ticTacToe.exceptions.TicTakToeException;
 
 import java.util.*;
 
-public class EasyPlayer implements Player {
+public class EasyPlayer extends AbstractPlayer implements Player {
 
-    @Override
-    public void setPlayerSign(String sign) {
-        playerSign = sign;
+    public EasyPlayer(PlayerSign playerSign){
+        super(playerSign);
     }
-
-    private String playerSign;
 
     @Override
     public void makeTurn(Matrix3d fightField) {
@@ -31,7 +29,7 @@ public class EasyPlayer implements Player {
 
         System.out.println("Making move level \"easy\"");
 
-        fightField.set(free.get(0), playerSign);
+        fightField.set(free.get(0), playerSign.toString());
 
 
     }

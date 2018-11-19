@@ -1,16 +1,15 @@
 package ticTacToe.players;
 
+import ticTacToe.enums.PlayerSign;
 import ticTacToe.utils.Matrix3d;
 
 import java.util.Scanner;
 
-public class HumanPlayer implements Player {
+public class HumanPlayer extends AbstractPlayer implements Player {
 
-    private String playerSign;
 
-    @Override
-    public void setPlayerSign(String sign) {
-        playerSign = sign;
+    public HumanPlayer(PlayerSign playerSign) {
+        super(playerSign);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class HumanPlayer implements Player {
         col--;
         //reverse original coordination to the down to up
         row = Matrix3d.getDIMENSION() - 1 - row;
-        fightField.set(row, col, playerSign);
+        fightField.set(row, col, playerSign.toString());
     }
 
     private String getFightFieldValue(int row, int col, Matrix3d fightField) {

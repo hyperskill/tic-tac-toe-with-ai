@@ -1,15 +1,17 @@
 package ticTacToe.players;
 
 
-public class PlayersFactory {
-    PlayersFactory(){}
+import ticTacToe.enums.PlayerSign;
 
-    public static Player getPlayer(String type) {
+public class PlayersFactory {
+    public static Player getPlayer(String type, PlayerSign sign) {
         switch (type){
             case "human":
-                return new HumanPlayer();
+                return new HumanPlayer(sign);
             case "easy":
-                return new EasyPlayer();
+                return new EasyPlayer(sign);
+            case "medium":
+                return new MediumPlayer(sign);
                 default:
                     return null;
         }

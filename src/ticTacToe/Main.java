@@ -5,12 +5,15 @@ import ticTacToe.players.PlayersFactory;
 
 import java.util.Scanner;
 
+import static ticTacToe.enums.PlayerSign.O;
+import static ticTacToe.enums.PlayerSign.X;
+
 public class Main {
 
     public static void main(String[] args) {
 
         while (true) {
-            System.out.println("Input comand:");
+            System.out.println("Input command:");
             Scanner scanner = new Scanner(System.in);
             String cmd = scanner.nextLine();
 
@@ -22,8 +25,8 @@ public class Main {
             if (cmds[0].equals("exit")) return;
             if (cmds[0].equals("start") && cmds.length < 3) continue;
 
-            Player first = PlayersFactory.getPlayer(cmds[1]);
-            Player second = PlayersFactory.getPlayer(cmds[2]);
+            Player first = PlayersFactory.getPlayer(cmds[1], X);
+            Player second = PlayersFactory.getPlayer(cmds[2], O);
 
             if (first == null || second == null) continue;
 

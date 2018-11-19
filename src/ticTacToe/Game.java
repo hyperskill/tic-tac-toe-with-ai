@@ -1,8 +1,6 @@
 package ticTacToe;
 
 import ticTacToe.enums.State;
-import ticTacToe.players.EasyPlayer;
-import ticTacToe.players.HumanPlayer;
 import ticTacToe.players.Player;
 import ticTacToe.utils.Matrix3d;
 
@@ -18,12 +16,7 @@ public class Game {
     public Game(Player first,Player second) {
         firstPlayer = first;
         secondPlayer = second;
-
-        firstPlayer.setPlayerSign("X");
-        secondPlayer.setPlayerSign("O");
-
         current = firstPlayer;
-
         printFightField(fightField);
     }
 

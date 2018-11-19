@@ -4,5 +4,4 @@ import ticTacToe.utils.Matrix3d;
 
 public interface Player {
      void makeTurn(Matrix3d fightField);
-     void setPlayerSign(String sign) ;
 }
