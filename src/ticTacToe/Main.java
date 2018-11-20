@@ -7,32 +7,97 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static Scanner scn = new Scanner(System.in);
-    public static char userSymbol;
-    public static boolean game = true;
-    public static char[][] fields = {
+    private Scanner scn = new Scanner(System.in);
+    private char[][] fields = {
             {' ', ' ', ' '},
             {' ', ' ', ' '},
             {' ', ' ', ' '}
     };
+    private char userSymbol;
+    private String resultOfGame = "";
+    private boolean game = true;
 
     public static void main(String[] args) {
-        System.out.print("Enter ur symbol (X or O)");
-        userSymbol = scn.next().charAt(0);
-        String winner = "";
-        while (game) {
-            showFields(fields);
-            enterCoords(fields);
-            winner = checkWinner(fields);
-            if (game) {
-                enterCoordsBot(fields);
-            }
-            showFields(fields);
-        }
-        System.out.println(winner);
+        Main main = new Main();
+        main.startGame();
     }
 
-    public static void enterCoordsBot(char[][] fields) {
+    public void startGame() {
+        System.out.print("Enter ur symbol (X or O): ");
+        userSymbol = scn.next().charAt(0);
+        while (true) {
+            printFields();
+            inputCoords();
+            if (checkWinner()) {
+                break;
+            }
+            inputCoordsBot();
+            if (checkWinner()) {
+                break;
+            }
+            printFields();
+        }
+        printFields();
+        System.out.println(resultOfGame);
+    }
+
+    public boolean checkWinner() {
+        boolean draw = true;
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields.length; j++) {
+                if (fields[i][j] == ' ') {
+                    draw = false;
+                    break;
+                }
+            }
+        }
+        if (draw) {
+            resultOfGame = "Draw";
+        }
+        for (int i = 0; i < fields.length; i++) {
+            if (checkFields(fields[0][i], fields[1][i], fields[2][i])) {
+                return winner(fields[0][i]);
+            } else if (checkFields(fields[i][0], fields[i][1], fields[i][2])) {
+                return winner(fields[i][0]);
+            } else if (checkFields(fields[1][1], fields[0][0], fields[2][2])) {
+                return winner(fields[1][1]);
+            } else if (checkFields(fields[0][2], fields[0][0], fields[2][0])) {
+                return winner(fields[1][1]);
+            }
+        }
+        return false;
+    }
+
+    private boolean winner(char c) {
+        if (c != ' ') {
+            resultOfGame = c + " wins";
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkFields(char... fields) {
+        for (int i = 1; i < fields.length; i++) {
+            if ((fields[i - 1] != fields[i]) && (fields[i - 1] != ' ' || fields[i] != ' ')) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void printFields() {
+        System.out.println("---------");
+        for (char[] ch : fields) {
+            System.out.print("| ");
+            for (char c : ch) {
+                System.out.print(c + " ");
+            }
+            System.out.println(" |");
+        }
+        System.out.println("---------");
+    }
+
+    public void inputCoordsBot() {
         Random r = new Random();
         while (true) {
             int xR = r.nextInt(3);
@@ -48,67 +113,33 @@ public class Main {
         }
     }
 
-    public static void enterCoords(char[][] fields) {
-        System.out.print("Enter the coordinates: ");
-        while (true) {
-            int x = scn.nextInt();
-            int y = scn.nextInt();
-            if (fields[x][y] == ' ') {
-                fields[x][y] = userSymbol;
-                break;
-            } else {
-                System.out.println("Enter other coords");
-            }
-        }
-    }
-
-    public static String checkWinner(char[][] fields) {
-        String resultOfGame = "";
-        boolean draw = true;
-        for (int i = 0; i < fields.length; i++) {
-            for (int j = 0; j < fields.length; j++) {
-                if (fields[i][j] != ' ') {
-                    draw = false;
+    public void inputCoords() {
+        boolean read = true;
+        int x = -1;
+        int y = -1;
+        while (read) {
+            System.out.print("Enter the coordinates: ");
+            if (scn.hasNextInt()) {
+                x = scn.nextInt();
+                if (scn.hasNextInt()) {
+                    y = scn.nextInt();
+                } else {
+                    System.out.println("You should enter numbers!");
                 }
+                if (x >= 0 && x <= 2 && y >= 0 && y <= 2) {
+                    if (fields[x][y] == ' ') {
+                        fields[x][y] = userSymbol;
+                        read = false;
+                    } else {
+                        System.out.println("This cell is occupied! Choose another one!");
+                    }
+                } else {
+                    System.out.println("Coordinates should be from 0 to 2!");
+                }
+            } else {
+                System.out.println("You should enter numbers!");
+                scn = new Scanner(System.in);
             }
         }
-        if (draw) {
-            game = false;
-            resultOfGame = "Draw";
-        }
-        for (int i = 0; i < fields.length; i++) {
-            if (checkFields(fields[i][0], fields[i][1], fields[i][0]) ||
-                    checkFields(fields[0][i], fields[1][i], fields[2][i])) {
-                resultOfGame = fields[i][0] + " wins";
-                game = false;
-            }
-        }
-        if (checkFields(fields[0][0], fields[1][1], fields[2][2]) ||
-                checkFields(fields[0][2], fields[1][1], fields[2][0])) {
-            resultOfGame = fields[1][1] + " wins";
-            game = false;
-        }
-        return resultOfGame;
-    }
-
-    private static boolean checkFields(char... fields) {
-        for (int i = 1; i < fields.length; i++) {
-            if (fields[i - 1] != fields[i] || fields[i - 1] == ' ' && fields[i] == ' ') {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static void showFields(char[][] fields) {
-        System.out.println("---------");
-        for (int i = 0; i < fields.length; i++) {
-            System.out.print("| ");
-            for (int j = 0; j < fields.length; j++) {
-                System.out.print(fields[i][j] + " ");
-            }
-            System.out.println("|");
-        }
-        System.out.println("---------");
     }
 }
