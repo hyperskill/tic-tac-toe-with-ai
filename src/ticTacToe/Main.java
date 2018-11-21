@@ -1,7 +1,5 @@
 package ticTacToe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -16,6 +14,10 @@ public class Main {
     private char userSymbol;
     private String resultOfGame = "";
     private boolean game = true;
+    private enum level{
+        EASY, MEDIUM, HARD
+    };
+    private level levelGame;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -25,13 +27,22 @@ public class Main {
     public void startGame() {
         System.out.print("Enter ur symbol (X or O): ");
         userSymbol = scn.next().charAt(0);
+        System.out.println();
+        System.out.print("Enter ur level of game(easy, medium or hard: ");
+        levelGame = level.valueOf(scn.next().toUpperCase());
         while (true) {
             printFields();
             inputCoords();
             if (checkWinner()) {
                 break;
             }
-            inputCoordsBot();
+            switch (levelGame) {
+                case EASY:
+                    inputRandomCoordsBot();
+                    break;
+                default:
+                    return;
+            }
             if (checkWinner()) {
                 break;
             }
@@ -53,17 +64,19 @@ public class Main {
         }
         if (draw) {
             resultOfGame = "Draw";
+            return true;
         }
         for (int i = 0; i < fields.length; i++) {
             if (checkFields(fields[0][i], fields[1][i], fields[2][i])) {
                 return winner(fields[0][i]);
             } else if (checkFields(fields[i][0], fields[i][1], fields[i][2])) {
                 return winner(fields[i][0]);
-            } else if (checkFields(fields[1][1], fields[0][0], fields[2][2])) {
-                return winner(fields[1][1]);
-            } else if (checkFields(fields[0][2], fields[0][0], fields[2][0])) {
-                return winner(fields[1][1]);
             }
+        }
+        if (checkFields(fields[1][1], fields[0][0], fields[2][2])) {
+            return winner(fields[1][1]);
+        } else if (checkFields(fields[0][2], fields[1][1], fields[2][0])) {
+            return winner(fields[1][1]);
         }
         return false;
     }
@@ -92,12 +105,12 @@ public class Main {
             for (char c : ch) {
                 System.out.print(c + " ");
             }
-            System.out.println(" |");
+            System.out.println("|");
         }
         System.out.println("---------");
     }
 
-    public void inputCoordsBot() {
+    public void inputRandomCoordsBot() {
         Random r = new Random();
         while (true) {
             int xR = r.nextInt(3);
