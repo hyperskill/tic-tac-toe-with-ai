@@ -13,15 +13,6 @@ public class Main {
     };
     private char userMove = 'X';
     private String resultOfGame = "";
-    private boolean game = true;
-
-    private enum level {
-        EASY, MEDIUM, HARD
-    }
-
-    ;
-    private String firstPlayer;
-    private String secondPlayer;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -39,29 +30,19 @@ public class Main {
                 case "start":
                     while (true) {
                         printFields();
-                        switch (mainCmdArray[1]) {
-                            case "user":
-                                inputCoords();
-                                break;
-                            case "easy":
-                                inputRandomCoordsBot();
-                        }
+                        System.out.println("make move " + mainCmdArray[1]);
+                        makeMove(mainCmdArray[1]);
                         if (checkWinner()) {
                             break;
                         }
                         printFields();
-                        switch (mainCmdArray[2]) {
-                            case "user":
-                                inputCoords();
-                                break;
-                            case "easy":
-                                inputRandomCoordsBot();
-                        }
+                        System.out.println("make move " + mainCmdArray[2]);
+                        makeMove(mainCmdArray[2]);
                         if (checkWinner()) {
                             break;
                         }
                     }
-                    read = false;
+                    outputFinish();
                     break;
                 case "exit":
                     read = false;
@@ -70,11 +51,123 @@ public class Main {
                     break;
             }
         }
+    }
+
+    public void outputFinish() {
         printFields();
         System.out.println(resultOfGame);
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields.length; j++) {
+                fields[i][j] = ' ';
+            }
+        }
+    }
+
+    public void makeMove(String move) {
+        switch (move) {
+            case "user":
+                inputCoords();
+                break;
+            case "easy":
+                inputRandomCoordsBot();
+                break;
+            case "medium":
+                inputMediumCoordsBot();
+                break;
+        }
+    }
+
+    public void inputMediumCoordsBot() {
+        Random r = new Random();
+        boolean f = r.nextBoolean();
+        if (f) {
+            inputRandomCoordsBot();
+            return;
+        }
+        boolean ifMove = true;
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i][0] == fields[i][1] && fields[i][2] == ' ') {
+                setMove(i, 2);
+                ifMove = false;
+                break;
+            } else if (fields[i][1] == fields[i][2] && fields[i][0] == ' ') {
+                setMove(i, 0);
+                ifMove = false;
+                break;
+            } else if (fields[i][0] == fields[i][2] && fields[i][1] == ' ') {
+                setMove(i, 1);
+                ifMove = false;
+                break;
+            } else if (fields[0][i] == fields[1][i] && fields[2][i] == ' ') {
+                setMove(2, i);
+                ifMove = false;
+                break;
+            } else if (fields[1][i] == fields[2][i] && fields[0][i] == ' ') {
+                setMove(0, i);
+                ifMove = false;
+                break;
+            } else if (fields[0][i] == fields[2][i] && fields[1][i] == ' ') {
+                setMove(1, i);
+                ifMove = false;
+                break;
+            } else if (fields[0][0] == fields[1][1] && fields[2][2] == ' ') {
+                setMove(2, 2);
+                ifMove = false;
+                break;
+            } else if (fields[0][0] == fields[2][2] && fields[1][1] == ' ') {
+                setMove(1, 1);
+                ifMove = false;
+                break;
+            } else if (fields[1][1] == fields[2][2] && fields[0][0] == ' ') {
+                setMove(0, 0);
+                ifMove = false;
+                break;
+            } else if (fields[0][2] == fields[1][1] && fields[2][0] == ' ') {
+                setMove(2, 0);
+                ifMove = false;
+                break;
+            } else if (fields[0][2] == fields[2][0] && fields[1][1] == ' ') {
+                setMove(1, 1);
+                ifMove = false;
+                break;
+            } else if (fields[2][0] == fields[1][1] && fields[0][2] == ' ') {
+                setMove(0, 2);
+                ifMove = false;
+                break;
+            } else if (fields[1][1] == ' ') {
+                setMove(1,1);
+                ifMove = false;
+                break;
+            }
+        }
+        if (ifMove) {
+            inputRandomCoordsBot();
+        }
+    }
+
+    public void setMove(int x, int y) {
+        System.out.println(x + " " + y + " |" + userMove + "|");
+        fields[x][y] = userMove;
+        if (userMove == 'X') {
+            userMove = 'O';
+        } else if (userMove == 'O') {
+            userMove = 'X';
+        }
     }
 
     public boolean checkWinner() {
+        for (int i = 0; i < fields.length; i++) {
+            if (checkFields(fields[0][i], fields[1][i], fields[2][i])) {
+                return winner(fields[0][i]);
+            } else if (checkFields(fields[i][0], fields[i][1], fields[i][2])) {
+                return winner(fields[i][0]);
+            }
+        }
+        if (checkFields(fields[1][1], fields[0][0], fields[2][2])) {
+            return winner(fields[1][1]);
+        } else if (checkFields(fields[0][2], fields[1][1], fields[2][0])) {
+            return winner(fields[1][1]);
+        }
         boolean draw = true;
         for (int i = 0; i < fields.length; i++) {
             for (int j = 0; j < fields.length; j++) {
@@ -87,18 +180,6 @@ public class Main {
         if (draw) {
             resultOfGame = "Draw";
             return true;
-        }
-        for (int i = 0; i < fields.length; i++) {
-            if (checkFields(fields[0][i], fields[1][i], fields[2][i])) {
-                return winner(fields[0][i]);
-            } else if (checkFields(fields[i][0], fields[i][1], fields[i][2])) {
-                return winner(fields[i][0]);
-            }
-        }
-        if (checkFields(fields[1][1], fields[0][0], fields[2][2])) {
-            return winner(fields[1][1]);
-        } else if (checkFields(fields[0][2], fields[1][1], fields[2][0])) {
-            return winner(fields[1][1]);
         }
         return false;
     }
@@ -133,18 +214,12 @@ public class Main {
     }
 
     public void inputRandomCoordsBot() {
-        System.out.println("Making move level \"easy\"");
         Random r = new Random();
         while (true) {
             int xR = r.nextInt(3);
             int yR = r.nextInt(3);
             if (fields[xR][yR] == ' ') {
-                fields[xR][yR] = userMove;
-                if (userMove == 'X') {
-                    userMove = 'O';
-                } else if (userMove == 'O') {
-                    userMove = 'X';
-                }
+                setMove(xR, yR);
                 break;
             }
         }
@@ -165,12 +240,7 @@ public class Main {
                 }
                 if (x >= 0 && x <= 2 && y >= 0 && y <= 2) {
                     if (fields[x][y] == ' ') {
-                        fields[x][y] = userMove;
-                        if (userMove == 'X') {
-                            userMove = 'O';
-                        } else if (userMove == 'O') {
-                            userMove = 'X';
-                        }
+                        setMove(x, y);
                         read = false;
                     } else {
                         System.out.println("This cell is occupied! Choose another one!");
