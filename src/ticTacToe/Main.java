@@ -11,13 +11,17 @@ public class Main {
             {' ', ' ', ' '},
             {' ', ' ', ' '}
     };
-    private char userSymbol;
+    private char userMove = 'X';
     private String resultOfGame = "";
     private boolean game = true;
-    private enum level{
+
+    private enum level {
         EASY, MEDIUM, HARD
-    };
-    private level levelGame;
+    }
+
+    ;
+    private String firstPlayer;
+    private String secondPlayer;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -25,26 +29,45 @@ public class Main {
     }
 
     public void startGame() {
-        System.out.print("Enter ur symbol (X or O): ");
-        userSymbol = scn.next().charAt(0);
         System.out.println();
-        System.out.print("Enter ur level of game(easy, medium or hard: ");
-        levelGame = level.valueOf(scn.next().toUpperCase());
-        while (true) {
-            printFields();
-            inputCoords();
-            if (checkWinner()) {
-                break;
-            }
-            switch (levelGame) {
-                case EASY:
-                    inputRandomCoordsBot();
+        String mainCmd = "";
+        boolean read = true;
+        while (read) {
+            mainCmd = scn.nextLine();
+            String[] mainCmdArray = mainCmd.split(" ");
+            switch (mainCmdArray[0]) {
+                case "start":
+                    while (true) {
+                        printFields();
+                        switch (mainCmdArray[1]) {
+                            case "user":
+                                inputCoords();
+                                break;
+                            case "easy":
+                                inputRandomCoordsBot();
+                        }
+                        if (checkWinner()) {
+                            break;
+                        }
+                        printFields();
+                        switch (mainCmdArray[2]) {
+                            case "user":
+                                inputCoords();
+                                break;
+                            case "easy":
+                                inputRandomCoordsBot();
+                        }
+                        if (checkWinner()) {
+                            break;
+                        }
+                    }
+                    read = false;
+                    break;
+                case "exit":
+                    read = false;
                     break;
                 default:
-                    return;
-            }
-            if (checkWinner()) {
-                break;
+                    break;
             }
         }
         printFields();
@@ -116,10 +139,11 @@ public class Main {
             int xR = r.nextInt(3);
             int yR = r.nextInt(3);
             if (fields[xR][yR] == ' ') {
-                if (userSymbol == 'X') {
-                    fields[xR][yR] = 'O';
-                } else {
-                    fields[xR][yR] = 'X';
+                fields[xR][yR] = userMove;
+                if (userMove == 'X') {
+                    userMove = 'O';
+                } else if (userMove == 'O') {
+                    userMove = 'X';
                 }
                 break;
             }
@@ -141,7 +165,12 @@ public class Main {
                 }
                 if (x >= 0 && x <= 2 && y >= 0 && y <= 2) {
                     if (fields[x][y] == ' ') {
-                        fields[x][y] = userSymbol;
+                        fields[x][y] = userMove;
+                        if (userMove == 'X') {
+                            userMove = 'O';
+                        } else if (userMove == 'O') {
+                            userMove = 'X';
+                        }
                         read = false;
                     } else {
                         System.out.println("This cell is occupied! Choose another one!");
