@@ -46,7 +46,6 @@ public class Main {
             if (checkWinner()) {
                 break;
             }
-            printFields();
         }
         printFields();
         System.out.println(resultOfGame);
@@ -111,6 +110,7 @@ public class Main {
     }
 
     public void inputRandomCoordsBot() {
+        System.out.println("Making move level \"easy\"");
         Random r = new Random();
         while (true) {
             int xR = r.nextInt(3);
