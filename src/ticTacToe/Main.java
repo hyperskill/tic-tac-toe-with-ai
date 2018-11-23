@@ -74,6 +74,94 @@ public class Main {
             case "medium":
                 inputMediumCoordsBot();
                 break;
+            case "hard":
+                inputHardCoordsBot();
+                break;
+        }
+    }
+
+    public void inputHardCoordsBot() {
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i][0] == fields[i][1] && fields[i][1] == userMove && fields[i][2] == ' ') {
+                setMove(i, 2);
+                break;
+            } else if (fields[i][1] == fields[i][2] && fields[i][2] == userMove && fields[i][0] == ' ') {
+                setMove(i, 0);
+                break;
+            } else if (fields[i][0] == fields[i][2] && fields[i][2] == userMove && fields[i][1] == ' ') {
+                setMove(i, 1);
+                break;
+            } else if (fields[0][i] == fields[1][i] && fields[1][i] == userMove && fields[2][i] == ' ') {
+                setMove(2, i);
+                break;
+            } else if (fields[1][i] == fields[2][i] && fields[2][i] == userMove && fields[0][i] == ' ') {
+                setMove(0, i);
+                break;
+            } else if (fields[0][i] == fields[2][i] && fields[2][i] == userMove && fields[1][i] == ' ') {
+                setMove(1, i);
+                break;
+            } else if (fields[0][0] == fields[1][1] && fields[1][1] == userMove && fields[2][2] == ' ') {
+                setMove(2, 2);
+                break;
+            } else if (fields[0][0] == fields[2][2] && fields[2][2] == userMove && fields[1][1] == ' ') {
+                setMove(1, 1);
+                break;
+            } else if (fields[1][1] == fields[2][2] && fields[2][2] == userMove && fields[0][0] == ' ') {
+                setMove(0, 0);
+                break;
+            } else if (fields[0][2] == fields[1][1] && fields[1][1] == userMove && fields[2][0] == ' ') {
+                setMove(2, 0);
+                break;
+            } else if (fields[0][2] == fields[2][0] && fields[2][0] == userMove && fields[1][1] == ' ') {
+                setMove(1, 1);
+                break;
+            } else if (fields[2][0] == fields[1][1] && fields[1][1] == userMove && fields[0][2] == ' ') {
+                setMove(0, 2);
+                break; // end first
+            } else if (fields[i][0] == fields[i][1] && fields[i][1] != ' ' && fields[i][2] == ' ') {
+                setMove(i, 2);
+                break;
+            } else if (fields[i][1] == fields[i][2] && fields[i][2] != ' ' && fields[i][0] == ' ') {
+                setMove(i, 0);
+                break;
+            } else if (fields[i][0] == fields[i][2] && fields[i][2] != ' ' && fields[i][1] == ' ') {
+                setMove(i, 1);
+                break;
+            } else if (fields[0][i] == fields[1][i] && fields[1][i] != ' ' && fields[2][i] == ' ') {
+                setMove(2, i);
+                break;
+            } else if (fields[1][i] == fields[2][i] && fields[2][i] != ' ' && fields[0][i] == ' ') {
+                setMove(0, i);
+                break;
+            } else if (fields[0][i] == fields[2][i] && fields[2][i] != ' ' && fields[1][i] == ' ') {
+                setMove(1, i);
+                break;
+            } else if (fields[0][0] == fields[1][1] && fields[1][1] != ' ' && fields[2][2] == ' ') {
+                setMove(2, 2);
+                break;
+            } else if (fields[0][0] == fields[2][2] && fields[2][2] != ' ' && fields[1][1] == ' ') {
+                setMove(1, 1);
+                break;
+            } else if (fields[1][1] == fields[2][2] && fields[2][2] != ' ' && fields[0][0] == ' ') {
+                setMove(0, 0);
+                break;
+            } else if (fields[0][2] == fields[1][1] && fields[1][1] != ' ' && fields[2][0] == ' ') {
+                setMove(2, 0);
+                break;
+            } else if (fields[0][2] == fields[2][0] && fields[2][0] != ' ' && fields[1][1] == ' ') {
+                setMove(1, 1);
+                break;
+            } else if (fields[2][0] == fields[1][1] && fields[1][1] != ' ' && fields[0][2] == ' ') {
+                setMove(0, 2);
+                break;
+            } else if (fields[1][1] == ' ') {
+                setMove(1, 1);
+                break;
+            } else {
+                System.out.println("random Hard");
+                inputRandomCoordsBot();
+                break;
+            }
         }
     }
 
@@ -135,7 +223,7 @@ public class Main {
                 ifMove = false;
                 break;
             } else if (fields[1][1] == ' ') {
-                setMove(1,1);
+                setMove(1, 1);
                 ifMove = false;
                 break;
             }
