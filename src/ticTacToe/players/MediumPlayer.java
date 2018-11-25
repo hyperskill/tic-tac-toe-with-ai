@@ -4,6 +4,8 @@ import ticTacToe.enums.PlayerSign;
 import ticTacToe.utils.Matrix3d;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
@@ -62,8 +64,9 @@ public class MediumPlayer extends AbstractPlayer implements Player {
         if (idx == null)
             idx = occupyLastSlot(fightField, playerSign.opposite());
         if (idx == null) {
-            Player easy = new EasyPlayer(playerSign);
-            easy.makeTurn(fightField);
+            List<Matrix3d.Coordinates> free = fightField.freeCoords();
+            Collections.shuffle(free);
+            fightField.set(free.get(0), playerSign.toString());
         }
     }
 

@@ -32,6 +32,7 @@ public class EasyPlayer extends AbstractPlayer implements Player {
         fightField.set(free.get(0), playerSign.toString());
 
 
+
     }
 
 

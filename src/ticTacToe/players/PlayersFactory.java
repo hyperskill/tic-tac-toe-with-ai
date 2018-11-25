@@ -12,6 +12,8 @@ public class PlayersFactory {
                 return new EasyPlayer(sign);
             case "medium":
                 return new MediumPlayer(sign);
+            case "hard":
+                return new HardPlayer(sign);
                 default:
                     return null;
         }

@@ -6,12 +6,16 @@ import ticTacToe.utils.Matrix3d;
 
 import java.util.*;
 
+import static ticTacToe.enums.State.O_WIN;
+
 public class Game {
     private final Matrix3d fightField = new Matrix3d();
     private final Player secondPlayer;
     private final Player firstPlayer;
     private Player current;
     private State gameState = State.NOT_FINISHED;
+
+    static private  List<State> states = new LinkedList<>();
 
     public Game(Player first,Player second) {
         firstPlayer = first;
@@ -29,6 +33,11 @@ public class Game {
             current = switchCurrentPlayer(current);
         }
         System.out.println(gameState);
+
+        states.add(gameState);
+        System.out.println("OWin:" +states.stream().filter(f->f.equals(State.O_WIN)).count());
+        System.out.println("Draw:" +states.stream().filter(f->f.equals(State.DRAW)).count());
+        System.out.println("Xwin:" +states.stream().filter(f->f.equals(State.X_WIN)).count());
 
     }
 
@@ -76,7 +85,7 @@ public class Game {
         Set<String> h = new HashSet<>(Arrays.asList(m));
         if (h.size() == 1) {
             if (h.contains("X")) return State.X_WIN;
-            if (h.contains("O")) return State.O_WIN;
+            if (h.contains("O")) return O_WIN;
         }
         return State.NOT_FINISHED;
     }
