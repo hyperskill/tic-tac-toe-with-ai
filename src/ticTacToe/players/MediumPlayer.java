@@ -28,7 +28,7 @@ public class MediumPlayer extends AbstractPlayer implements Player {
             return null;
     }
 
-    public Integer occupyLastSlot(Matrix3d fightField, PlayerSign player){
+    private Integer occupyLastSlot(Matrix3d fightField, PlayerSign player){
         Integer idx;
         for (int i = 0; i < Matrix3d.getDIMENSION(); i++) {
             idx = getIdxOfLastFreeSpace(fightField.getRow(i), player);
@@ -64,7 +64,7 @@ public class MediumPlayer extends AbstractPlayer implements Player {
         if (idx == null)
             idx = occupyLastSlot(fightField, playerSign.opposite());
         if (idx == null) {
-            List<Matrix3d.Coordinates> free = fightField.freeCoords();
+            List<Matrix3d.Coordinates> free = fightField.freeTile();
             Collections.shuffle(free);
             fightField.set(free.get(0), playerSign.toString());
         }

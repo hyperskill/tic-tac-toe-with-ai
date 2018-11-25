@@ -12,34 +12,26 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        while (true) {
-//            System.out.println("Input command:");
-//            Scanner scanner = new Scanner(System.in);
-//            String cmd = scanner.nextLine();
-//
-//            if (cmd == null) continue;
-//
-//            String[] cmds = cmd.split(" ");
-//
-//            if (cmds[0] == null) continue;
-//            if (cmds[0].equals("exit")) return;
-//            if (cmds[0].equals("start") && cmds.length < 3) continue;
-//
-//            Player first = PlayersFactory.getPlayer(cmds[1], X);
-//            Player second = PlayersFactory.getPlayer(cmds[2], O);
-//
-//            if (first == null || second == null) continue;
-//
-//            Game game = new Game(first, second);
-//            game.makeTurn();
-//        }
+        while (true) {
+            System.out.println("Input command:");
+            Scanner scanner = new Scanner(System.in);
+            String cmd = scanner.nextLine();
 
-        for (int i = 0; i < 100; i++) {
-            Player first = PlayersFactory.getPlayer("hard", X);
-            Player second = PlayersFactory.getPlayer("medium", O);
+            if (cmd == null) continue;
+
+            String[] cods = cmd.split(" ");
+
+            if (cods[0] == null) continue;
+            if (cods[0].equals("exit")) return;
+            if (cods[0].equals("start") && cods.length < 3) continue;
+
+            Player first = PlayersFactory.getPlayer(cods[1], X);
+            Player second = PlayersFactory.getPlayer(cods[2], O);
+
+            if (first == null || second == null) continue;
+
             Game game = new Game(first, second);
             game.makeTurn();
-
         }
     }
 }

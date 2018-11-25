@@ -8,37 +8,29 @@ import java.util.*;
 
 import static ticTacToe.enums.State.O_WIN;
 
-public class Game {
+class Game {
     private final Matrix3d fightField = new Matrix3d();
     private final Player secondPlayer;
     private final Player firstPlayer;
     private Player current;
     private State gameState = State.NOT_FINISHED;
 
-    static private  List<State> states = new LinkedList<>();
-
-    public Game(Player first,Player second) {
+    Game(Player first, Player second) {
         firstPlayer = first;
         secondPlayer = second;
         current = firstPlayer;
         printFightField(fightField);
     }
 
-    public void makeTurn() {
+    void makeTurn() {
 
-        while (gameState==State.NOT_FINISHED) {
+        while (gameState == State.NOT_FINISHED) {
             current.makeTurn(fightField);
             printFightField(fightField);
             gameState = getState(fightField);
             current = switchCurrentPlayer(current);
         }
         System.out.println(gameState);
-
-        states.add(gameState);
-        System.out.println("OWin:" +states.stream().filter(f->f.equals(State.O_WIN)).count());
-        System.out.println("Draw:" +states.stream().filter(f->f.equals(State.DRAW)).count());
-        System.out.println("Xwin:" +states.stream().filter(f->f.equals(State.X_WIN)).count());
-
     }
 
     private Player switchCurrentPlayer(final Player current) {
@@ -50,7 +42,7 @@ public class Game {
 
     private void printFightField(Matrix3d fightField) {
         String topBoarderSign = "-";
-        String splitter = String.join("", Collections.nCopies(Matrix3d.getDIMENSION() * Matrix3d.getDIMENSION(), topBoarderSign));
+        String splitter = String.join("", Collections.nCopies(Matrix3d.getDIMENSION()*Matrix3d.getDIMENSION(), topBoarderSign));
         System.out.println(splitter);
         for (int i = 0; i < Matrix3d.getDIMENSION(); i++) {
             System.out.println(String.format("| %s |", String.join(" ", fightField.getRow(i))));
@@ -64,11 +56,12 @@ public class Game {
         Set<State> checks = new HashSet<>();
 
         for (int i = 0; i < Matrix3d.getDIMENSION(); i++) {
-            checks.add(winCheck(m.getRow(i)));
             checks.add(winCheck(m.getColon(i)));
-            checks.add(winCheck(m.getDiagonal(Matrix3d.DiagonalType.POSITIVE)));
-            checks.add(winCheck(m.getDiagonal(Matrix3d.DiagonalType.NEGATIVE)));
+            checks.add(winCheck(m.getRow(i)));
         }
+
+        checks.add(winCheck(m.getDiagonal(Matrix3d.DiagonalType.POSITIVE)));
+        checks.add(winCheck(m.getDiagonal(Matrix3d.DiagonalType.NEGATIVE)));
 
         Optional<State> st = checks.stream().filter(s -> s != State.NOT_FINISHED).findFirst();
 

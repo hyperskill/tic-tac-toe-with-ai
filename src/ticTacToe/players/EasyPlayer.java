@@ -16,12 +16,8 @@ public class EasyPlayer extends AbstractPlayer implements Player {
     @Override
     public void makeTurn(Matrix3d fightField) {
 
-        List<Integer> free = new ArrayList<>();
-        String []field  = fightField.getValues();
+        List<Matrix3d.Coordinates> free = fightField.freeTile();
 
-        for (int i = 0; i < field.length; i++) {
-            if (field[i].equals(" ")) free.add(i);
-        }
         Collections.shuffle(free);
 
         if (free.size() == 0 )
@@ -29,10 +25,7 @@ public class EasyPlayer extends AbstractPlayer implements Player {
 
         System.out.println("Making move level \"easy\"");
 
-        fightField.set(free.get(0), playerSign.toString());
-
-
-
+        fightField.set(free.get(0), playerSign);
     }
 
 

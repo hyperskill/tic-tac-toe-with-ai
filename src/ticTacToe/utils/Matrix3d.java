@@ -1,39 +1,38 @@
 package ticTacToe.utils;
 
+import ticTacToe.enums.PlayerSign;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Matrix3d {
 
+
     private final static int DIMENSION = 3;
-    private final String[] proto = new String[DIMENSION * DIMENSION];
-    private String[] values = Collections.nCopies(DIMENSION * DIMENSION, " ").toArray(proto);
+    private final String[] values = new String[DIMENSION * DIMENSION];
 
     public String get(int i, int j) {
         return values[i * DIMENSION + j];
-    }
-
-    public void set(final int i, final String val) {
-        values[i] = val;
     }
 
     public void set(final int i, final int j, final String val) {
         values[i * DIMENSION + j] = val;
     }
 
+    public void set(Coordinates coordinates, PlayerSign val){
+        this.set(coordinates.getRow(),coordinates.getCol(), val.toString());
+    }
+
     public void set(Coordinates coordinates, String val){
         this.set(coordinates.getRow(),coordinates.getCol(), val);
     }
-    public String get(Coordinates coordinates){
-         return this.get(coordinates.getRow(),coordinates.getCol());
-    }
 
     public Matrix3d() {
+        Arrays.setAll(values, i -> " ");
     }
     public Matrix3d(Matrix3d orig) {
-        values = orig.values;
+        System.arraycopy(orig.values, 0, values, 0, values.length);
     }
 
     public static int getDIMENSION() {
@@ -99,41 +98,34 @@ public class Matrix3d {
     }
 
 
-    public List<Coordinates> freeCoords() {
-        List<Matrix3d.Coordinates> freeCoords = new LinkedList<>();
+    public List<Coordinates> freeTile() {
+        List<Matrix3d.Coordinates> freeTile = new LinkedList<>();
 
         for (int i = 0; i < Matrix3d.getDIMENSION(); i++) {
             for (int j = 0; j < Matrix3d.getDIMENSION(); j++) {
-                Coordinates coor = new Matrix3d.Coordinates(i,j);
-                if (get(coor).equals(" "))
-                    freeCoords.add(coor);
+                Coordinates tile = new Matrix3d.Coordinates(i,j);
+                if (get(i,j).equals(" "))
+                    freeTile.add(tile);
             }
         }
-        return freeCoords;
+        return freeTile;
     }
 
     public static class Coordinates{
-        @Override
-        public String toString() {
-            return "Coordinates{" +
-                    "row=" + row +
-                    ", col=" + col +
-                    '}';
-        }
 
-        int row;
-        int col;
+        final int row;
+        final int col;
 
-        public Coordinates(int i, int j){
+         Coordinates(int i, int j){
             row = i;
             col = j;
         }
 
-        public int getRow() {
+        int getRow() {
             return row;
         }
 
-        public int getCol() {
+        int getCol() {
             return col;
         }
     }
