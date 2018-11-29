@@ -100,19 +100,47 @@ public class Main {
 			}
 		}
 	}
-	
-    public static void main(String[] args) {
+	//CHECK USER INPUT
+	static boolean checkUserInput(String input) {
+		Scanner scanner = new Scanner(input);
+		int x;
+		int y;
+		if (scanner.hasNextInt()) {
+			x = scanner.nextInt();
+			if (scanner.hasNextInt()) {
+				y = scanner.nextInt();
+				scanner.close();
+			}
+			else {
+				System.out.println("You should enter numbers!");
+				scanner.close();
+				return false;
+				}
+		}
+		else {
+			System.out.println("You should enter numbers!");
+			scanner.close();
+			return false;
+			}
+		if (x < 1 || x > 3 || y < 1 || y > 3) {
+			System.out.println("Coordinates should be from 1 to 3!");
+			return false;
+		}
+		array[dim-x][y-1] = 'X';
+		return true;
+	}
+	//MAIN FUNCTION
+	public static void main(String[] args) {
     	generateField(array);
     	displayField(array);
     	Scanner scanner = new Scanner(System.in);
     	System.out.print("Enter the coordinates: ");
     	String coordinates = scanner.nextLine();
+    	while (!checkUserInput(coordinates)) {
+        	System.out.print("Enter the coordinates: ");
+        	coordinates = scanner.nextLine();
+    	}
     	scanner.close();
-    	scanner = new Scanner(coordinates);
-    	int x = scanner.nextInt();
-    	int y = scanner.nextInt();
-    	scanner.close();
-    	array[dim-x][y-1] = 'X';
     	displayField(array);
     	//System.out.println(displayStage(array));
     }
