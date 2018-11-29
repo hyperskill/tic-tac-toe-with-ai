@@ -1,18 +1,25 @@
 package ticTacToe;
 
+import java.util.Scanner;
+
 public class Main {
 	static int dim = 3;
 	static char[][] array = new char[dim][dim];
 	//SHOW CURRENT FIELD
 	static void displayField(char[][] array) {
+		System.out.println("---------");
 		for (int i = 0; i < dim; i++) {
+			System.out.print("| ");
 			for (int j = 0; j < dim; j++) {
 				System.out.print(array[i][j]);
 				System.out.print(' ');
 			}
+			System.out.print("| ");
 			System.out.println();
 		}
+		System.out.println("---------");
 	}
+	//DISPLAY STAGE
 	static String displayStage(char[][] array) {
 		char current;
 		boolean flag = false;
@@ -97,6 +104,16 @@ public class Main {
     public static void main(String[] args) {
     	generateField(array);
     	displayField(array);
-    	System.out.println(displayStage(array));
+    	Scanner scanner = new Scanner(System.in);
+    	System.out.print("Enter the coordinates: ");
+    	String coordinates = scanner.nextLine();
+    	scanner.close();
+    	scanner = new Scanner(coordinates);
+    	int x = scanner.nextInt();
+    	int y = scanner.nextInt();
+    	scanner.close();
+    	array[dim-x][y-1] = 'X';
+    	displayField(array);
+    	//System.out.println(displayStage(array));
     }
 }
