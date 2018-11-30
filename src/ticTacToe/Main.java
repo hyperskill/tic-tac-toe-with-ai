@@ -21,7 +21,7 @@ public class Main {
 		System.out.println("---------");
 	}
 	//DISPLAY STAGE
-	static String displayStage(char[][] array) {
+	static boolean displayStage(char[][] array) {
 		char current;
 		boolean flag = false;
 		for (int i = 0; i < dim; i++) {
@@ -35,7 +35,7 @@ public class Main {
 				}
 				else {flag = false;break;}
 				}
-			if (flag) {return current+" wins";}
+			if (flag) {System.out.println(current+" wins"); return true;}
 			}
 		for (int i = 0; i < dim; i++) {
 			current = 'z';
@@ -48,7 +48,7 @@ public class Main {
 				}
 				else {flag = false;break;}
 				}
-			if (flag) {return current+" wins";}
+			if (flag) {System.out.println(current+" wins"); return true;}
 			}
 		
 		current = 'z';
@@ -61,7 +61,7 @@ public class Main {
 					}
 				else {flag = false;break;}
 			}
-			if (flag) {return current+" wins";}
+			if (flag) {System.out.println(current+" wins"); return true;}
 		}
 			
 		current = 'z';
@@ -74,35 +74,28 @@ public class Main {
 					}
 				else {flag = false;break;}
 				}
-			if (flag) {return current+" wins";}
+			if (flag) {System.out.println(current+" wins"); return true;}
 
 		}
 		
 		for (int i = 0; i < dim; i++) {
 			for (int j = 0; j < dim; j++) {
-				if (array[i][j] == ' ') {return "Game not finished";}
+				if (array[i][j] == ' ') {return false;}
 			}
 		}
-		return "Draw";
+		System.out.println("Draw");
+		return true;
 	}
 	//GENERATE RANDOM FIELD
 	static void generateField(char[][] array) {
 		for (int i = 0; i < dim; i++) {
 			for (int j = 0; j < dim; j++) {
-				if (Math.random()>=0.66) {
-	        		array[i][j] = 'X';
-	       		}
-	       		else if (Math.random() <= 0.33) {
-	       			array[i][j] = 'O';
-	       			}
-	       		else {
-	       			array[i][j] = ' ';
-	       		}
+				array[i][j] = ' ';
 			}
 		}
 	}
 	//CHECK USER INPUT
-	static boolean checkUserInput(String input) {
+	static boolean checkUserInput(String input, char symbol) {
 		Scanner scannerTemp = new Scanner(input);
 		int x;
 		int y;
@@ -127,22 +120,21 @@ public class Main {
 			System.out.println("Coordinates should be from 1 to 3!");
 			return false;
 		}
-		array[dim-x][y-1] = 'X';
+		array[dim-x][y-1] = symbol;
 		return true;
 	}
 	//User move implementation
-	static void userMove(char[][] array, Scanner scanner) {
+	static void userMove(char[][] array, Scanner scanner, char symbol) {
     	System.out.print("Enter the coordinates: ");
 		String coordinates = scanner.nextLine();
-		while (!checkUserInput(coordinates)) {
+		while (!checkUserInput(coordinates, symbol)) {
         	System.out.print("Enter the coordinates: ");
         	coordinates = scanner.nextLine();
     	}
 		displayField(array);
 	}
 	//Easy level move implementation
-	
-	static void easyMove(char[][] array) {
+	static void easyMove(char[][] array, char symbol) {
 		System.out.println("Making move level \"easy\"");
 		Random random = new Random();
 		int randomNumber = random.nextInt(dim * dim);
@@ -150,7 +142,7 @@ public class Main {
 		while (!flag) {
 			for (int i = 0; i < dim; i++) {
 				for (int j = 0; j < dim; j++) {
-					if (randomNumber == 0 && array[i][j] == ' ') {flag = true; array[i][j] = 'X'; break;}
+					if (randomNumber == 0 && array[i][j] == ' ') {flag = true; array[i][j] = symbol; break;}
 					if (array[i][j] == ' ') {randomNumber--;}					
 					}
 					if (flag == true) {break;}
@@ -158,27 +150,17 @@ public class Main {
 		}
 		displayField(array);		
 	}
-	/*
-    	while (!checkUserInput(coordinates)) {
-        	System.out.print("Enter the coordinates: ");
-        	coordinates = scanner.nextLine();
-    	}
-	}
-	*/
-			
 	//MAIN FUNCTION
 	public static void main(String[] args) {
     	generateField(array);
     	displayField(array);
     	Scanner scanner = new Scanner(System.in);
-    	easyMove(array);
-    	/*
-    	while (!checkUserInput(coordinates)) {
-        	System.out.print("Enter the coordinates: ");
-        	coordinates = scanner.nextLine();
+    	while (true) {
+    		userMove(array, scanner, 'X');
+    		if (displayStage(array)) {break;}
+    		easyMove(array, 'O');
+    		if (displayStage(array)) {break;}
     	}
-    	*/
     	scanner.close();
-    	//System.out.println(displayStage(array));
     }
 }
