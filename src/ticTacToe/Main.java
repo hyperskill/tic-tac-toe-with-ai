@@ -1,6 +1,7 @@
 package ticTacToe;
 
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
 	static int dim = 3;
@@ -102,24 +103,24 @@ public class Main {
 	}
 	//CHECK USER INPUT
 	static boolean checkUserInput(String input) {
-		Scanner scanner = new Scanner(input);
+		Scanner scannerTemp = new Scanner(input);
 		int x;
 		int y;
-		if (scanner.hasNextInt()) {
-			x = scanner.nextInt();
-			if (scanner.hasNextInt()) {
-				y = scanner.nextInt();
-				scanner.close();
+		if (scannerTemp.hasNextInt()) {
+			x = scannerTemp.nextInt();
+			if (scannerTemp.hasNextInt()) {
+				y = scannerTemp.nextInt();
+				scannerTemp.close();
 			}
 			else {
 				System.out.println("You should enter numbers!");
-				scanner.close();
+				scannerTemp.close();
 				return false;
 				}
 		}
 		else {
 			System.out.println("You should enter numbers!");
-			scanner.close();
+			scannerTemp.close();
 			return false;
 			}
 		if (x < 1 || x > 3 || y < 1 || y > 3) {
@@ -129,19 +130,55 @@ public class Main {
 		array[dim-x][y-1] = 'X';
 		return true;
 	}
+	//User move implementation
+	static void userMove(char[][] array, Scanner scanner) {
+    	System.out.print("Enter the coordinates: ");
+		String coordinates = scanner.nextLine();
+		while (!checkUserInput(coordinates)) {
+        	System.out.print("Enter the coordinates: ");
+        	coordinates = scanner.nextLine();
+    	}
+		displayField(array);
+	}
+	//Easy level move implementation
+	
+	static void easyMove(char[][] array) {
+		System.out.println("Making move level \"easy\"");
+		Random random = new Random();
+		int randomNumber = random.nextInt(dim * dim);
+		boolean flag = false;
+		while (!flag) {
+			for (int i = 0; i < dim; i++) {
+				for (int j = 0; j < dim; j++) {
+					if (randomNumber == 0 && array[i][j] == ' ') {flag = true; array[i][j] = 'X'; break;}
+					if (array[i][j] == ' ') {randomNumber--;}					
+					}
+					if (flag == true) {break;}
+			}
+		}
+		displayField(array);		
+	}
+	/*
+    	while (!checkUserInput(coordinates)) {
+        	System.out.print("Enter the coordinates: ");
+        	coordinates = scanner.nextLine();
+    	}
+	}
+	*/
+			
 	//MAIN FUNCTION
 	public static void main(String[] args) {
     	generateField(array);
     	displayField(array);
     	Scanner scanner = new Scanner(System.in);
-    	System.out.print("Enter the coordinates: ");
-    	String coordinates = scanner.nextLine();
+    	easyMove(array);
+    	/*
     	while (!checkUserInput(coordinates)) {
         	System.out.print("Enter the coordinates: ");
         	coordinates = scanner.nextLine();
     	}
+    	*/
     	scanner.close();
-    	displayField(array);
     	//System.out.println(displayStage(array));
     }
 }
