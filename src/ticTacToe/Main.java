@@ -2,6 +2,7 @@ package ticTacToe;
 
 import java.util.Scanner;
 import java.util.Random;
+import java.util.Arrays;
 
 public class Main {
 	static int dim = 3;
@@ -120,8 +121,11 @@ public class Main {
 			System.out.println("Coordinates should be from 1 to 3!");
 			return false;
 		}
-		array[dim-x][y-1] = symbol;
-		return true;
+		if (array[dim-x][y-1] == ' ') {
+			array[dim-x][y-1] = symbol;
+			return true;
+		} 
+		else {return false;}
 	}
 	//User move implementation
 	static void userMove(char[][] array, Scanner scanner, char symbol) {
@@ -150,6 +154,152 @@ public class Main {
 		}
 		displayField(array);		
 	}
+	//Medium level move implementation
+	static void mediumMove(char[][]array, char symbol) {
+		System.out.println("Making move level \"medium\"");
+		char enemy;
+		if (symbol=='X') {enemy='O';}
+		else {enemy = 'X';}
+		int count = 0;
+		//First step
+		for (int i = 0; i < dim; i++) {
+			count = 0;
+			for (int j = 0; j < dim; j++) {
+				if (array[i][j] == symbol) {
+					count++;
+				}
+				if (array[i][j] == enemy) {
+					count--;
+				}
+			}
+			if (count == 2) {
+				Arrays.fill(array[i], symbol);
+				displayField(array);
+				return;
+			}
+		}
+		for (int i = 0; i < dim; i++) {
+			count = 0;
+			for (int j = 0; j < dim; j++) {
+				if (array[j][i] == symbol) {
+					count++;
+				}
+				if (array[j][i] == enemy) {
+					count--;
+				}
+			}
+			if (count == 2) {
+				for (int j = 0; j < dim; j++) {
+					array[j][i] = symbol;
+				}
+				displayField(array);
+				return;
+			}
+		}
+		count = 0;
+		for (int i = 0; i < dim; i++) {
+			if (array[i][i] == symbol) {count++;}
+			if (array[i][i] == enemy) {
+				count--;
+			}
+		}
+		if (count == 2) {
+			for (int i = 0; i < dim; i++) {
+				array[i][i] = symbol;
+			}
+			displayField(array);
+			return;
+		}
+		count = 0;
+		for (int i = 0; i < dim; i++) {
+			if (array[i][dim-i-1] == symbol) {count++;}
+			if (array[i][dim-i-1] == enemy) {
+				count--;
+			}
+		}
+		if (count == 2) {
+			for (int i = 0; i < dim; i++) {
+				array[i][dim-1-i] = symbol;
+			}
+			displayField(array);
+			return;
+		}
+		//Second step
+		for (int i = 0; i < dim; i++) {
+			count = 0;
+			for (int j = 0; j < dim; j++) {
+				if (array[i][j] == enemy) {
+					count++;
+				}
+				if (array[i][j] == symbol) {
+					count--;
+				}
+			}
+			if (count == 2) {
+				for (int j =0; j<dim;j++) {
+					if (array[i][j]==' ') {array[i][j] = symbol;}
+				}
+				displayField(array);
+				return;
+			}
+		}
+		for (int i = 0; i < dim; i++) {
+			count = 0;
+			for (int j = 0; j < dim; j++) {
+				if (array[j][i] == enemy) {
+					count++;
+				}
+				if (array[j][i] == symbol) {
+					count--;
+				}
+			}
+			if (count == 2) {
+				for (int j = 0; j < dim; j++) {
+					if (array[j][i]==' ') {array[j][i] = symbol;}
+				}
+				displayField(array);
+				return;
+			}
+		}
+		count = 0;
+		for (int i = 0; i < dim; i++) {
+			if (array[i][i] == enemy) {count++;}
+			if (array[i][i] == symbol) {count--;}
+		}
+		if (count == 2) {
+			for (int i = 0; i < dim; i++) {
+				if (array[i][i]==' ') {array[i][i] = symbol;}
+			}
+			displayField(array);
+			return;
+		}
+		count = 0;
+		for (int i = 0; i < dim; i++) {
+			if (array[i][dim-i-1] == enemy) {count++;}
+			if (array[i][dim-i-1] == symbol) {count--;}
+		}
+		if (count == 2) {
+			for (int i = 0; i < dim; i++) {
+				if (array[i][dim-1-i] == ' ') {array[i][dim-1-i] = symbol;}
+			}
+			displayField(array);
+			return;
+		}
+		//Third step
+		Random random = new Random();
+		int randomNumber = random.nextInt(dim * dim);
+		boolean flag = false;
+		while (!flag) {
+			for (int i = 0; i < dim; i++) {
+				for (int j = 0; j < dim; j++) {
+					if (randomNumber == 0 && array[i][j] == ' ') {flag = true; array[i][j] = symbol; break;}
+					if (array[i][j] == ' ') {randomNumber--;}					
+					}
+					if (flag == true) {break;}
+			}
+		}
+		displayField(array);			
+	}
 	//MAIN FUNCTION
 	public static void main(String[] args) {
     	Scanner scanner = new Scanner(System.in);    	
@@ -174,6 +324,14 @@ public class Main {
 	    	    		if (displayStage(array)) {break;}
 	    	    	}
 	    			break;
+	    		case "start user medium":
+	    			while (true) {
+	    	    		userMove(array, scanner, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		mediumMove(array, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
 	    		case "start easy user":
 	    			while (true) {
 	    	    		easyMove(array, 'X');
@@ -187,6 +345,38 @@ public class Main {
 	    	    		easyMove(array, 'X');
 	    	    		if (displayStage(array)) {break;}
 	    	    		easyMove(array, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start easy medium":
+	    			while (true) {
+	    	    		easyMove(array, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		mediumMove(array, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start medium user":
+	    			while (true) {
+	    	    		mediumMove(array, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		userMove(array, scanner, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start medium easy":
+	    			while (true) {
+	    	    		mediumMove(array, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		easyMove(array, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start medium medium":
+	    			while (true) {
+	    	    		mediumMove(array, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		mediumMove(array, 'O');
 	    	    		if (displayStage(array)) {break;}
 	    	    	}
 	    			break;
