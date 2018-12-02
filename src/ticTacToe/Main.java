@@ -152,15 +152,50 @@ public class Main {
 	}
 	//MAIN FUNCTION
 	public static void main(String[] args) {
-    	generateField(array);
-    	displayField(array);
-    	Scanner scanner = new Scanner(System.in);
-    	while (true) {
-    		userMove(array, scanner, 'X');
-    		if (displayStage(array)) {break;}
-    		easyMove(array, 'O');
-    		if (displayStage(array)) {break;}
-    	}
-    	scanner.close();
-    }
+    	Scanner scanner = new Scanner(System.in);    	
+		do {
+    		generateField(array);
+        	displayField(array);
+        	System.out.print("Input command:");
+	    	switch (scanner.nextLine()) {
+	    		case "start user user":
+	    			while (true) {
+	    	    		userMove(array, scanner, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		userMove(array, scanner, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start user easy":
+	    			while (true) {
+	    	    		userMove(array, scanner, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		easyMove(array, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start easy user":
+	    			while (true) {
+	    	    		easyMove(array, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		userMove(array, scanner, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "start easy easy":
+	    			while (true) {
+	    	    		easyMove(array, 'X');
+	    	    		if (displayStage(array)) {break;}
+	    	    		easyMove(array, 'O');
+	    	    		if (displayStage(array)) {break;}
+	    	    	}
+	    			break;
+	    		case "exit":
+	    			scanner.close();
+	    			return;
+	    		default:
+	    			System.out.println("Bad parameters!");
+	    	}
+		} while(true);
+	}
 }
