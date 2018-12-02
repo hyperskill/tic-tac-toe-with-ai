@@ -28,3 +28,4 @@ git.properties
 
 #IDEA Project Files
 .idea/
+/bin/
