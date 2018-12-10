@@ -22,17 +22,17 @@ public class UserInterface extends JFrame {
 
 
     private void createField() {
-        GameButton a1 = new GameButton();
-        GameButton a2 = new GameButton();
-        GameButton a3 = new GameButton();
+        GameButton a1 = new GameButton(0,0);
+        GameButton a2 = new GameButton(0,1);
+        GameButton a3 = new GameButton(0,2);
 
-        GameButton b1 = new GameButton();
-        GameButton b2 = new GameButton();
-        GameButton b3 = new GameButton();
+        GameButton b1 = new GameButton(1,0);
+        GameButton b2 = new GameButton(1,1);
+        GameButton b3 = new GameButton(1,2);
 
-        GameButton c1 = new GameButton();
-        GameButton c2 = new GameButton();
-        GameButton c3 = new GameButton();
+        GameButton c1 = new GameButton(2,0);
+        GameButton c2 = new GameButton(2,1);
+        GameButton c3 = new GameButton(2,2);
 
         JPanel line1 = formLine(a1.button, a2.button, a3.button);
         JPanel line2 = formLine(b1.button, b2.button, b3.button);
