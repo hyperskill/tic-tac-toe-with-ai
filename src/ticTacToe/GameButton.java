@@ -7,16 +7,12 @@ public class GameButton {
 
     public JButton button = new JButton();
 
-    public final int ZERO = 0;
-    public final int CROSS = 1;
-    public final int NULL = 2;
+    private int string;
+    private int row;
 
-    private int boundX;
-    private int boundY;
-
-    GameButton(int boundX, int boundY){
-        this.boundX = boundX;
-        this.boundY = boundY;
+    GameButton(int string, int row){
+        this.string = string;
+        this.row = row;
 
         Font font = new Font(null,Font.BOLD,100);
         Dimension dimension = new Dimension(120,120);
@@ -26,18 +22,18 @@ public class GameButton {
     }
 
     private void printFieldElement() {
-        int val = Game.getFieldValue(boundX,boundY);
+        int val = Game.getFieldValue(string,row);
 
         switch (val) {
-            case ZERO : {
+            case Game.ZERO : {
                 button.setText("O");
                 break;
             }
-            case CROSS : {
+            case Game.CROSS : {
                 button.setText("X");
                 break;
             }
-            case NULL : {
+            case Game.NULL : {
                 button.setText("");
                 break;
             }
