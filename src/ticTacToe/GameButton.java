@@ -3,9 +3,9 @@ package ticTacToe;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameButton {
+public class GameButton extends JFrame{
 
-    public JButton button = new JButton();
+    private JButton button = new JButton();
 
     private int string;
     private int row;
@@ -19,9 +19,10 @@ public class GameButton {
         button.setPreferredSize(new Dimension(dimension));
         button.setFont(font);
         printFieldElement();
+        button.addActionListener( actionEvent -> getUserSelection());
     }
 
-    private void printFieldElement() {
+    public void printFieldElement() {
         int val = Game.getFieldValue(string,row);
 
         switch (val) {
@@ -39,5 +40,40 @@ public class GameButton {
             }
             default : break;
         }
+    }
+
+    private void getUserSelection () {
+        Game.setFieldValue(string,row, Game.getWhoMoves());
+        printFieldElement();
+        button.setEnabled(false);
+
+        if (Game.getWhoMoves() == Game.CROSS) {
+            Game.setWhoMoves(Game.ZERO);
+        } else {
+            Game.setWhoMoves(Game.CROSS);
+        }
+
+        if (Game.getCurrentPlayerName() == Game.PLAYER1) {
+            Game.setCurrentPlayerName(Game.PLAYER2);
+        } else {
+            Game.setCurrentPlayerName(Game.PLAYER1);
+        }
+
+        DisplayPlayer.display();
+
+        Game.checkGameResult();
+    }
+
+    public void setButtonEnabled(boolean state) {
+        button.setEnabled(state);
+    }
+
+    public void setWaitingForGame () {
+        button.setEnabled(false);
+        printFieldElement();
+    }
+
+    public JButton getButton() {
+        return button;
     }
 }

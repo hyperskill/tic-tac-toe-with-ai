@@ -9,22 +9,45 @@ public class Game {
     public static final int NULL = 2;
     public static final int NOT_SEQUENCE = 3;
 
+    public static final int PLAYER1 = 0;
+    public static final int PLAYER2 = 1;
+    public static final int NOT_STARTED = 2;
+
+    private static int whoMoves = CROSS;
+    private static int currentPlayerName;
+
+    private static boolean gameIsStarted = false;
+
     private static int[][] fieldValues = new int[3][3];
 
-    public static int getFieldValue(int string, int row) {
-        return fieldValues[string][row];
+
+
+    public static void startTheGame(){
+        if (!gameIsStarted) {
+            Random random = new Random();
+
+            gameIsStarted = true;
+            whoMoves = CROSS;
+            currentPlayerName = random.nextInt(2);
+            DisplayPlayer.display();
+
+            for ( int i = 0; i < 3; i++) {
+                for ( int j = 0; j < 3; j++) {
+                    Game.setFieldValue(i,j, NULL);
+                    UserInterface.button[i][j].setButtonEnabled(true);
+                }
+            }
+        }
     }
 
-    public static void setFieldValue(int string, int row, int fieldValue) {
-        fieldValues[string][row] = fieldValue;
-    }
-
-    public static void fillFieldRand() {
+    public static void restartTheGame(){
+        gameIsStarted = false;
+        setCurrentPlayerName(NOT_STARTED);
+        DisplayPlayer.display();
         for ( int i = 0; i < 3; i++) {
             for ( int j = 0; j < 3; j++) {
-                Random random = new Random();
-                int rand = random.nextInt(3);
-                setFieldValue(i,j,rand);
+                Game.setFieldValue(i,j, NULL);
+                UserInterface.button[i][j].setWaitingForGame();
             }
         }
     }
@@ -152,5 +175,29 @@ public class Game {
 
             default : break;
         }
+    }
+
+    public static int getFieldValue(int string, int row) {
+        return fieldValues[string][row];
+    }
+
+    public static void setFieldValue(int string, int row, int fieldValue) {
+        fieldValues[string][row] = fieldValue;
+    }
+
+    public static int getWhoMoves() {
+        return whoMoves;
+    }
+
+    public static void setWhoMoves(int whoMoves) {
+        Game.whoMoves = whoMoves;
+    }
+
+    public static int getCurrentPlayerName() {
+        return currentPlayerName;
+    }
+
+    public static void setCurrentPlayerName(int currentPlayerName) {
+        Game.currentPlayerName = currentPlayerName;
     }
 }

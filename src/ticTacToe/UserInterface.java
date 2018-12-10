@@ -5,10 +5,20 @@ import java.awt.*;
 
 public class UserInterface extends JFrame {
 
+    public static GameButton[][] button = new GameButton[3][3];
+    public static GameTextField player1 =
+            new GameTextField("Player 1", true, true, 50);
+    public static GameTextField player2 =
+            new GameTextField("Player 2", true, true, 50);
+    public static GameTextField whoMoves =
+            new GameTextField("Who Moves", true, true, 50);
+
     public void window() {
         Dimension dimension = new Dimension(410,510);
 
+
         createField();
+        Game.restartTheGame();
 
         setSize(dimension);
         setResizable(false);
@@ -20,29 +30,90 @@ public class UserInterface extends JFrame {
 
     }
 
-
     private void createField() {
-        GameButton a1 = new GameButton(0,0);
-        GameButton a2 = new GameButton(0,1);
-        GameButton a3 = new GameButton(0,2);
+        JPanel headLabels = createHeadLabels();
+        JPanel head = createHead();
+        JPanel[] line = new JPanel[3];
 
-        GameButton b1 = new GameButton(1,0);
-        GameButton b2 = new GameButton(1,1);
-        GameButton b3 = new GameButton(1,2);
-
-        GameButton c1 = new GameButton(2,0);
-        GameButton c2 = new GameButton(2,1);
-        GameButton c3 = new GameButton(2,2);
-
-        JPanel line1 = formLine(a1.button, a2.button, a3.button);
-        JPanel line2 = formLine(b1.button, b2.button, b3.button);
-        JPanel line3 = formLine(c1.button, c2.button, c3.button);
-
-        createLayout(line1, line2, line3);
+        for ( int i = 0; i < 3; i++) {
+            for ( int j = 0; j < 3; j++) {
+                button[i][j] = new GameButton(i,j);
+            }
+            line[i] = formLine(button[i][0].getButton(), button[i][1].getButton(), button[i][2].getButton());
+        }
 
 
+        createLayout(headLabels, head, line[0], line[1], line[2]);
     }
 
+    private JPanel createHeadLabels() {
+        JPanel head = new JPanel();
+
+        GameTextField player1Label =
+                new GameTextField("Player 1", false, false, 20);
+        GameTextField player2Label =
+                new GameTextField("Player 2", false, false, 20);
+        GameTextField whoMovesLabel =
+                new GameTextField("Who Moves", false, false, 20);
+        JButton restart = new JButton("Restart");
+
+        restart.setPreferredSize(new Dimension(90,20));
+        restart.addActionListener( actionEvent -> Game.restartTheGame());
+
+        GroupLayout groupLayout = new GroupLayout(head);
+        head.setLayout(groupLayout);
+
+        groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
+                .addComponent(player1Label.getTextField())
+                .addGap(5)
+                .addComponent(whoMovesLabel.getTextField())
+                .addGap(5)
+                .addComponent(player2Label.getTextField())
+                .addComponent(restart)
+        );
+
+        groupLayout.setVerticalGroup(groupLayout.createParallelGroup()
+                .addComponent(player1Label.getTextField())
+                .addComponent(whoMovesLabel.getTextField())
+                .addComponent(player2Label.getTextField())
+                .addComponent(restart)
+        );
+
+        groupLayout.linkSize( player1Label.getTextField(), player2Label.getTextField(),whoMovesLabel.getTextField(), restart);
+
+        return head;
+    }
+
+    private JPanel createHead() {
+        JPanel head = new JPanel();
+        JButton start = new JButton("Start");
+
+        start.setPreferredSize(new Dimension(90,50));
+        start.addActionListener( actionEvent -> Game.startTheGame());
+
+        GroupLayout groupLayout = new GroupLayout(head);
+        head.setLayout(groupLayout);
+
+        groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
+                .addComponent(player1.getTextField())
+                .addGap(5)
+                .addComponent(whoMoves.getTextField())
+                .addGap(5)
+                .addComponent(player2.getTextField())
+                .addComponent(start)
+        );
+
+        groupLayout.setVerticalGroup(groupLayout.createParallelGroup()
+                .addComponent(player1.getTextField())
+                .addComponent(whoMoves.getTextField())
+                .addComponent(player2.getTextField())
+                .addComponent(start)
+        );
+
+        groupLayout.linkSize( player1.getTextField(), player2.getTextField(), whoMoves.getTextField(), start);
+
+        return head;
+    }
 
     private JPanel formLine(JButton b1, JButton b2, JButton b3) {
 
@@ -70,7 +141,7 @@ public class UserInterface extends JFrame {
         return fileSelectGroup;
     }
 
-    private void createLayout(JComponent line1,JComponent line2,JComponent line3) {
+    private void createLayout(JComponent headLabels, JComponent head,JComponent line1,JComponent line2,JComponent line3) {
         Container pane = getContentPane();
         GroupLayout groupLayout = new GroupLayout(pane);
         pane.setLayout(groupLayout);
@@ -79,17 +150,22 @@ public class UserInterface extends JFrame {
         groupLayout.setAutoCreateGaps(true);
 
         groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
+                .addComponent(headLabels)
+                .addComponent(head)
                 .addComponent(line1)
                 .addComponent(line2)
                 .addComponent(line3)
         );
 
         groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
+                .addComponent(headLabels)
+                .addComponent(head)
                 .addComponent(line1)
                 .addComponent(line2)
                 .addComponent(line3)
         );
 
+        groupLayout.linkSize(0,head, headLabels, line1);
         pack();
     }
 }
