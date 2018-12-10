@@ -1,7 +1,11 @@
 package ticTacToe;
 
 public class Main {
+
+
     public static void main(String[] args) {
-        System.out.print("Hello world!");
+        Game.fillFieldRand();
+        UserInterface userInterface = new UserInterface();
+        userInterface.window();
     }
 }
