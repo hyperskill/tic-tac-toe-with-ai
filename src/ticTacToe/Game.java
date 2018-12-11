@@ -32,7 +32,7 @@ public class Game {
     private static Players currentPlayer;
     private static Players firstPlayerTriggered;
 
-    private static Level level;
+    private static Level level = Level.MEDIUM;
 
     private static boolean playWithComputer = true;
     private static boolean playWithComputerTriggered;
@@ -166,20 +166,29 @@ public class Game {
     public static void setFirstPlayerUserSelection(FirstPlayerSelect firstPlayerUserSelection) {
         Game.firstPlayerUserSelection = firstPlayerUserSelection;
     }
+
     public static void setPlayWithComputer(boolean playWithComputer) {
         Game.playWithComputer = playWithComputer;
     }
+
     public static boolean isPlayWithComputerTriggered() {
         return playWithComputerTriggered;
     }
+
     public static void setLevel(Level level) {
         Game.level = level;
     }
+
     public static boolean isGameStarted() {
         return gameStarted;
     }
+
     public static Players getFirstPlayerTriggered() {
         return firstPlayerTriggered;
+    }
+
+    public static Level getLevel() {
+        return level;
     }
 
 }

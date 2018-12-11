@@ -2,28 +2,30 @@ package ticTacToe;
 
 import javax.swing.*;
 
+import static ticTacToe.Game.*;
+
 public class GameResult {
     public  void checkGameResult() {
         int result = scanDiagonal();
-        if (result != Game.NOT_SEQUENCE) {
+        if (result != NOT_SEQUENCE) {
             printGameResult(result);
             return;
         }
 
         result = scanDown();
-        if (result != Game.NOT_SEQUENCE) {
+        if (result != NOT_SEQUENCE) {
             printGameResult(result);
             return;
         }
 
         result = scanRight();
-        if (result != Game.NOT_SEQUENCE) {
+        if (result != NOT_SEQUENCE) {
             printGameResult(result);
             return;
         }
 
         if (checkGameOver()){
-            printGameResult(Game.NOT_SEQUENCE);
+            printGameResult(NOT_SEQUENCE);
         }
 
 
@@ -34,15 +36,15 @@ public class GameResult {
         for( int row = 0; row < 3; row++) {
             boolean sequenceFound = true;
             for (int string = 1; string < 3; string++) {
-                if (Game.getFieldValue(string - 1, row) != Game.getFieldValue(string, row)) {
+                if (getFieldValue(string - 1, row) != getFieldValue(string, row)) {
                     sequenceFound = false;
                 }
             }
-            if (sequenceFound && Game.getFieldValue(0, row) != Game.NULL) {
-                return Game.getFieldValue(0, row);
+            if (sequenceFound && getFieldValue(0, row) != NULL) {
+                return getFieldValue(0, row);
             }
         }
-        return Game.NOT_SEQUENCE;
+        return NOT_SEQUENCE;
     }
 
     private  int scanRight() {
@@ -50,41 +52,41 @@ public class GameResult {
         for (int string = 0; string < 3; string++) {
             boolean sequenceFound = true;
             for (int row = 1; row < 3; row++) {
-                if (Game.getFieldValue(string, row - 1) != Game.getFieldValue(string, row)) {
+                if (getFieldValue(string, row - 1) != getFieldValue(string, row)) {
                     sequenceFound = false;
                 }
             }
-            if (sequenceFound && Game.getFieldValue(string,0) !=Game. NULL) {
-                return Game.getFieldValue(string,0);
+            if (sequenceFound && getFieldValue(string,0) != NULL) {
+                return getFieldValue(string,0);
             }
         }
-        return Game.NOT_SEQUENCE;
+        return NOT_SEQUENCE;
     }
 
     private  int scanDiagonal() {
         /*
             Check that first diagonal equal and not null
          */
-        if (Game.getFieldValue(0, 0) == Game.getFieldValue(1, 1) &&
-                Game.getFieldValue(1, 1) == Game.getFieldValue(2, 2)
-                && Game.getFieldValue(1,1) != Game.NULL) {
-            return Game.getFieldValue(1,1);
+        if (getFieldValue(0, 0) == getFieldValue(1, 1) &&
+                getFieldValue(1, 1) == getFieldValue(2, 2)
+                && getFieldValue(1,1) != NULL) {
+            return getFieldValue(1,1);
         }
         /*
             Check that second diagonal equal and not null
          */
-        if (Game.getFieldValue(0, 2) == Game.getFieldValue(1, 1) &&
-                Game.getFieldValue(1, 1) == Game.getFieldValue(2, 0)
-                && Game.getFieldValue(1,1) != Game.NULL) {
-            return Game.getFieldValue(1,1);
+        if (getFieldValue(0, 2) == getFieldValue(1, 1) &&
+                getFieldValue(1, 1) == getFieldValue(2, 0)
+                && getFieldValue(1,1) != NULL) {
+            return getFieldValue(1,1);
         }
-        return Game.NOT_SEQUENCE;
+        return NOT_SEQUENCE;
     }
 
     private  boolean checkGameOver() {
         for (int row = 0; row < 3; row++) {
             for (int string = 0; string < 3; string++) {
-                if (Game.getFieldValue(string, row) ==Game.NULL) {
+                if (getFieldValue(string, row) ==NULL) {
                     return false;
                 }
             }
@@ -95,8 +97,8 @@ public class GameResult {
     private void printGameResult(int result){
         String winnersName;
         switch (result) {
-            case Game.ZERO : {
-                if (Game.getFirstPlayerTriggered() == Game.Players.PLAYER1) {
+            case ZERO : {
+                if (getFirstPlayerTriggered() == Players.PLAYER1) {
                     winnersName = UserInterface.player2.getText();
                 } else {
                     winnersName = UserInterface.player1.getText();
@@ -104,8 +106,8 @@ public class GameResult {
 
                 break;
             }
-            case Game.CROSS : {
-                if (Game.getFirstPlayerTriggered() == Game.Players.PLAYER1) {
+            case CROSS : {
+                if (getFirstPlayerTriggered() == Players.PLAYER1) {
                     winnersName = UserInterface.player1.getText();
                 } else {
                     winnersName = UserInterface.player2.getText();
@@ -113,7 +115,7 @@ public class GameResult {
                 break;
             }
 
-            case Game.NOT_SEQUENCE : {
+            case NOT_SEQUENCE : {
                 winnersName = "Friendship";
                 break;
             }
@@ -123,7 +125,7 @@ public class GameResult {
         JOptionPane.showMessageDialog(null,
                 winnersName + " wins!!!");
 
-        Game.endTheGame();
+        endTheGame();
     }
 
 

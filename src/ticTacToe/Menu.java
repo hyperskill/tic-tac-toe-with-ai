@@ -3,6 +3,8 @@ package ticTacToe;
 import javax.swing.*;
 import java.awt.*;
 
+import static ticTacToe.Game.*;
+
 public class Menu extends JPanel{
     private Font font = new Font(null,Font.BOLD,15);
 
@@ -30,9 +32,9 @@ public class Menu extends JPanel{
         JMenuItem restart = new JMenuItem("Restart game");
         JMenuItem stop = new JMenuItem("Stop game");
 
-        start.addActionListener( actionEvent -> Game.startTheGame());
-        restart.addActionListener( actionEvent -> Game.restartTheGame());
-        stop.addActionListener( actionEvent -> Game.stopTheGame());
+        start.addActionListener( actionEvent -> startTheGame());
+        restart.addActionListener( actionEvent -> restartTheGame());
+        stop.addActionListener( actionEvent -> stopTheGame());
 
         file.add(start);
         file.add(restart);
@@ -50,23 +52,23 @@ public class Menu extends JPanel{
         JMenuItem hard = new JRadioButtonMenuItem("Hard");
 
         computerRival.addActionListener( actionEvent ->
-                Game.setPlayWithComputer(((JCheckBoxMenuItem) computerRival).getState()));
+                setPlayWithComputer(((JCheckBoxMenuItem) computerRival).getState()));
 
         computerRival.setSelected(true);
 
-        easy.setSelected(true);
+        medium.setSelected(true);
         easy.addActionListener( actionEvent -> {
-            Game.setLevel(Game.Level.EASY);
+            setLevel(Level.EASY);
             medium.setSelected(false);
             hard.setSelected(false);
         });
         medium.addActionListener( actionEvent -> {
-            Game.setLevel(Game.Level.MEDIUM);
+            setLevel(Level.MEDIUM);
             easy.setSelected(false);
             hard.setSelected(false);
         });
         hard.addActionListener( actionEvent -> {
-            Game.setLevel(Game.Level.HARD);
+            setLevel(Level.HARD);
             easy.setSelected(false);
             medium.setSelected(false);
         });
@@ -91,17 +93,17 @@ public class Menu extends JPanel{
         random.setSelected(true);
 
         p1.addActionListener( actionEvent -> {
-            Game.setFirstPlayerUserSelection(Game.FirstPlayerSelect.PLAYER1);
+            setFirstPlayerUserSelection(FirstPlayerSelect.PLAYER1);
             p2.setSelected(false);
             random.setSelected(false);
         });
         p2.addActionListener( actionEvent -> {
-            Game.setFirstPlayerUserSelection(Game.FirstPlayerSelect.PLAYER2);
+            setFirstPlayerUserSelection(FirstPlayerSelect.PLAYER2);
             p1.setSelected(false);
             random.setSelected(false);
         });
         random.addActionListener( actionEvent -> {
-            Game.setFirstPlayerUserSelection(Game.FirstPlayerSelect.RANDOM);
+            setFirstPlayerUserSelection(FirstPlayerSelect.RANDOM);
             p1.setSelected(false);
             p2.setSelected(false);
         });
