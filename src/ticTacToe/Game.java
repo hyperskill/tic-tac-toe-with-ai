@@ -1,5 +1,6 @@
 package ticTacToe;
 
+import javax.swing.filechooser.FileSystemView;
 import java.util.Random;
 
 public class Game {
@@ -9,12 +10,30 @@ public class Game {
     public static final int NULL = 2;
     public static final int NOT_SEQUENCE = 3;
 
-    public static final int PLAYER1 = 0;
-    public static final int PLAYER2 = 1;
-    public static final int NOT_STARTED = 2;
+    public enum Players {
+        PLAYER1,
+        PLAYER2,
+        NOT_STARTED
+    }
 
-    private static int whoMoves = CROSS;
-    private static int currentPlayerName;
+    public enum FirstPlayerSelect {
+        PLAYER1,
+        PLAYER2,
+        RANDOM
+    }
+
+    public enum Level {
+        EASY,
+        MEDIUM,
+        HARD
+    }
+
+
+    private static FirstPlayerSelect firstPlayerSelect = FirstPlayerSelect.RANDOM;
+    private static int activeFigure = CROSS;
+    private static Players currentPlayerName;
+    private static boolean playWithComputer = false;
+    private static Level level;
 
     private static boolean gameIsStarted = false;
 
@@ -24,11 +43,28 @@ public class Game {
 
     public static void startTheGame(){
         if (!gameIsStarted) {
-            Random random = new Random();
 
             gameIsStarted = true;
-            whoMoves = CROSS;
-            currentPlayerName = random.nextInt(2);
+            activeFigure = CROSS;
+
+            switch (firstPlayerSelect) {
+                case PLAYER1 : {
+                    currentPlayerName = Players.PLAYER1;
+                    break;
+                }
+                case PLAYER2 : {
+                    currentPlayerName = Players.PLAYER2;
+                    break;
+                }
+                case RANDOM : {
+                    if (new Random().nextBoolean()) {
+                        currentPlayerName = Players.PLAYER1;
+                    } else {
+                        currentPlayerName = Players.PLAYER2;
+                    }
+                }
+            }
+
             DisplayPlayer.display();
 
             for ( int i = 0; i < 3; i++) {
@@ -42,7 +78,7 @@ public class Game {
 
     public static void restartTheGame(){
         gameIsStarted = false;
-        setCurrentPlayerName(NOT_STARTED);
+        setCurrentPlayerName(Players.NOT_STARTED);
         DisplayPlayer.display();
         for ( int i = 0; i < 3; i++) {
             for ( int j = 0; j < 3; j++) {
@@ -186,18 +222,28 @@ public class Game {
     }
 
     public static int getWhoMoves() {
-        return whoMoves;
+        return activeFigure;
     }
 
     public static void setWhoMoves(int whoMoves) {
-        Game.whoMoves = whoMoves;
+        Game.activeFigure = whoMoves;
     }
 
-    public static int getCurrentPlayerName() {
+    public static Players getCurrentPlayerName() {
         return currentPlayerName;
     }
 
-    public static void setCurrentPlayerName(int currentPlayerName) {
+    public static void setCurrentPlayerName(Players currentPlayerName) {
         Game.currentPlayerName = currentPlayerName;
+    }
+
+    public static void setFirstPlayerSelect(FirstPlayerSelect firstPlayerSelect) {
+        Game.firstPlayerSelect = firstPlayerSelect;
+    }
+    public static void setPlayWithComputer(boolean playWithComputer) {
+        Game.playWithComputer = playWithComputer;
+    }
+    public static void setLevel(Level level) {
+        Game.level = level;
     }
 }

@@ -7,12 +7,13 @@ public class GameTextField extends JFrame {
 
     private JTextField text = new JTextField();
 
-    GameTextField(String text, boolean setEditable, boolean enableBorders, int height) {
-        Dimension dimension = new Dimension(90,height);
+    GameTextField(String text, boolean setEditable, boolean enableBorders, Font font) {
+        Dimension dimension = new Dimension(135,25);
         this.text.setText(text);
         this.text.setHorizontalAlignment(JTextField.CENTER);
         this.text.setEditable(setEditable);
         this.text.setPreferredSize(dimension);
+        this.text.setFont(font);
         if (!enableBorders) {
             this.text.setBorder(null);
         }
