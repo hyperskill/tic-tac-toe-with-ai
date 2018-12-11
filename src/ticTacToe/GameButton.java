@@ -15,7 +15,7 @@ public class GameButton extends JFrame{
         this.row = row;
 
         Font font = new Font(null,Font.BOLD,100);
-        Dimension dimension = new Dimension(120,120);
+        Dimension dimension = new Dimension(135,135);
         button.setPreferredSize(new Dimension(dimension));
         button.setFont(font);
         printFieldElement();
@@ -43,25 +43,15 @@ public class GameButton extends JFrame{
     }
 
     private void getUserSelection () {
-        Game.setFieldValue(string,row, Game.getWhoMoves());
-        printFieldElement();
-        button.setEnabled(false);
-
-        if (Game.getWhoMoves() == Game.CROSS) {
-            Game.setWhoMoves(Game.ZERO);
-        } else {
-            Game.setWhoMoves(Game.CROSS);
+        if (Game.isGameStarted()) {
+            Game.setFieldValue(string,row, Game.getActiveFigure() , true);
+            printFieldElement();
+            button.setEnabled(false);
+            new GameResult().checkGameResult();
+            if (Game.isGameStarted()) {
+                new ComputerRival().makeMove();
+            }
         }
-
-        if (Game.getCurrentPlayerName() == Game.PLAYER1) {
-            Game.setCurrentPlayerName(Game.PLAYER2);
-        } else {
-            Game.setCurrentPlayerName(Game.PLAYER1);
-        }
-
-        DisplayPlayer.display();
-
-        Game.checkGameResult();
     }
 
     public void setButtonEnabled(boolean state) {
