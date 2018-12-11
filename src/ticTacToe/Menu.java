@@ -28,12 +28,15 @@ public class Menu extends JPanel{
 
         JMenuItem start = new JMenuItem("Start game");
         JMenuItem restart = new JMenuItem("Restart game");
+        JMenuItem stop = new JMenuItem("Stop game");
 
         start.addActionListener( actionEvent -> Game.startTheGame());
         restart.addActionListener( actionEvent -> Game.restartTheGame());
+        stop.addActionListener( actionEvent -> Game.stopTheGame());
 
         file.add(start);
         file.add(restart);
+        file.add(stop);
 
         return file;
     }
@@ -48,6 +51,8 @@ public class Menu extends JPanel{
 
         computerRival.addActionListener( actionEvent ->
                 Game.setPlayWithComputer(((JCheckBoxMenuItem) computerRival).getState()));
+
+        computerRival.setSelected(true);
 
         easy.setSelected(true);
         easy.addActionListener( actionEvent -> {
@@ -86,17 +91,17 @@ public class Menu extends JPanel{
         random.setSelected(true);
 
         p1.addActionListener( actionEvent -> {
-            Game.setFirstPlayerSelect(Game.FirstPlayerSelect.PLAYER1);
+            Game.setFirstPlayerUserSelection(Game.FirstPlayerSelect.PLAYER1);
             p2.setSelected(false);
             random.setSelected(false);
         });
         p2.addActionListener( actionEvent -> {
-            Game.setFirstPlayerSelect(Game.FirstPlayerSelect.PLAYER2);
+            Game.setFirstPlayerUserSelection(Game.FirstPlayerSelect.PLAYER2);
             p1.setSelected(false);
             random.setSelected(false);
         });
         random.addActionListener( actionEvent -> {
-            Game.setFirstPlayerSelect(Game.FirstPlayerSelect.RANDOM);
+            Game.setFirstPlayerUserSelection(Game.FirstPlayerSelect.RANDOM);
             p1.setSelected(false);
             p2.setSelected(false);
         });

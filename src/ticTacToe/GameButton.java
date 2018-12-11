@@ -43,25 +43,15 @@ public class GameButton extends JFrame{
     }
 
     private void getUserSelection () {
-        Game.setFieldValue(string,row, Game.getWhoMoves());
-        printFieldElement();
-        button.setEnabled(false);
-
-        if (Game.getWhoMoves() == Game.CROSS) {
-            Game.setWhoMoves(Game.ZERO);
-        } else {
-            Game.setWhoMoves(Game.CROSS);
+        if (Game.isGameStarted()) {
+            Game.setFieldValue(string,row, Game.getActiveFigure() , true);
+            printFieldElement();
+            button.setEnabled(false);
+            new GameResult().checkGameResult();
+            if (Game.isGameStarted()) {
+                new ComputerRival().makeMove();
+            }
         }
-
-        if (Game.getCurrentPlayerName() == Game.Players.PLAYER1) {
-            Game.setCurrentPlayerName(Game.Players.PLAYER2);
-        } else {
-            Game.setCurrentPlayerName(Game.Players.PLAYER1);
-        }
-
-        DisplayPlayer.display();
-
-        Game.checkGameResult();
     }
 
     public void setButtonEnabled(boolean state) {

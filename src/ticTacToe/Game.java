@@ -1,14 +1,8 @@
 package ticTacToe;
 
-import javax.swing.filechooser.FileSystemView;
 import java.util.Random;
 
 public class Game {
-
-    public static final int ZERO = 0;
-    public static final int CROSS = 1;
-    public static final int NULL = 2;
-    public static final int NOT_SEQUENCE = 3;
 
     public enum Players {
         PLAYER1,
@@ -28,222 +22,164 @@ public class Game {
         HARD
     }
 
+    public static final int ZERO = 0;
+    public static final int CROSS = 1;
+    public static final int NULL = 2;
+    public static final int NOT_SEQUENCE = 3;
 
-    private static FirstPlayerSelect firstPlayerSelect = FirstPlayerSelect.RANDOM;
-    private static int activeFigure = CROSS;
-    private static Players currentPlayerName;
-    private static boolean playWithComputer = false;
+
+    private static FirstPlayerSelect firstPlayerUserSelection = FirstPlayerSelect.RANDOM;
+    private static Players currentPlayer;
+    private static Players firstPlayerTriggered;
+
     private static Level level;
 
-    private static boolean gameIsStarted = false;
+    private static boolean playWithComputer = true;
+    private static boolean playWithComputerTriggered;
+
+    private static boolean gameStarted = false;
 
     private static int[][] fieldValues = new int[3][3];
+    private static int activeFigure = CROSS;
 
-
+    private static String player2Name = "Player 2";
 
     public static void startTheGame(){
-        if (!gameIsStarted) {
+        if (!gameStarted) {
 
-            gameIsStarted = true;
+            gameStarted = true;
             activeFigure = CROSS;
 
-            switch (firstPlayerSelect) {
+            switch (firstPlayerUserSelection) {
                 case PLAYER1 : {
-                    currentPlayerName = Players.PLAYER1;
+                    currentPlayer = Players.PLAYER1;
                     break;
                 }
                 case PLAYER2 : {
-                    currentPlayerName = Players.PLAYER2;
+                    currentPlayer = Players.PLAYER2;
                     break;
                 }
                 case RANDOM : {
                     if (new Random().nextBoolean()) {
-                        currentPlayerName = Players.PLAYER1;
+                        currentPlayer = Players.PLAYER1;
                     } else {
-                        currentPlayerName = Players.PLAYER2;
+                        currentPlayer = Players.PLAYER2;
                     }
                 }
             }
-
             DisplayPlayer.display();
+            firstPlayerTriggered = currentPlayer;
 
             for ( int i = 0; i < 3; i++) {
                 for ( int j = 0; j < 3; j++) {
-                    Game.setFieldValue(i,j, NULL);
+                    Game.setFieldValue(i,j, NULL, false);
+                    UserInterface.button[i][j].printFieldElement();
                     UserInterface.button[i][j].setButtonEnabled(true);
                 }
             }
+
+            playWithComputerTriggered = playWithComputer;
+
+            if (playWithComputerTriggered){
+                player2Name = UserInterface.player2.getText();
+                UserInterface.player2.setText("Computer");
+                UserInterface.player2.getTextField().setEditable(false);
+                new ComputerRival().makeMove();
+            }
+
         }
     }
 
     public static void restartTheGame(){
-        gameIsStarted = false;
+        gameStarted = false;
+        UserInterface.player2.setText(player2Name);
+        UserInterface.player2.getTextField().setEditable(true);
+        startTheGame();
+    }
+
+    public static void stopTheGame(){
+        gameStarted = false;
         setCurrentPlayerName(Players.NOT_STARTED);
+        UserInterface.player2.setText(player2Name);
+        UserInterface.player2.getTextField().setEditable(true);
         DisplayPlayer.display();
         for ( int i = 0; i < 3; i++) {
             for ( int j = 0; j < 3; j++) {
-                Game.setFieldValue(i,j, NULL);
+                Game.setFieldValue(i,j, NULL, false);
                 UserInterface.button[i][j].setWaitingForGame();
             }
         }
     }
 
-    public static void printArray() {
-        System.out.print("\n New Array: \n");
+    public static void endTheGame(){
+        gameStarted = false;
+        setCurrentPlayerName(Game.Players.NOT_STARTED);
+        UserInterface.player2.setText(player2Name);
+        UserInterface.player2.getTextField().setEditable(true);
+        DisplayPlayer.display();
         for ( int i = 0; i < 3; i++) {
             for ( int j = 0; j < 3; j++) {
-                System.out.print(getFieldValue(i,j)+" ");
+                UserInterface.button[i][j].setWaitingForGame();
             }
-            System.out.print("\n");
         }
     }
 
-    public static void checkGameResult() {
-        int result = scanDiagonal();
-        if (result != NOT_SEQUENCE) {
-            printResult(result);
-            return;
+    public static void setFieldValue(int string, int row, int fieldValue, boolean changeGameProgress) {
+        fieldValues[string][row] = fieldValue;
+        if (changeGameProgress) {
+            if (getActiveFigure() == Game.CROSS) {
+                setActiveFigure(Game.ZERO);
+            } else {
+                setActiveFigure(Game.CROSS);
+            }
+
+            if (getCurrentPlayerName() == Players.PLAYER1) {
+                setCurrentPlayerName(Players.PLAYER2);
+            } else {
+                setCurrentPlayerName(Players.PLAYER1);
+            }
+            DisplayPlayer.display();
         }
-
-        result = scanDown();
-        if (result != NOT_SEQUENCE) {
-            printResult(result);
-            return;
-        }
-
-        result = scanRight();
-        if (result != NOT_SEQUENCE) {
-            printResult(result);
-            return;
-        }
-
-        if (checkGameOver()){
-            printResult(NOT_SEQUENCE);
-        } else {
-            printResult(NULL);
-        }
-
-
     }
 
-    private static int scanDown() {
 
-        for( int row = 0; row < 3; row++) {
-            boolean sequenceFound = true;
-            for (int string = 1; string < 3; string++) {
-                if (getFieldValue(string - 1, row) != getFieldValue(string, row)) {
-                    sequenceFound = false;
-                }
-            }
-            if (sequenceFound && getFieldValue(0, row) != NULL) {
-                return getFieldValue(0, row);
-            }
-        }
-        return NOT_SEQUENCE;
-    }
-
-    private static int scanRight() {
-
-        for( int string = 0; string < 3; string++) {
-            boolean sequenceFound = true;
-            for (int row = 1; row < 3; row++) {
-                if (getFieldValue(string, row - 1) != getFieldValue(string, row)) {
-                    sequenceFound = false;
-                }
-            }
-            if (sequenceFound && getFieldValue(string,0) != NULL) {
-                return getFieldValue(string,0);
-            }
-        }
-        return NOT_SEQUENCE;
-    }
-
-    private static int scanDiagonal() {
-        /*
-            Check that first diagonal equal and not null
-         */
-        if(getFieldValue(0, 0) == getFieldValue(1, 1) &&
-                getFieldValue(1, 1) == getFieldValue(2, 2)
-         && getFieldValue(1,1) != NULL) {
-                return getFieldValue(1,1);
-        }
-        /*
-            Check that second diagonal equal and not null
-         */
-        if(getFieldValue(0, 2) == getFieldValue(1, 1) &&
-                getFieldValue(1, 1) == getFieldValue(2, 0)
-                && getFieldValue(1,1) != NULL) {
-            return getFieldValue(1,1);
-        }
-        return NOT_SEQUENCE;
-    }
-
-    private static boolean checkGameOver() {
-        for( int row = 0; row < 3; row++) {
-            for (int string = 0; string < 3; string++) {
-                if (getFieldValue(string, row) == NULL) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private static void printResult(int result) {
-        switch (result) {
-            case ZERO : {
-                System.out.println("O wins!");
-                break;
-            }
-            case CROSS : {
-                System.out.println("X wins!");
-                break;
-            }
-            case Game.NULL : {
-                System.out.println("Game not finished");
-                break;
-            }
-
-            case Game.NOT_SEQUENCE : {
-                System.out.println("Friendship wins");
-                break;
-            }
-
-            default : break;
-        }
+    public static int getActiveFigure() {
+        return activeFigure;
     }
 
     public static int getFieldValue(int string, int row) {
         return fieldValues[string][row];
     }
 
-    public static void setFieldValue(int string, int row, int fieldValue) {
-        fieldValues[string][row] = fieldValue;
-    }
-
-    public static int getWhoMoves() {
-        return activeFigure;
-    }
-
-    public static void setWhoMoves(int whoMoves) {
+    public static void setActiveFigure(int whoMoves) {
         Game.activeFigure = whoMoves;
     }
 
     public static Players getCurrentPlayerName() {
-        return currentPlayerName;
+        return currentPlayer;
     }
 
     public static void setCurrentPlayerName(Players currentPlayerName) {
-        Game.currentPlayerName = currentPlayerName;
+        Game.currentPlayer = currentPlayerName;
     }
 
-    public static void setFirstPlayerSelect(FirstPlayerSelect firstPlayerSelect) {
-        Game.firstPlayerSelect = firstPlayerSelect;
+    public static void setFirstPlayerUserSelection(FirstPlayerSelect firstPlayerUserSelection) {
+        Game.firstPlayerUserSelection = firstPlayerUserSelection;
     }
     public static void setPlayWithComputer(boolean playWithComputer) {
         Game.playWithComputer = playWithComputer;
     }
+    public static boolean isPlayWithComputerTriggered() {
+        return playWithComputerTriggered;
+    }
     public static void setLevel(Level level) {
         Game.level = level;
     }
+    public static boolean isGameStarted() {
+        return gameStarted;
+    }
+    public static Players getFirstPlayerTriggered() {
+        return firstPlayerTriggered;
+    }
+
 }
