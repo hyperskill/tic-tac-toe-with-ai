@@ -13,7 +13,8 @@ public class MiniMax extends GameResult {
         int nodeRate;
         int bestNodeIndex = 0;
 
-        List<Cell> emptyCells = new GameResult().emptyCells();
+        List<Cell> emptyCells = emptyCells();
+
 
         if ( getFirstPlayerTriggered() == Players.PLAYER2 ) {
             computer = CROSS;
@@ -23,17 +24,19 @@ public class MiniMax extends GameResult {
             human = CROSS;
         }
 
-        if (new GameResult().win(field, computer)) {
+        if (win(field, computer)) {
             cell.rate = 10;
-            return
-        } else if (new GameResult().win(field, human)) {
-            return -10;
+            return cell;
+        } else if (win(field, human)) {
+            cell.rate = -10;
+            return cell;
         } else if (emptyCells.isEmpty()) {
-            return 0;
+            cell.rate = 0;
+            return cell;
         }
 
         for ( int i = 0; i < emptyCells.size(); i++) {
-            GameResult.Cell cell= emptyCells.get(i);
+            cell= emptyCells.get(i);
             field[cell.s][cell.r] = activeFigure;
 
             if (activeFigure == computer) {

@@ -25,7 +25,7 @@ public class Game {
     public static final int ZERO = 0;
     public static final int CROSS = 1;
     public static final int EMPTY = 2;
-    public static final int NOT_SEQUENCE = 3;
+    
 
 
     private static FirstPlayerSelect firstPlayerUserSelection = FirstPlayerSelect.RANDOM;

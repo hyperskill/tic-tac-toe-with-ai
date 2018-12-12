@@ -35,8 +35,13 @@ public class ComputerRival {
 
 
     private void hard() {
+        if (new GameResult().emptyCells().size() == 9) {
+            easy();
+            return;
+        }
 
-        //dataUpdate(string, row);
+        GameResult.Cell cell = new MiniMax().minimax(getFieldValues(),getActiveFigure());
+        dataUpdate(cell.s, cell.r);
     }
 
 

@@ -19,7 +19,7 @@ public class GameResult {
             }
         }
         if (emptyCells().isEmpty()) {
-            printGameResult(NOT_SEQUENCE);
+            printGameResult(EMPTY);
         }
     }
 
@@ -73,7 +73,7 @@ public class GameResult {
                 break;
             }
 
-            case NOT_SEQUENCE : {
+            case EMPTY : {
                 winnersName = "Friendship";
                 break;
             }
