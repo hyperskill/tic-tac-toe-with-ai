@@ -29,7 +29,7 @@ public class ComputerRival {
             string = rand.nextInt(3);
             row = rand.nextInt(3);
             cell= getFieldValue(string, row);
-        } while (cell != NULL);
+        } while (cell != EMPTY);
         dataUpdate(string, row);
     }
 

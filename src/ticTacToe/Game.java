@@ -16,7 +16,7 @@ public class Game {
         RANDOM
     }
 
-    public enum Level {
+    public enum Levels {
         EASY,
         MEDIUM,
         HARD
@@ -24,7 +24,7 @@ public class Game {
 
     public static final int ZERO = 0;
     public static final int CROSS = 1;
-    public static final int NULL = 2;
+    public static final int EMPTY = 2;
     public static final int NOT_SEQUENCE = 3;
 
 
@@ -32,13 +32,12 @@ public class Game {
     private static Players currentPlayer;
     private static Players firstPlayerTriggered;
 
-    private static Level level = Level.MEDIUM;
+    private static Levels level = Levels.MEDIUM;
 
     private static boolean playWithComputer = true;
     private static boolean playWithComputerTriggered;
 
     private static boolean gameStarted = false;
-
     private static int[][] fieldValues = new int[3][3];
     private static int activeFigure = CROSS;
 
@@ -72,7 +71,7 @@ public class Game {
 
             for ( int i = 0; i < 3; i++) {
                 for ( int j = 0; j < 3; j++) {
-                    Game.setFieldValue(i,j, NULL, false);
+                    Game.setFieldValue(i,j, EMPTY, false);
                     UserInterface.button[i][j].printFieldElement();
                     UserInterface.button[i][j].setButtonEnabled(true);
                 }
@@ -105,7 +104,7 @@ public class Game {
         DisplayPlayer.display();
         for ( int i = 0; i < 3; i++) {
             for ( int j = 0; j < 3; j++) {
-                Game.setFieldValue(i,j, NULL, false);
+                Game.setFieldValue(i,j, EMPTY, false);
                 UserInterface.button[i][j].setWaitingForGame();
             }
         }
@@ -151,6 +150,10 @@ public class Game {
         return fieldValues[string][row];
     }
 
+    public static int[][] getFieldValues() {
+        return fieldValues;
+    }
+
     public static void setActiveFigure(int whoMoves) {
         Game.activeFigure = whoMoves;
     }
@@ -175,7 +178,7 @@ public class Game {
         return playWithComputerTriggered;
     }
 
-    public static void setLevel(Level level) {
+    public static void setLevel(Levels level) {
         Game.level = level;
     }
 
@@ -187,8 +190,9 @@ public class Game {
         return firstPlayerTriggered;
     }
 
-    public static Level getLevel() {
+    public static Levels getLevel() {
         return level;
     }
+
 
 }

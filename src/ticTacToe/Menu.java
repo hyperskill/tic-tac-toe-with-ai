@@ -58,17 +58,17 @@ public class Menu extends JPanel{
 
         medium.setSelected(true);
         easy.addActionListener( actionEvent -> {
-            setLevel(Level.EASY);
+            setLevel(Levels.EASY);
             medium.setSelected(false);
             hard.setSelected(false);
         });
         medium.addActionListener( actionEvent -> {
-            setLevel(Level.MEDIUM);
+            setLevel(Levels.MEDIUM);
             easy.setSelected(false);
             hard.setSelected(false);
         });
         hard.addActionListener( actionEvent -> {
-            setLevel(Level.HARD);
+            setLevel(Levels.HARD);
             easy.setSelected(false);
             medium.setSelected(false);
         });

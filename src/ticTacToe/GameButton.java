@@ -3,6 +3,8 @@ package ticTacToe;
 import javax.swing.*;
 import java.awt.*;
 
+import static ticTacToe.Game.*;
+
 public class GameButton extends JFrame{
 
     private JButton button = new JButton();
@@ -23,18 +25,18 @@ public class GameButton extends JFrame{
     }
 
     public void printFieldElement() {
-        int val = Game.getFieldValue(string,row);
+        int val = getFieldValue(string,row);
 
         switch (val) {
-            case Game.ZERO : {
+            case ZERO : {
                 button.setText("O");
                 break;
             }
-            case Game.CROSS : {
+            case CROSS : {
                 button.setText("X");
                 break;
             }
-            case Game.NULL : {
+            case EMPTY: {
                 button.setText("");
                 break;
             }
@@ -43,12 +45,12 @@ public class GameButton extends JFrame{
     }
 
     private void getUserSelection () {
-        if (Game.isGameStarted()) {
-            Game.setFieldValue(string,row, Game.getActiveFigure() , true);
+        if (isGameStarted()) {
+            setFieldValue(string,row, getActiveFigure() , true);
             printFieldElement();
             button.setEnabled(false);
             new GameResult().checkGameResult();
-            if (Game.isGameStarted()) {
+            if (isGameStarted()) {
                 new ComputerRival().makeMove();
             }
         }
