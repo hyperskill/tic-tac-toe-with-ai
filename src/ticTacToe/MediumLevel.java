@@ -2,10 +2,17 @@ package ticTacToe;
 
 import static ticTacToe.Game.*;
 
+/**
+ *  Class that implements medium level for game - it finished sequence if it found
+ */
 public class MediumLevel {
     private int string;
     private int row;
 
+    /**
+     * method calls scanning for sequence, if it not found making a random move
+     * @see ComputerRival
+     */
     public void medium() {
         int valueOfComputer = getActiveFigure();
         int valueOfHuman;
@@ -27,6 +34,10 @@ public class MediumLevel {
         new ComputerRival().easy();
     }
 
+    /**
+     * method scanning field upside down, left to right and diagonals to find sequence in field that could lead to win
+     * of any player
+     */
     private boolean scan(int value) {
         if (scanDown(value)) {
             ComputerRival.dataUpdate(string, row);

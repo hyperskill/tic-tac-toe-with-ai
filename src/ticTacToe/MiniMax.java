@@ -4,8 +4,22 @@ import java.util.List;
 
 import static ticTacToe.Game.*;
 
+/**
+ *  Class that implements algorithm minimax to find the best move *
+ */
 public class MiniMax extends GameResult {
 
+
+    /**
+     * minimax method that completes recursively until the terminal game state will not found
+     *
+     * a result of this algorithm work is a tree with all possible game combinations from which selected move with
+     * minimum probability of win for user and maximum for computer
+     *
+     * @param field game field that should be analysed
+     * @param activeFigure figure that should moves now
+     * @return cell with best move coordinates and it rate
+     */
     public Cell minimax (int[][] field, int activeFigure) {
         Cell cell = new Cell(0,0);
         int computer;
@@ -68,7 +82,6 @@ public class MiniMax extends GameResult {
                 }
             }
         }
-
         return emptyCells.get(bestNodeIndex);
     }
 }

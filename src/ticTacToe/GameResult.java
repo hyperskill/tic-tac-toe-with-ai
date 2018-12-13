@@ -7,11 +7,17 @@ import java.util.List;
 
 import static ticTacToe.Game.*;
 
+/**
+ *  Class for field analyse- detects winner and wnd of game
+ */
+
 public class GameResult {
 
 
+    /**
+     * Method checks game win and tie for players 1 and 2
+     */
     public  void checkGameResult() {
-
         for (int i = 0; i < 2; i++ ){
             if (win(getFieldValues(), i)) {
                 printGameResult(i);
@@ -23,7 +29,12 @@ public class GameResult {
         }
     }
 
-
+    /**
+     * Method gets field and check all winning states for given figure
+     * @param field game field that should be checked
+     * @param figure figure for which game result should be checked
+     * @return true if winning combination for given figure exists in field
+     */
     public boolean win(int[][] field, int figure) {
         if (
                 (field[0][0] == figure && field[1][1] == figure && field[2][2] == figure) || //diagonal 1
@@ -41,6 +52,11 @@ public class GameResult {
         }
     }
 
+    /**
+     * Method creates list of cells free to move
+     *
+     * @return list of cells
+     */
     public List<Cell> emptyCells() {
         List<Cell> emptyCells = new ArrayList<>();
         for (int row = 0; row < 3; row++) {
@@ -53,6 +69,10 @@ public class GameResult {
         return emptyCells;
     }
 
+    /**
+     * Open new information window according game result
+     * @param result figure that win the game
+     */
     private void printGameResult(int result){
         String winnersName;
         switch (result) {
@@ -86,6 +106,11 @@ public class GameResult {
         endTheGame();
     }
 
+    /**
+     * Class that contain coordinate and rate of cell(using for minimax algorithm)
+     *
+     * @see MiniMax
+     */
     public class Cell {
         int s;
         int r;
@@ -96,5 +121,4 @@ public class GameResult {
             this.r = row;
         }
     }
-
 }

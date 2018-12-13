@@ -3,6 +3,11 @@ package ticTacToe;
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+ *  Class for head labels User interface element
+ * @see UserInterface
+ */
 public class HeadLabels {
     public JPanel createHeadLabels() {
         JPanel head = new JPanel();

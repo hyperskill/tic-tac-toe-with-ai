@@ -5,10 +5,12 @@ import java.awt.*;
 
 import static ticTacToe.Game.*;
 
+/**
+ *  Class for Game Button ui element, contains button, and it coordinate according to field matrix
+ */
 public class GameButton extends JFrame{
 
     private JButton button = new JButton();
-
     private int string;
     private int row;
 
@@ -23,7 +25,12 @@ public class GameButton extends JFrame{
         printFieldElement();
         button.addActionListener( actionEvent -> getUserSelection());
     }
-
+    /**
+     *  method that updates button text according to field matrix element
+     *  that it was bound by string and row parameter
+     *
+     * @see Game
+     */
     public void printFieldElement() {
         int val = getFieldValue(string,row);
 
@@ -43,7 +50,9 @@ public class GameButton extends JFrame{
             default : break;
         }
     }
-
+    /**
+     *  method that process user selection to button
+     */
     private void getUserSelection () {
         if (isGameStarted()) {
             setFieldValue(string,row, getActiveFigure() , true);
@@ -55,16 +64,24 @@ public class GameButton extends JFrame{
             }
         }
     }
-
+    /**
+     * Button state setter
+     * @param state enable button when true
+     */
     public void setButtonEnabled(boolean state) {
         button.setEnabled(state);
     }
-
+    /**
+     * Method disables button before game starts and updates text in it
+     *
+     */
     public void setWaitingForGame () {
         button.setEnabled(false);
         printFieldElement();
     }
-
+    /**
+        button getter
+     */
     public JButton getButton() {
         return button;
     }

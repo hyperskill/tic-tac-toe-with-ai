@@ -5,6 +5,10 @@ import java.awt.*;
 
 import static ticTacToe.Game.*;
 
+/**
+ *  Class for menu bar user interface element
+ * @see UserInterface
+ */
 public class Menu extends JPanel{
     private Font font = new Font(null,Font.BOLD,15);
 
