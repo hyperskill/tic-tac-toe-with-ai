@@ -2,10 +2,17 @@ package ticTacToe;
 
 import static ticTacToe.Game.*;
 
+/**
+ *  Class that implements medium level for game - it finished sequence if it found
+ */
 public class MediumLevel {
     private int string;
     private int row;
 
+    /**
+     * method calls scanning for sequence, if it not found making a random move
+     * @see ComputerRival
+     */
     public void medium() {
         int valueOfComputer = getActiveFigure();
         int valueOfHuman;
@@ -27,6 +34,10 @@ public class MediumLevel {
         new ComputerRival().easy();
     }
 
+    /**
+     * method scanning field upside down, left to right and diagonals to find sequence in field that could lead to win
+     * of any player
+     */
     private boolean scan(int value) {
         if (scanDown(value)) {
             ComputerRival.dataUpdate(string, row);
@@ -49,7 +60,7 @@ public class MediumLevel {
         for( int r = 0; r < 3; r++) {
             if (getFieldValue(0, r) == value &&
                     getFieldValue(1, r) == value &&
-                    getFieldValue(2,r) == NULL) {
+                    getFieldValue(2,r) == EMPTY) {
                 string = 2;
                 row = r;
                 return true;
@@ -57,7 +68,7 @@ public class MediumLevel {
 
             if (getFieldValue(1, r) == value &&
                     getFieldValue(2, r) == value &&
-                    getFieldValue(0,r) == NULL ) {
+                    getFieldValue(0,r) == EMPTY) {
                 string = 0;
                 row = r;
                 return true;
@@ -72,7 +83,7 @@ public class MediumLevel {
         for( int s = 0; s < 3; s++) {
             if (getFieldValue(s, 0) == value &&
                     getFieldValue(s, 1) == value &&
-                    getFieldValue(s,2) == NULL ) {
+                    getFieldValue(s,2) == EMPTY) {
                 string = s;
                 row = 2;
                 return true;
@@ -80,7 +91,7 @@ public class MediumLevel {
 
             if (getFieldValue(s, 1) == value &&
                     getFieldValue(s, 2) == value &&
-                    getFieldValue(s,0) == NULL ) {
+                    getFieldValue(s,0) == EMPTY) {
                 string = s;
                 row = 0;
                 return true;
@@ -95,7 +106,7 @@ public class MediumLevel {
          */
         if (getFieldValue(0, 0) == value &&
                 getFieldValue(1, 1) == value &&
-                getFieldValue(2,2) == NULL ) {
+                getFieldValue(2,2) == EMPTY) {
             string = 2;
             row = 2;
             return true;
@@ -104,7 +115,7 @@ public class MediumLevel {
 
         if (getFieldValue(1, 1) == value &&
                 getFieldValue(2, 2) == value &&
-                getFieldValue(0,0) == NULL ) {
+                getFieldValue(0,0) == EMPTY) {
             string = 0;
             row = 0;
             return true;
@@ -114,7 +125,7 @@ public class MediumLevel {
          */
         if (getFieldValue(0, 2) == value &&
                 getFieldValue(1, 1) == value &&
-                getFieldValue(2,0) == NULL ) {
+                getFieldValue(2,0) == EMPTY) {
             string = 2;
             row = 0;
             return true;
@@ -123,7 +134,7 @@ public class MediumLevel {
 
         if (getFieldValue(2, 0) == value &&
                 getFieldValue(1, 1) == value &&
-                getFieldValue(0,2) == NULL ) {
+                getFieldValue(0,2) == EMPTY) {
             string = 0;
             row = 2;
             return true;

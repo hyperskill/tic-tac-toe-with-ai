@@ -2,98 +2,77 @@ package ticTacToe;
 
 import javax.swing.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ticTacToe.Game.*;
 
+/**
+ *  Class for field analyse- detects winner and wnd of game
+ */
+
 public class GameResult {
+
+
+    /**
+     * Method checks game win and tie for players 1 and 2
+     */
     public  void checkGameResult() {
-        int result = scanDiagonal();
-        if (result != NOT_SEQUENCE) {
-            printGameResult(result);
-            return;
-        }
-
-        result = scanDown();
-        if (result != NOT_SEQUENCE) {
-            printGameResult(result);
-            return;
-        }
-
-        result = scanRight();
-        if (result != NOT_SEQUENCE) {
-            printGameResult(result);
-            return;
-        }
-
-        if (checkGameOver()){
-            printGameResult(NOT_SEQUENCE);
-        }
-
-
-    }
-
-    private  int scanDown() {
-
-        for( int row = 0; row < 3; row++) {
-            boolean sequenceFound = true;
-            for (int string = 1; string < 3; string++) {
-                if (getFieldValue(string - 1, row) != getFieldValue(string, row)) {
-                    sequenceFound = false;
-                }
-            }
-            if (sequenceFound && getFieldValue(0, row) != NULL) {
-                return getFieldValue(0, row);
+        for (int i = 0; i < 2; i++ ){
+            if (win(getFieldValues(), i)) {
+                printGameResult(i);
+                return;
             }
         }
-        return NOT_SEQUENCE;
+        if (emptyCells().isEmpty()) {
+            printGameResult(EMPTY);
+        }
     }
 
-    private  int scanRight() {
-
-        for (int string = 0; string < 3; string++) {
-            boolean sequenceFound = true;
-            for (int row = 1; row < 3; row++) {
-                if (getFieldValue(string, row - 1) != getFieldValue(string, row)) {
-                    sequenceFound = false;
-                }
-            }
-            if (sequenceFound && getFieldValue(string,0) != NULL) {
-                return getFieldValue(string,0);
-            }
+    /**
+     * Method gets field and check all winning states for given figure
+     * @param field game field that should be checked
+     * @param figure figure for which game result should be checked
+     * @return true if winning combination for given figure exists in field
+     */
+    public boolean win(int[][] field, int figure) {
+        if (
+                (field[0][0] == figure && field[1][1] == figure && field[2][2] == figure) || //diagonal 1
+                (field[2][0] == figure && field[1][1] == figure && field[0][2] == figure) || //diagonal 2
+                (field[0][0] == figure && field[0][1] == figure && field[0][2] == figure) || //string 1
+                (field[1][0] == figure && field[1][1] == figure && field[1][2] == figure) || //string 2
+                (field[2][0] == figure && field[2][1] == figure && field[2][2] == figure) || //string 3
+                (field[0][0] == figure && field[1][0] == figure && field[2][0] == figure) || //row 1
+                (field[0][1] == figure && field[1][1] == figure && field[2][1] == figure) || //row 2
+                (field[0][2] == figure && field[1][2] == figure && field[2][2] == figure)    //row 3
+        ) {
+            return true;
+        } else {
+            return false;
         }
-        return NOT_SEQUENCE;
     }
 
-    private  int scanDiagonal() {
-        /*
-            Check that first diagonal equal and not null
-         */
-        if (getFieldValue(0, 0) == getFieldValue(1, 1) &&
-                getFieldValue(1, 1) == getFieldValue(2, 2)
-                && getFieldValue(1,1) != NULL) {
-            return getFieldValue(1,1);
-        }
-        /*
-            Check that second diagonal equal and not null
-         */
-        if (getFieldValue(0, 2) == getFieldValue(1, 1) &&
-                getFieldValue(1, 1) == getFieldValue(2, 0)
-                && getFieldValue(1,1) != NULL) {
-            return getFieldValue(1,1);
-        }
-        return NOT_SEQUENCE;
-    }
-
-    private  boolean checkGameOver() {
+    /**
+     * Method creates list of cells free to move
+     *
+     * @return list of cells
+     */
+    public List<Cell> emptyCells() {
+        List<Cell> emptyCells = new ArrayList<>();
         for (int row = 0; row < 3; row++) {
             for (int string = 0; string < 3; string++) {
-                if (getFieldValue(string, row) ==NULL) {
-                    return false;
+                if (getFieldValue(string, row) == EMPTY) {
+                    emptyCells.add(new Cell(string,row));
                 }
             }
         }
-        return true;
+        return emptyCells;
     }
 
+    /**
+     * Open new information window according game result
+     * @param result figure that win the game
+     */
     private void printGameResult(int result){
         String winnersName;
         switch (result) {
@@ -103,7 +82,6 @@ public class GameResult {
                 } else {
                     winnersName = UserInterface.player1.getText();
                 }
-
                 break;
             }
             case CROSS : {
@@ -115,7 +93,7 @@ public class GameResult {
                 break;
             }
 
-            case NOT_SEQUENCE : {
+            case EMPTY : {
                 winnersName = "Friendship";
                 break;
             }
@@ -128,5 +106,19 @@ public class GameResult {
         endTheGame();
     }
 
+    /**
+     * Class that contain coordinate and rate of cell(using for minimax algorithm)
+     *
+     * @see MiniMax
+     */
+    public class Cell {
+        int s;
+        int r;
+        int rate;
 
+        Cell(int string, int row) {
+            this.s = string;
+            this.r = row;
+        }
+    }
 }

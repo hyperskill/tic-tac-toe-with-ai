@@ -3,6 +3,10 @@ package ticTacToe;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *  Class for Game Text field ui element, contains field and its parameters
+ * @see UserInterface
+ */
 public class GameTextField extends JFrame {
 
     private JTextField text = new JTextField();

@@ -3,9 +3,21 @@ package ticTacToe;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class that implements UI
+ */
 public class UserInterface extends JFrame {
 
+    /**
+     *  buttons matrix that bound to field with matrix values
+     * @see GameButton
+     * @see Game
+     */
     public static GameButton[][] button = new GameButton[3][3];
+
+    /**
+     * Text fields for gamer names and turn indication
+     */
     public static GameTextField player1 =
             new GameTextField("Player 1", true, true,null);
     public static GameTextField player2 =
@@ -28,6 +40,10 @@ public class UserInterface extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Methods bounds buttons to matrix, creates bars of menu,labels, players name and buttons
+     *
+     */
     private void createField() {
         JMenuBar menu = new Menu().menuCreator();
         JPanel headLabels = new HeadLabels().createHeadLabels();
@@ -40,7 +56,6 @@ public class UserInterface extends JFrame {
             }
             line[i] = formLine(button[i][0].getButton(), button[i][1].getButton(), button[i][2].getButton());
         }
-
 
         createLayout(menu, headLabels, head, line[0], line[1], line[2]);
     }
@@ -72,12 +87,19 @@ public class UserInterface extends JFrame {
         return head;
     }
 
+    /**
+     * Methods form the string of buttons matrix
+     * @param b1
+     * @param b2
+     * @param b3
+     * @return line of buttons
+     */
     private JPanel formLine(JButton b1, JButton b2, JButton b3) {
 
-        JPanel fileSelectGroup = new JPanel();
+        JPanel buttonsLine = new JPanel();
 
-        GroupLayout groupLayout = new GroupLayout(fileSelectGroup);
-        fileSelectGroup.setLayout(groupLayout);
+        GroupLayout groupLayout = new GroupLayout(buttonsLine);
+        buttonsLine.setLayout(groupLayout);
 
         groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
                 .addComponent(b1)
@@ -95,10 +117,19 @@ public class UserInterface extends JFrame {
 
         groupLayout.linkSize( b1, b2, b3);
 
-        return fileSelectGroup;
+        return buttonsLine;
     }
 
 
+    /**
+     * creates layout compiling table of stings :
+     * @param menu
+     * @param headLabels
+     * @param head
+     * @param line1
+     * @param line2
+     * @param line3
+     */
     private void createLayout(JComponent menu, JComponent headLabels, JComponent head, JComponent line1,
                               JComponent line2, JComponent line3) {
         Container pane = getContentPane();
