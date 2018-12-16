@@ -36,20 +36,49 @@ public class GameResult {
      * @return true if winning combination for given figure exists in field
      */
     public boolean win(int[][] field, int figure) {
-        if (
-                (field[0][0] == figure && field[1][1] == figure && field[2][2] == figure) || //diagonal 1
-                (field[2][0] == figure && field[1][1] == figure && field[0][2] == figure) || //diagonal 2
-                (field[0][0] == figure && field[0][1] == figure && field[0][2] == figure) || //string 1
-                (field[1][0] == figure && field[1][1] == figure && field[1][2] == figure) || //string 2
-                (field[2][0] == figure && field[2][1] == figure && field[2][2] == figure) || //string 3
-                (field[0][0] == figure && field[1][0] == figure && field[2][0] == figure) || //row 1
-                (field[0][1] == figure && field[1][1] == figure && field[2][1] == figure) || //row 2
-                (field[0][2] == figure && field[1][2] == figure && field[2][2] == figure)    //row 3
-        ) {
-            return true;
-        } else {
-            return false;
+        for (int s = 0; s < field.length; s++) {
+            for(int r = 0; r < field.length; r++) {
+                if (field[s][r] != figure) {
+                    break;
+                }
+                if (r == field.length - 1) {
+                    return true;
+                }
+            }
         }
+
+        for (int r = 0; r < field.length; r++) {
+            for(int s = 0; s < field.length; s++) {
+                if (field[s][r] != figure) {
+                    break;
+                }
+                if (s == field.length - 1) {
+                    return true;
+                }
+            }
+        }
+
+        for (int s = 0; s < field.length; s++) {
+            if (field[s][s] != figure) {
+                break;
+            }
+            if (s == field.length - 1) {
+                return true;
+            }
+        }
+
+        int r = 0;
+        for (int s = field.length-1; s >= 0; s--) {
+
+            if (field[s][r] != figure) {
+                break;
+            }
+            if (r == field.length - 1) {
+                return true;
+            }
+            r++;
+        }
+        return false;
     }
 
     /**
@@ -59,8 +88,8 @@ public class GameResult {
      */
     public List<Cell> emptyCells() {
         List<Cell> emptyCells = new ArrayList<>();
-        for (int row = 0; row < 3; row++) {
-            for (int string = 0; string < 3; string++) {
+        for (int row = 0; row < getFieldValues().length; row++) {
+            for (int string = 0; string < getFieldValues().length; string++) {
                 if (getFieldValue(string, row) == EMPTY) {
                     emptyCells.add(new Cell(string,row));
                 }
@@ -77,15 +106,15 @@ public class GameResult {
         String winnersName;
         switch (result) {
             case ZERO : {
-                if (getFirstPlayerTriggered() == Players.PLAYER1) {
-                    winnersName = UserInterface.player2.getText();
-                } else {
+                if (Game.player1.getFigure() == ZERO) {
                     winnersName = UserInterface.player1.getText();
+                } else {
+                    winnersName = UserInterface.player2.getText();
                 }
                 break;
             }
             case CROSS : {
-                if (getFirstPlayerTriggered() == Players.PLAYER1) {
+                if (Game.player1.getFigure() == CROSS) {
                     winnersName = UserInterface.player1.getText();
                 } else {
                     winnersName = UserInterface.player2.getText();

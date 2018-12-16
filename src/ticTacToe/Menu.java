@@ -15,16 +15,19 @@ public class Menu extends JPanel{
     public JMenuBar menuCreator(){
         JMenuBar menuBar = new JMenuBar();
         JMenu game = menuGameCreator();
-        JMenu rival = menuRivalCreator();
+        JMenu p1 = menuPlayerCreator("Player 1  |",1,false);
+        JMenu p2 = menuPlayerCreator("Player 2", 2, true);
         JMenu first = firstMoveCreator();
 
         game.setFont(font);
-        rival.setFont(font);
+        p1.setFont(font);
+        p2.setFont(font);
         first.setFont(font);
 
         menuBar.add(game);
         menuBar.add(first);
-        menuBar.add(rival);
+        menuBar.add(p1);
+        menuBar.add(p2);
 
         return menuBar;
     }
@@ -47,8 +50,8 @@ public class Menu extends JPanel{
         return file;
     }
 
-    private JMenu menuRivalCreator(){
-        JMenu file = new JMenu("Rival  ");
+    private JMenu menuPlayerCreator(String name, int playerID, boolean isComputer){
+        JMenu file = new JMenu(name);
 
         JMenuItem computerRival = new JCheckBoxMenuItem("Play with computer");
         JMenuItem easy = new JRadioButtonMenuItem("Easy");
@@ -56,23 +59,24 @@ public class Menu extends JPanel{
         JMenuItem hard = new JRadioButtonMenuItem("Hard");
 
         computerRival.addActionListener( actionEvent ->
-                setPlayWithComputer(((JCheckBoxMenuItem) computerRival).getState()));
+                new Game().getPlayer(playerID).setisComputer(((JCheckBoxMenuItem) computerRival).getState()));
 
-        computerRival.setSelected(true);
+        computerRival.setSelected(isComputer);
+        new Game().getPlayer(playerID).setisComputer(isComputer);
 
         medium.setSelected(true);
         easy.addActionListener( actionEvent -> {
-            setLevel(Levels.EASY);
+            new Game().getPlayer(playerID).setLevel(Levels.EASY);
             medium.setSelected(false);
             hard.setSelected(false);
         });
         medium.addActionListener( actionEvent -> {
-            setLevel(Levels.MEDIUM);
+            new Game().getPlayer(playerID).setLevel(Levels.MEDIUM);
             easy.setSelected(false);
             hard.setSelected(false);
         });
         hard.addActionListener( actionEvent -> {
-            setLevel(Levels.HARD);
+            new Game().getPlayer(playerID).setLevel(Levels.HARD);
             easy.setSelected(false);
             medium.setSelected(false);
         });
@@ -87,7 +91,7 @@ public class Menu extends JPanel{
     }
 
     private JMenu firstMoveCreator(){
-        JMenu file = new JMenu("Move  | ");
+        JMenu file = new JMenu("Move   |");
 
         JLabel label = new JLabel("  First move select");
         JMenuItem p1 = new JRadioButtonMenuItem("Player 1");

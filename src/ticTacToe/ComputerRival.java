@@ -1,5 +1,6 @@
 package ticTacToe;
 
+import java.util.List;
 import java.util.Random;
 
 import static ticTacToe.Game.*;
@@ -10,45 +11,27 @@ import static ticTacToe.Game.*;
  */
 public class ComputerRival {
 
-    /**
-     * Base method of class, after calling selects behaviour depending of settings
-     *
-     * @see MediumLevel
-     * @see GameResult
-     */
-    public void makeMove(){
-        if (getCurrentPlayerName() == Players.PLAYER2 && isPlayWithComputerTriggered()) {
-            switch (getLevel()) {
-                case EASY: easy(); break;
-                case MEDIUM: new MediumLevel().medium(); break;
-                case HARD: hard(); break;
-            }
-
-        }
-        new GameResult().checkGameResult();
-    }
-
-    /**
+     /**
      * Easy level method - randomly selects cell in field
      */
     public void easy() {
-        int string;
-        int row;
-        Random rand = new Random();
-        int cell;
-        do {
-            string = rand.nextInt(3);
-            row = rand.nextInt(3);
-            cell= getFieldValue(string, row);
-        } while (cell != EMPTY);
-        dataUpdate(string, row);
+        List<GameResult.Cell> emptyCells = new GameResult().emptyCells();
+        GameResult.Cell cell;
+        int size = emptyCells.size();
+        if (size > 0) {
+            cell = emptyCells.get(new Random().nextInt(size));
+        } else {
+            return;
+        }
+
+        dataUpdate(cell.s, cell.r);
     }
 
     /**
      *  Hard Level makes first move randomly, in others used minimax algorithm
      */
-    private void hard() {
-        if (new GameResult().emptyCells().size() == 9) {
+    public void hard() {
+        if (new GameResult().emptyCells().size() > 20) {
             easy();
             return;
         }

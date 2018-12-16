@@ -13,7 +13,7 @@ public class UserInterface extends JFrame {
      * @see GameButton
      * @see Game
      */
-    public static GameButton[][] button = new GameButton[3][3];
+    public static GameButton[][] button = new GameButton[Game.getFieldValues().length][Game.getFieldValues().length];
 
     /**
      * Text fields for gamer names and turn indication
@@ -26,7 +26,7 @@ public class UserInterface extends JFrame {
             new GameTextField("Who Moves", true, true,null);
 
     public void window() {
-        Dimension dimension = new Dimension(450,600);
+        Dimension dimension = new Dimension(480,610);
 
         createField();
         Game.stopTheGame();
@@ -48,16 +48,15 @@ public class UserInterface extends JFrame {
         JMenuBar menu = new Menu().menuCreator();
         JPanel headLabels = new HeadLabels().createHeadLabels();
         JPanel head = createHead();
-        JPanel[] line = new JPanel[3];
-
-        for ( int i = 0; i < 3; i++) {
-            for ( int j = 0; j < 3; j++) {
-                button[i][j] = new GameButton(i,j);
+        JPanel[] line = new JPanel[button.length];
+        int btnSize = GameButton.foundSize(button.length);
+        for ( int i = 0; i < button.length; i++) {
+            for ( int j = 0; j < button.length; j++) {
+                button[i][j] = new GameButton(i,j, btnSize);
             }
-            line[i] = formLine(button[i][0].getButton(), button[i][1].getButton(), button[i][2].getButton());
+            line[i] = formLine(button[i]);
         }
-
-        createLayout(menu, headLabels, head, line[0], line[1], line[2]);
+        createLayout(line, menu, headLabels, head);
     }
 
     private JPanel createHead() {
@@ -89,33 +88,27 @@ public class UserInterface extends JFrame {
 
     /**
      * Methods form the string of buttons matrix
-     * @param b1
-     * @param b2
-     * @param b3
+//
      * @return line of buttons
      */
-    private JPanel formLine(JButton b1, JButton b2, JButton b3) {
+    private JPanel formLine(GameButton b[]) {
 
         JPanel buttonsLine = new JPanel();
 
         GroupLayout groupLayout = new GroupLayout(buttonsLine);
         buttonsLine.setLayout(groupLayout);
+        GroupLayout.ParallelGroup parallelGroup = groupLayout.createParallelGroup();
+        GroupLayout.SequentialGroup sequentialGroup = groupLayout.createSequentialGroup();
+       // groupLayout.setAutoCreateContainerGaps(true);
+        groupLayout.setAutoCreateGaps(true);
 
-        groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
-                .addComponent(b1)
-                .addGap(5)
-                .addComponent(b2)
-                .addGap(5)
-                .addComponent(b3)
-        );
+        for (GameButton aB : b) {
+            sequentialGroup.addComponent(aB.getButton());
+            parallelGroup.addComponent(aB.getButton());
+        }
+        groupLayout.setVerticalGroup(parallelGroup);
+        groupLayout.setHorizontalGroup(sequentialGroup);
 
-        groupLayout.setVerticalGroup(groupLayout.createParallelGroup()
-                .addComponent(b1)
-                .addComponent(b2)
-                .addComponent(b3)
-        );
-
-        groupLayout.linkSize( b1, b2, b3);
 
         return buttonsLine;
     }
@@ -123,42 +116,35 @@ public class UserInterface extends JFrame {
 
     /**
      * creates layout compiling table of stings :
-     * @param menu
-     * @param headLabels
-     * @param head
-     * @param line1
-     * @param line2
-     * @param line3
+     *
      */
-    private void createLayout(JComponent menu, JComponent headLabels, JComponent head, JComponent line1,
-                              JComponent line2, JComponent line3) {
+    private void createLayout(JComponent[] lines, JComponent... component) {
         Container pane = getContentPane();
         GroupLayout groupLayout = new GroupLayout(pane);
         pane.setLayout(groupLayout);
-
+        GroupLayout.ParallelGroup parallelGroup = groupLayout.createParallelGroup();
+        GroupLayout.SequentialGroup sequentialGroup = groupLayout.createSequentialGroup();
         groupLayout.setAutoCreateContainerGaps(true);
         groupLayout.setAutoCreateGaps(true);
 
-        groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
-                .addComponent(menu)
-                .addComponent(headLabels)
-                .addComponent(head)
-                .addComponent(line1)
-                .addComponent(line2)
-                .addComponent(line3)
-        );
 
-        groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
-                .addComponent(menu)
-                .addComponent(headLabels)
-                .addComponent(head)
-                .addComponent(line1)
-                .addComponent(line2)
-                .addComponent(line3)
-        );
+        for (JComponent aComponent : component) {
+            parallelGroup.addComponent(aComponent);
+            sequentialGroup.addComponent(aComponent);
+        }
 
-        groupLayout.linkSize(1,menu,head,headLabels);
-        groupLayout.linkSize(0,head, headLabels, line1);
-        pack();
+        for (JComponent line : lines) {
+            parallelGroup.addComponent(line);
+            sequentialGroup.addComponent(line);
+        }
+
+        groupLayout.setHorizontalGroup(parallelGroup);
+        groupLayout.setVerticalGroup(sequentialGroup);
+
+        groupLayout.linkSize(component);
+
+    //    groupLayout.linkSize(1,menu,head,headLabels);
+    //    groupLayout.linkSize(0,head, headLabels);
+//        pack();
     }
 }

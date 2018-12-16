@@ -8,14 +8,7 @@ import java.util.Random;
  */
 public class Game {
 
-    /**
-     *  Used for game turn identification
-     */
-    public enum Players {
-        PLAYER1,
-        PLAYER2,
-        NOT_STARTED
-    }
+
 
     /**
      *  Used for game setting who moves first
@@ -42,29 +35,31 @@ public class Game {
     public static final int CROSS = 1;
     public static final int EMPTY = 2;
 
+
+//make a private
+     static Player player1 = new Player("Player 1",CROSS);
+     static Player player2 = new Player("Player 2",ZERO);
     /**
      *  Contains setting for game start- which player should make first move
      */
     private static FirstPlayerSelect firstPlayerUserSelection = FirstPlayerSelect.RANDOM;
 
+
+
     /**
      *  Contains information which player turn now
      */
-    private static Players currentPlayer;
+    private static Player currentPlayer;
 
     /**
      *  Contains information about first player who made a move,  for winner identification
      *  so it should be memorised at game start for case of settings change while game in process
      */
-    private static Players firstPlayerTriggered;
+    private static Player firstPlayerTriggered;
 
-    private static Levels level = Levels.MEDIUM;
-
-    /**
+    /**1
      *  Parameters for rival selection(human or computer). Should be memorised in start of a game
      */
-    private static boolean playWithComputer = true;
-    private static boolean playWithComputerTriggered;
 
     /**
      *  Parameter deactivating start game method after game start until it finished
@@ -74,7 +69,7 @@ public class Game {
     /**
      *  Contains game field
      */
-    private static int[][] fieldValues = new int[3][3];
+    private static int[][] fieldValues = new int[4][4];
 
     /**
      *  Contains which figure is active now - zero or cross
@@ -97,18 +92,26 @@ public class Game {
 
             switch (firstPlayerUserSelection) {
                 case PLAYER1 : {
-                    currentPlayer = Players.PLAYER1;
+                    currentPlayer = player1;
+                    player1.setFigure(CROSS);
+                    player2.setFigure(ZERO);
                     break;
                 }
                 case PLAYER2 : {
-                    currentPlayer = Players.PLAYER2;
+                    currentPlayer = player2;
+                    player1.setFigure(ZERO);
+                    player2.setFigure(CROSS);
                     break;
                 }
                 case RANDOM : {
                     if (new Random().nextBoolean()) {
-                        currentPlayer = Players.PLAYER1;
+                        currentPlayer = player2;
+                        player1.setFigure(ZERO);
+                        player2.setFigure(CROSS);
                     } else {
-                        currentPlayer = Players.PLAYER2;
+                        currentPlayer = player1;
+                        player1.setFigure(CROSS);
+                        player2.setFigure(ZERO);
                     }
                     break;
                 }
@@ -116,22 +119,15 @@ public class Game {
             DisplayPlayer.display();
             firstPlayerTriggered = currentPlayer;
 
-            for ( int i = 0; i < 3; i++) {
-                for ( int j = 0; j < 3; j++) {
+            for ( int i = 0; i < fieldValues.length; i++) {
+                for ( int j = 0; j < fieldValues.length; j++) {
                     Game.setFieldValue(i,j, EMPTY, false);
                     UserInterface.button[i][j].printFieldElement();
                     UserInterface.button[i][j].setButtonEnabled(true);
                 }
             }
 
-            playWithComputerTriggered = playWithComputer;
-
-            if (playWithComputerTriggered){
-                player2Name = UserInterface.player2.getText();
-                UserInterface.player2.setText("Computer");
-                UserInterface.player2.getTextField().setEditable(false);
-                new ComputerRival().makeMove();
-            }
+            currentPlayer.makeMove();
         }
     }
 
@@ -150,12 +146,12 @@ public class Game {
      */
     public static void stopTheGame(){
         gameStarted = false;
-        setCurrentPlayerName(Players.NOT_STARTED);
+        currentPlayer = null;
         UserInterface.player2.setText(player2Name);
         UserInterface.player2.getTextField().setEditable(true);
         DisplayPlayer.display();
-        for ( int i = 0; i < 3; i++) {
-            for ( int j = 0; j < 3; j++) {
+        for ( int i = 0; i < fieldValues.length; i++) {
+            for ( int j = 0; j < fieldValues.length; j++) {
                 Game.setFieldValue(i,j, EMPTY, false);
                 UserInterface.button[i][j].setWaitingForGame();
             }
@@ -169,15 +165,16 @@ public class Game {
      */
     public static void endTheGame(){
         gameStarted = false;
-        setCurrentPlayerName(Game.Players.NOT_STARTED);
+        currentPlayer = null;
         UserInterface.player2.setText(player2Name);
         UserInterface.player2.getTextField().setEditable(true);
         DisplayPlayer.display();
-        for ( int i = 0; i < 3; i++) {
-            for ( int j = 0; j < 3; j++) {
+        for ( int i = 0; i < fieldValues.length; i++) {
+            for ( int j = 0; j < fieldValues.length; j++) {
                 UserInterface.button[i][j].setWaitingForGame();
             }
         }
+        System.out.println("game finished");
     }
 
     /**
@@ -191,18 +188,28 @@ public class Game {
     public static void setFieldValue(int string, int row, int fieldValue, boolean changeGameProgress) {
         fieldValues[string][row] = fieldValue;
         if (changeGameProgress) {
+            UserInterface.button[string][row].printFieldElement();
+            new GameResult().checkGameResult();
+
             if (getActiveFigure() == Game.CROSS) {
                 setActiveFigure(Game.ZERO);
             } else {
                 setActiveFigure(Game.CROSS);
             }
 
-            if (getCurrentPlayerName() == Players.PLAYER1) {
-                setCurrentPlayerName(Players.PLAYER2);
+            if (currentPlayer == player1) {
+                currentPlayer = player2;
             } else {
-                setCurrentPlayerName(Players.PLAYER1);
+                currentPlayer = player1;
             }
             DisplayPlayer.display();
+
+
+
+            if (currentPlayer != null) {
+                currentPlayer.makeMove();
+            }
+
         }
     }
 
@@ -225,39 +232,27 @@ public class Game {
         Game.activeFigure = whoMoves;
     }
 
-    public static Players getCurrentPlayerName() {
-        return currentPlayer;
-    }
 
-    public static void setCurrentPlayerName(Players currentPlayerName) {
-        Game.currentPlayer = currentPlayerName;
-    }
 
     public static void setFirstPlayerUserSelection(FirstPlayerSelect firstPlayerUserSelection) {
         Game.firstPlayerUserSelection = firstPlayerUserSelection;
     }
 
-    public static void setPlayWithComputer(boolean playWithComputer) {
-        Game.playWithComputer = playWithComputer;
-    }
-
-    public static boolean isPlayWithComputerTriggered() {
-        return playWithComputerTriggered;
-    }
-
-    public static void setLevel(Levels level) {
-        Game.level = level;
-    }
 
     public static boolean isGameStarted() {
         return gameStarted;
     }
 
-    public static Players getFirstPlayerTriggered() {
-        return firstPlayerTriggered;
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public static Levels getLevel() {
-        return level;
+    public Player getPlayer(int id) {
+        if (id == 1) {
+            return player1;
+        } else {
+            return player2;
+        }
     }
+
 }

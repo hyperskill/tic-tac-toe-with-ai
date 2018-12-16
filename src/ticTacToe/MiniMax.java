@@ -23,25 +23,25 @@ public class MiniMax extends GameResult {
     public Cell minimax (int[][] field, int activeFigure) {
         Cell cell = new Cell(0,0);
         int computer;
-        int human;
+        int rival;
         int nodeRate;
         int bestNodeIndex = 0;
 
         List<Cell> emptyCells = emptyCells();
 
 
-        if ( getFirstPlayerTriggered() == Players.PLAYER2 ) {
+        if ( Game.getCurrentPlayer().getFigure() == CROSS ) {
             computer = CROSS;
-            human = ZERO;
+            rival = ZERO;
         } else {
             computer = ZERO;
-            human = CROSS;
+            rival = CROSS;
         }
 
         if (win(field, computer)) {
             cell.rate = 10;
             return cell;
-        } else if (win(field, human)) {
+        } else if (win(field, rival)) {
             cell.rate = -10;
             return cell;
         } else if (emptyCells.isEmpty()) {
@@ -54,7 +54,7 @@ public class MiniMax extends GameResult {
             field[cell.s][cell.r] = activeFigure;
 
             if (activeFigure == computer) {
-                cell.rate = minimax(field,human).rate ;
+                cell.rate = minimax(field,rival).rate ;
             } else {
                 cell.rate  = minimax(field,computer).rate ;
             }

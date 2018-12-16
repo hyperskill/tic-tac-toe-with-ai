@@ -14,13 +14,15 @@ public class GameButton extends JFrame{
     private int string;
     private int row;
 
-    GameButton(int string, int row){
+    GameButton(int string, int row, int size){
         this.string = string;
         this.row = row;
+        int fontSize = size*7/10;
 
-        Font font = new Font(null,Font.BOLD,100);
-        Dimension dimension = new Dimension(135,135);
-        button.setPreferredSize(new Dimension(dimension));
+        Font font = new Font(null,Font.BOLD,fontSize);
+        Dimension dimension = new Dimension(size,size);
+        button.setMinimumSize(new Dimension(dimension));
+        button.setMaximumSize(new Dimension(dimension));
         button.setFont(font);
         printFieldElement();
         button.addActionListener( actionEvent -> getUserSelection());
@@ -55,13 +57,12 @@ public class GameButton extends JFrame{
      */
     private void getUserSelection () {
         if (isGameStarted()) {
-            setFieldValue(string,row, getActiveFigure() , true);
-            printFieldElement();
             button.setEnabled(false);
-            new GameResult().checkGameResult();
-            if (isGameStarted()) {
-                new ComputerRival().makeMove();
-            }
+            setFieldValue(string,row, getActiveFigure() , true);
+
+         //   if (getCurrentPlayer() != null) {
+             //   Game.getCurrentPlayer().makeMove();
+        //    }
         }
     }
     /**
@@ -84,5 +85,10 @@ public class GameButton extends JFrame{
      */
     public JButton getButton() {
         return button;
+    }
+
+    public static int foundSize(int qnt) {
+        int width = 445;
+        return (width - 5 * (qnt - 1)) / qnt;
     }
 }
