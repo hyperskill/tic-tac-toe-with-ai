@@ -14,10 +14,12 @@ import static ticTacToe.game.Game.*;
  */
 public class ComputerRival {
 
+    public static LearningAlgorithm learningAlgorithm = new LearningAlgorithm();
+
      /**
      * Easy level method - randomly selects cell in field
      */
-    public void easy() {
+    public static void easy() {
         List<GameResult.Cell> emptyCells = new GameResult().emptyCells();
         GameResult.Cell cell;
         int size = emptyCells.size();
@@ -33,7 +35,7 @@ public class ComputerRival {
     /**
      *  Hard Level makes first move randomly, in others used minimax algorithm
      */
-    public void hard() {
+    public static void hard() {
         if (new GameResult().emptyCells().size() > 8) {
             easy();
             return;
@@ -42,6 +44,13 @@ public class ComputerRival {
         GameResult.Cell cell = new MiniMax().minimax(getFieldValues(),getActiveFigure());
         dataUpdate(cell.s, cell.r);
     }
+
+    public static void learning() {
+        GameResult.Cell cell = learningAlgorithm.makeMove(getFieldValues());
+
+        dataUpdate(cell.s, cell.r);
+    }
+
 
     /**
      * This method updates a text inside a button after computer makes a move, and disable it for user

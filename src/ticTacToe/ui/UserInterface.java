@@ -1,5 +1,6 @@
 package ticTacToe.ui;
 
+import ticTacToe.ai.ComputerRival;
 import ticTacToe.game.Game;
 
 import javax.swing.*;
@@ -160,9 +161,9 @@ public class UserInterface extends JFrame {
 
      private void changeFieldSize() {
         Game.setFieldSize(fieldSizeSetup.getSelectedIndex() + 3);
-
         dispose();
         new UserInterface();
+        ComputerRival.learningAlgorithm.init();
     }
 
     public static GameButton getButton(int s, int r) {

@@ -26,7 +26,8 @@ public class Game {
     public enum Levels {
         EASY,
         MEDIUM,
-        HARD
+        HARD,
+        LEARNING
     }
 
     /**

@@ -1,5 +1,6 @@
 package ticTacToe.game;
 
+import ticTacToe.ai.ComputerRival;
 import ticTacToe.ai.MiniMax;
 import ticTacToe.ui.UserInterface;
 
@@ -131,6 +132,8 @@ public class GameResult {
 
         JOptionPane.showMessageDialog(null,
                 winnersName + " wins!!!");
+
+        ComputerRival.learningAlgorithm.writeResults(result);
 
         endTheGame();
     }

@@ -32,9 +32,10 @@ public class Player {
     public void makeMove() {
         if (computer && Game.isGameStarted()) {
             switch (level) {
-                case EASY: new ComputerRival().easy();break;
+                case EASY: ComputerRival.easy();break;
                 case MEDIUM: new MediumLevel().medium(); break;
-                case HARD: new ComputerRival().hard(); break;
+                case HARD: ComputerRival.hard(); break;
+                case LEARNING: ComputerRival.learning(); break;
             }
         } else {
             return;

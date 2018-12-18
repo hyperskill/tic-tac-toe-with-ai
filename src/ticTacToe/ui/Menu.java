@@ -59,8 +59,9 @@ import static ticTacToe.game.Game.*;
         JMenuItem easy = new JRadioButtonMenuItem("Easy");
         JMenuItem medium = new JRadioButtonMenuItem("Medium");
         JMenuItem hard = new JRadioButtonMenuItem("Hard");
+        JMenuItem learning = new JRadioButtonMenuItem("Self-learning");
 
-        new Game();
+        //new Game();
         computerRival.addActionListener(actionEvent ->
                 getPlayer(playerID).setisComputer(computerRival.getState()));
 
@@ -73,16 +74,25 @@ import static ticTacToe.game.Game.*;
             getPlayer(playerID).setLevel(Levels.EASY);
             medium.setSelected(false);
             hard.setSelected(false);
+            learning.setSelected(false);
         });
         medium.addActionListener( actionEvent -> {
             getPlayer(playerID).setLevel(Levels.MEDIUM);
             easy.setSelected(false);
             hard.setSelected(false);
+            learning.setSelected(false);
         });
         hard.addActionListener( actionEvent -> {
             getPlayer(playerID).setLevel(Levels.HARD);
             easy.setSelected(false);
             medium.setSelected(false);
+            learning.setSelected(false);
+        });
+        learning.addActionListener( actionEvent -> {
+            getPlayer(playerID).setLevel(Levels.LEARNING);
+            easy.setSelected(false);
+            medium.setSelected(false);
+            hard.setSelected(false);
         });
 
         file.add(computerRival);
@@ -90,6 +100,7 @@ import static ticTacToe.game.Game.*;
         file.add(easy);
         file.add(medium);
         file.add(hard);
+        file.add(learning);
 
         return file;
     }
