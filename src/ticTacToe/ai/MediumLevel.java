@@ -37,6 +37,7 @@ public class MediumLevel {
     /**
      * method scanning field upside down, left to right and diagonals to find sequence in field that could lead to win
      * of any player
+     * @param value which combination should be checked
      */
     private boolean scan(int value) {
         if (scanDown(value)) {

@@ -31,9 +31,12 @@ public class UserInterface extends JFrame {
     private static GameTextField whoMoves =
             new GameTextField("Who Moves", true, true,null);
 
-    private JComboBox fieldSizeSetup;
+    /**
+     * Combo box for field size selection
+     */
+    private static JComboBox fieldSizeSetup;
 
-    public void window() {
+    public UserInterface() {
         Dimension dimension = new Dimension(480,610);
 
         createField();
@@ -131,7 +134,7 @@ public class UserInterface extends JFrame {
 
 
         JMenuBar menu = new Menu().menuCreator();
-        String[] items = {"3x3","4x4", "5x5"};
+        String[] items = {"Classic 3x3","Big 4x4","Extra big 5x5","Crazy 6x6"};
         fieldSizeSetup = new JComboBox<>(items);
 
         fieldSizeSetup.setSelectedIndex(getFieldSize() - 3);
@@ -142,7 +145,7 @@ public class UserInterface extends JFrame {
 
         groupLayout.setHorizontalGroup(groupLayout.createSequentialGroup()
                 .addComponent(menu)
-                .addGap(70)
+                .addGap(40)
                 .addComponent(fieldSizeSetup)
 
         );
@@ -159,7 +162,7 @@ public class UserInterface extends JFrame {
         Game.setFieldSize(fieldSizeSetup.getSelectedIndex() + 3);
 
         dispose();
-        new UserInterface().window();
+        new UserInterface();
     }
 
     public static GameButton getButton(int s, int r) {

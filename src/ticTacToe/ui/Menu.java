@@ -8,13 +8,13 @@ import java.awt.*;
 import static ticTacToe.game.Game.*;
 
 /**
- *  Class for menu bar user interface element
+ *  Class for menu bar user interface element creation
  * @see UserInterface
  */
-public class Menu extends JPanel{
+ class Menu extends JPanel{
     private Font font = new Font(null,Font.BOLD,15);
 
-    public JMenuBar menuCreator(){
+    JMenuBar menuCreator(){
         JMenuBar menuBar = new JMenuBar();
         JMenu game = menuGameCreator();
         JMenu p1 = menuPlayerCreator("Player 1  |",1,false);
@@ -55,30 +55,32 @@ public class Menu extends JPanel{
     private JMenu menuPlayerCreator(String name, int playerID, boolean isComputer){
         JMenu file = new JMenu(name);
 
-        JMenuItem computerRival = new JCheckBoxMenuItem("Play with computer");
+        JCheckBoxMenuItem computerRival = new JCheckBoxMenuItem("Play with computer");
         JMenuItem easy = new JRadioButtonMenuItem("Easy");
         JMenuItem medium = new JRadioButtonMenuItem("Medium");
         JMenuItem hard = new JRadioButtonMenuItem("Hard");
 
-        computerRival.addActionListener( actionEvent ->
-                new Game().getPlayer(playerID).setisComputer(((JCheckBoxMenuItem) computerRival).getState()));
+        new Game();
+        computerRival.addActionListener(actionEvent ->
+                getPlayer(playerID).setisComputer(computerRival.getState()));
 
         computerRival.setSelected(isComputer);
-        new Game().getPlayer(playerID).setisComputer(isComputer);
+        getPlayer(playerID).setisComputer(isComputer);
 
+        getPlayer(playerID).setLevel(Levels.MEDIUM);
         medium.setSelected(true);
         easy.addActionListener( actionEvent -> {
-            new Game().getPlayer(playerID).setLevel(Levels.EASY);
+            getPlayer(playerID).setLevel(Levels.EASY);
             medium.setSelected(false);
             hard.setSelected(false);
         });
         medium.addActionListener( actionEvent -> {
-            new Game().getPlayer(playerID).setLevel(Levels.MEDIUM);
+            getPlayer(playerID).setLevel(Levels.MEDIUM);
             easy.setSelected(false);
             hard.setSelected(false);
         });
         hard.addActionListener( actionEvent -> {
-            new Game().getPlayer(playerID).setLevel(Levels.HARD);
+            getPlayer(playerID).setLevel(Levels.HARD);
             easy.setSelected(false);
             medium.setSelected(false);
         });

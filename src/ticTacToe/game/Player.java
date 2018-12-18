@@ -9,13 +9,22 @@ import ticTacToe.game.Game;
  */
 public class Player {
 
-    private String name;
+    /**
+     * for which figure player is playing 0 or X
+     */
     private int figure;
+
+    /**
+     * Is player human(false), or computer (true)
+     */
     private boolean computer;
+
+    /**
+     * Level if player is computer
+     */
     private Game.Levels level;
 
-    public Player(String name, int figure) {
-        this.name = name;
+    public Player(int figure) {
         this.figure = figure;
         this.computer = false;
         this.level = Game.Levels.MEDIUM;
@@ -33,6 +42,10 @@ public class Player {
         }
 
     }
+
+    /**
+     * Getters and setters for player settings
+     */
 
     public void setFigure(int figure) {
         this.figure = figure;

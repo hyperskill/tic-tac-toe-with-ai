@@ -6,10 +6,9 @@ import ticTacToe.game.Player;
 import java.awt.*;
 
 /**
- *  Class for indicate which player should move now
+ *  Class for indicate which player should moves now
  */
 public class DisplayPlayer {
-
 
     /**
      *  Base method which changed name of active player in text field "Now moves"

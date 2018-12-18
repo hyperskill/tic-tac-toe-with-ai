@@ -36,16 +36,16 @@ public class Game {
     public static final int CROSS = 1;
     public static final int EMPTY = 2;
 
+    /**
+     *  Players declaration
+     */
+    private static Player player1 = new Player(CROSS);
+    private static Player player2 = new Player(ZERO);
 
-
-    private static Player player1 = new Player("Player 1",CROSS);
-    private static Player player2 = new Player("Player 2",ZERO);
     /**
      *  Contains setting for game start- which player should make first move
      */
     private static FirstPlayerSelect firstPlayerUserSelection = FirstPlayerSelect.RANDOM;
-
-
 
     /**
      *  Contains information which player turn now
@@ -53,22 +53,12 @@ public class Game {
     private static Player currentPlayer;
 
     /**
-     *  Contains information about first player who made a move,  for winner identification
-     *  so it should be memorised at game start for case of settings change while game in process
-     */
-    private static Player firstPlayerTriggered;
-
-    /**1
-     *  Parameters for rival selection(human or computer). Should be memorised in start of a game
-     */
-
-    /**
      *  Parameter deactivating start game method after game start until it finished
      */
     private static boolean gameStarted = false;
 
     /**
-     *  Contains game field
+     *  Contains game field and it's size. Size of array equal to maximum possible size of game field
      */
     private static int fieldSize = 3;
     private static int[][] fieldValues = new int[6][6];
@@ -114,7 +104,6 @@ public class Game {
                 }
             }
             DisplayPlayer.display();
-            firstPlayerTriggered = currentPlayer;
 
             for ( int i = 0; i < fieldSize; i++) {
                 for ( int j = 0; j < fieldSize; j++) {
@@ -182,10 +171,10 @@ public class Game {
             UserInterface.getButton(string,row).printFieldElement();
             new GameResult().checkGameResult();
 
-            if (getActiveFigure() == Game.CROSS) {
-                setActiveFigure(Game.ZERO);
+            if (getActiveFigure() == CROSS) {
+                activeFigure = ZERO;
             } else {
-                setActiveFigure(Game.CROSS);
+                activeFigure = CROSS;
             }
 
             if (currentPlayer == player1) {
@@ -219,16 +208,9 @@ public class Game {
         return fieldValues;
     }
 
-    public static void setActiveFigure(int whoMoves) {
-        Game.activeFigure = whoMoves;
-    }
-
-
-
     public static void setFirstPlayerUserSelection(FirstPlayerSelect firstPlayerUserSelection) {
         Game.firstPlayerUserSelection = firstPlayerUserSelection;
     }
-
 
     public static boolean isGameStarted() {
         return gameStarted;

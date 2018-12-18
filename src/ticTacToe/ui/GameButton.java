@@ -19,7 +19,14 @@ public class GameButton extends JFrame{
     GameButton(int string, int row, int size){
         this.string = string;
         this.row = row;
-        int fontSize = size*7/10;
+        int fontSize;
+        switch (Game.getFieldSize()) {
+            case 3 : fontSize = 140; break;
+            case 4 : fontSize = 90; break;
+            case 5 : fontSize = 65; break;
+            case 6 : fontSize = 45; break;
+            default : fontSize = 15; break;
+        }
 
         Font font = new Font(null,Font.BOLD,fontSize);
         Dimension dimension = new Dimension(size,size);
@@ -63,10 +70,6 @@ public class GameButton extends JFrame{
         if (isGameStarted()) {
             button.setEnabled(false);
             nextMove(string,row, getActiveFigure() , true);
-
-         //   if (getCurrentPlayer() != null) {
-             //   Game.getCurrentPlayer().makeMove();
-        //    }
         }
     }
 
@@ -95,6 +98,6 @@ public class GameButton extends JFrame{
 
     public static int foundSize(int qnt) {
         int width = 445;
-        return (width - 5 * (qnt - 1)) / qnt;
+        return ((width - 5 * (qnt - 1)) / qnt) -1;
     }
 }

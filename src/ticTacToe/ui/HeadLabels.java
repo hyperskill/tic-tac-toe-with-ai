@@ -5,12 +5,12 @@ import java.awt.*;
 
 
 /**
- *  Class for head labels User interface element
+ *  Class for head labels User interface element creation
  * @see UserInterface
  */
-public class HeadLabels {
+ class HeadLabels {
 
-    public JPanel createHeadLabels() {
+     JPanel createHeadLabels() {
         JPanel head = new JPanel();
         Font font = new Font(null,Font.BOLD,13);
 

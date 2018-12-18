@@ -11,9 +11,8 @@ import java.util.List;
 import static ticTacToe.game.Game.*;
 
 /**
- *  Class for field analyse- detects winner and wnd of game
+ *  Class for field analyse and winner detecting
  */
-
 public class GameResult {
     /**
      * Method checks game win and tie for players 1 and 2

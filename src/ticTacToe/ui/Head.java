@@ -4,8 +4,12 @@ import javax.swing.*;
 
 import static ticTacToe.ui.UserInterface.*;
 
-public class Head {
-    public JPanel createHead() {
+/**
+ *  Class for head User interface element creation
+ * @see UserInterface
+ */
+class Head {
+    JPanel createHead() {
         JPanel head = new JPanel();
 
 
