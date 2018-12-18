@@ -1,9 +1,11 @@
-package ticTacToe;
+package ticTacToe.ui;
+
+import ticTacToe.game.Game;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static ticTacToe.Game.*;
+import static ticTacToe.game.Game.*;
 
 /**
  *  Class for menu bar user interface element

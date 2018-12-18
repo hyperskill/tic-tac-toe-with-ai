@@ -1,8 +1,11 @@
-package ticTacToe;
+package ticTacToe.ai;
+
+import ticTacToe.game.Game;
+import ticTacToe.game.GameResult;
 
 import java.util.List;
 
-import static ticTacToe.Game.*;
+import static ticTacToe.game.Game.*;
 
 /**
  *  Class that implements algorithm minimax to find the best move *

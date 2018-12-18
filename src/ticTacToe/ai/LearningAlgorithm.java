@@ -1,4 +1,7 @@
-package ticTacToe;
+package ticTacToe.ai;
+
+import ticTacToe.game.Game;
+import ticTacToe.game.GameResult;
 
 import java.util.List;
 

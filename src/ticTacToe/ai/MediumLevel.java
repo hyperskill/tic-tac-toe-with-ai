@@ -1,6 +1,6 @@
-package ticTacToe;
+package ticTacToe.ai;
 
-import static ticTacToe.Game.*;
+import static ticTacToe.game.Game.*;
 
 /**
  *  Class that implements medium level for game - it finished sequence if it found
@@ -57,7 +57,7 @@ public class MediumLevel {
     }
 
     private boolean scanDown(int value) {
-        for( int r = 0; r < getFieldValues().length; r++) {
+        for( int r = 0; r < getFieldSize(); r++) {
             if (getFieldValue(0, r) == value &&
                     getFieldValue(1, r) == value &&
                     getFieldValue(2,r) == EMPTY) {
@@ -80,7 +80,7 @@ public class MediumLevel {
 
 
     private boolean scanRight(int value) {
-        for( int s = 0; s < getFieldValues().length; s++) {
+        for( int s = 0; s < getFieldSize(); s++) {
             if (getFieldValue(s, 0) == value &&
                     getFieldValue(s, 1) == value &&
                     getFieldValue(s,2) == EMPTY) {

@@ -1,9 +1,12 @@
-package ticTacToe;
+package ticTacToe.ai;
+
+import ticTacToe.game.GameResult;
+import ticTacToe.ui.UserInterface;
 
 import java.util.List;
 import java.util.Random;
 
-import static ticTacToe.Game.*;
+import static ticTacToe.game.Game.*;
 
 
 /**
@@ -31,7 +34,7 @@ public class ComputerRival {
      *  Hard Level makes first move randomly, in others used minimax algorithm
      */
     public void hard() {
-        if (new GameResult().emptyCells().size() > 20) {
+        if (new GameResult().emptyCells().size() > 8) {
             easy();
             return;
         }
@@ -47,8 +50,8 @@ public class ComputerRival {
      * @param row number in field matrix
      */
     public static void dataUpdate(int string, int row) {
-        setFieldValue(string, row, getActiveFigure(),true);
-        UserInterface.button[string][row].printFieldElement();
-        UserInterface.button[string][row].setButtonEnabled(false);
+        nextMove(string, row, getActiveFigure(),true);
+        UserInterface.getButton(string, row).printFieldElement();
+        UserInterface.getButton(string, row).setButtonEnabled(false);
     }
 }

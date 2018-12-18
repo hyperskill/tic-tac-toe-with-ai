@@ -1,4 +1,4 @@
-package ticTacToe;
+package ticTacToe.ui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +9,7 @@ import java.awt.*;
  * @see UserInterface
  */
 public class HeadLabels {
+
     public JPanel createHeadLabels() {
         JPanel head = new JPanel();
         Font font = new Font(null,Font.BOLD,13);

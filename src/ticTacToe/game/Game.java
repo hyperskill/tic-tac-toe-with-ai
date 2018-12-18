@@ -1,4 +1,7 @@
-package ticTacToe;
+package ticTacToe.game;
+
+import ticTacToe.ui.DisplayPlayer;
+import ticTacToe.ui.UserInterface;
 
 import java.util.Random;
 
@@ -7,8 +10,6 @@ import java.util.Random;
  *  This class saves all game settings, and current parameters
  */
 public class Game {
-
-
 
     /**
      *  Used for game setting who moves first
@@ -36,9 +37,9 @@ public class Game {
     public static final int EMPTY = 2;
 
 
-//make a private
-     static Player player1 = new Player("Player 1",CROSS);
-     static Player player2 = new Player("Player 2",ZERO);
+
+    private static Player player1 = new Player("Player 1",CROSS);
+    private static Player player2 = new Player("Player 2",ZERO);
     /**
      *  Contains setting for game start- which player should make first move
      */
@@ -69,17 +70,13 @@ public class Game {
     /**
      *  Contains game field
      */
-    private static int[][] fieldValues = new int[4][4];
+    private static int fieldSize = 3;
+    private static int[][] fieldValues = new int[6][6];
 
     /**
      *  Contains which figure is active now - zero or cross
      */
     private static int activeFigure = CROSS;
-
-    /**
-     *  Contains text field data, because it changed in case of computer rival selection.
-     */
-    private static String player2Name = "Player 2";
 
     /**
      *  method that configure game to a start position depending of game settings
@@ -119,11 +116,11 @@ public class Game {
             DisplayPlayer.display();
             firstPlayerTriggered = currentPlayer;
 
-            for ( int i = 0; i < fieldValues.length; i++) {
-                for ( int j = 0; j < fieldValues.length; j++) {
-                    Game.setFieldValue(i,j, EMPTY, false);
-                    UserInterface.button[i][j].printFieldElement();
-                    UserInterface.button[i][j].setButtonEnabled(true);
+            for ( int i = 0; i < fieldSize; i++) {
+                for ( int j = 0; j < fieldSize; j++) {
+                    Game.nextMove(i,j, EMPTY, false);
+                    UserInterface.getButton(i,j).printFieldElement();
+                    UserInterface.getButton(i,j).setButtonEnabled(true);
                 }
             }
 
@@ -136,8 +133,6 @@ public class Game {
      */
     public static void restartTheGame(){
         gameStarted = false;
-        UserInterface.player2.setText(player2Name);
-        UserInterface.player2.getTextField().setEditable(true);
         startTheGame();
     }
 
@@ -147,13 +142,11 @@ public class Game {
     public static void stopTheGame(){
         gameStarted = false;
         currentPlayer = null;
-        UserInterface.player2.setText(player2Name);
-        UserInterface.player2.getTextField().setEditable(true);
         DisplayPlayer.display();
-        for ( int i = 0; i < fieldValues.length; i++) {
-            for ( int j = 0; j < fieldValues.length; j++) {
-                Game.setFieldValue(i,j, EMPTY, false);
-                UserInterface.button[i][j].setWaitingForGame();
+        for ( int i = 0; i < fieldSize; i++) {
+            for ( int j = 0; j < fieldSize; j++) {
+                Game.nextMove(i,j, EMPTY, false);
+                UserInterface.getButton(i,j).setWaitingForGame();
             }
         }
     }
@@ -166,12 +159,10 @@ public class Game {
     public static void endTheGame(){
         gameStarted = false;
         currentPlayer = null;
-        UserInterface.player2.setText(player2Name);
-        UserInterface.player2.getTextField().setEditable(true);
         DisplayPlayer.display();
-        for ( int i = 0; i < fieldValues.length; i++) {
-            for ( int j = 0; j < fieldValues.length; j++) {
-                UserInterface.button[i][j].setWaitingForGame();
+        for ( int i = 0; i < fieldSize; i++) {
+            for ( int j = 0; j < fieldSize; j++) {
+                UserInterface.getButton(i,j).setWaitingForGame();
             }
         }
         System.out.println("game finished");
@@ -185,10 +176,10 @@ public class Game {
      * @param fieldValue value which should be write
      * @param changeGameProgress true if game should be updated
      */
-    public static void setFieldValue(int string, int row, int fieldValue, boolean changeGameProgress) {
+    public static void nextMove(int string, int row, int fieldValue, boolean changeGameProgress) {
         fieldValues[string][row] = fieldValue;
         if (changeGameProgress) {
-            UserInterface.button[string][row].printFieldElement();
+            UserInterface.getButton(string,row).printFieldElement();
             new GameResult().checkGameResult();
 
             if (getActiveFigure() == Game.CROSS) {
@@ -247,12 +238,20 @@ public class Game {
         return currentPlayer;
     }
 
-    public Player getPlayer(int id) {
+    public static Player getPlayer(int id) {
         if (id == 1) {
             return player1;
         } else {
             return player2;
         }
+    }
+
+    public static int getFieldSize() {
+        return fieldSize;
+    }
+
+    public static void setFieldSize(int fieldSize) {
+        Game.fieldSize = fieldSize;
     }
 
 }
