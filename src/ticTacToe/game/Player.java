@@ -2,7 +2,6 @@ package ticTacToe.game;
 
 import ticTacToe.ai.ComputerRival;
 import ticTacToe.ai.MediumLevel;
-import ticTacToe.game.Game;
 
 /**
  * Class implements players specifications

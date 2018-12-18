@@ -148,6 +148,7 @@ public class GameResult {
         public Cell(int string, int row) {
             this.s = string;
             this.r = row;
+            this.rate = 0;
         }
     }
 }
