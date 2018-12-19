@@ -16,7 +16,7 @@ public class Main {
        char[] grid3 = {' ','X' , 'X'};
 
 
-       System.out.println(grid1);
+        System.out.println(grid1);
         System.out.println(grid2);
         System.out.println(grid3);
 
