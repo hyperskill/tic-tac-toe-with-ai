@@ -11,8 +11,6 @@ public class LearningAlgorithm implements Serializable {
 
     private Map<Integer[][],Rate> fieldsMap;
 
-    private ArrayList<Integer[][]> movesInCurrentGame = new ArrayList<>(); //must be cleared at the end of game!!!
-
     public LearningAlgorithm() {
         init();
     }
@@ -57,21 +55,14 @@ public class LearningAlgorithm implements Serializable {
     }
 
 
-    public GameResult.Cell makeMove(int[][] gameField){
+    public GameResult.Cell makeMove(Integer[][] field){
         int fieldSize = Game.getFieldSize();
-        Integer[][] field = new Integer[fieldSize][fieldSize];
         List<GameResult.Cell> emptyCells = new GameResult().emptyCells();
         int currentRate = Integer.MIN_VALUE;
         int selectedMoveIndex = 0;
         int activeFigure = Game.getActiveFigure();
         GameResult.Cell cell;
 
-
-        for (int s = 0; s < fieldSize; s++) {
-            for (int r = 0; r < fieldSize; r++) {
-                field[s][r] = gameField[s][r];
-            }
-        }
 
         for (int i = 0; i < emptyCells.size(); i++) {
             cell = emptyCells.get(i);
@@ -88,16 +79,14 @@ public class LearningAlgorithm implements Serializable {
             field[cell.s][cell.r] = Game.EMPTY;
         }
 
-        movesInCurrentGame.add(field);
         cell = emptyCells.get(selectedMoveIndex);
         field[cell.s][cell.r] = Game.getActiveFigure();
-        movesInCurrentGame.add(field);
         return cell;
     }
 
     public void writeResults(int result) {
         Rate rate = new Rate();
-        Set<Integer[][]> movesSet= new HashSet<>();
+        List<Integer[][]> movesLog = GameResult.getMovesLog();
 
         if (result == Game.CROSS) {
             rate.rateX = 1;
@@ -107,21 +96,14 @@ public class LearningAlgorithm implements Serializable {
             rate.rate0 = 1;
         }
 
-        makeMove(Game.getFieldValues());//add last value to collection if winner not learning machine
-        movesSet.addAll(movesInCurrentGame);
-        movesInCurrentGame.clear();
-        movesInCurrentGame.addAll(movesSet);
-
-        for (int i = 0; i < movesSet.size(); i++) {
-            Integer[][] move = movesInCurrentGame.get(i);
+        for (int i = 0; i < movesLog.size(); i++) {
+            Integer[][] move = movesLog.get(i);
             Rate prevRate = fieldsMap.putIfAbsent(move, rate);
             if (prevRate != null) {
                 prevRate.updateRates(rate);
                 fieldsMap.put(move, prevRate);
             }
         }
-
-        movesInCurrentGame.clear();
         save();
     }
 

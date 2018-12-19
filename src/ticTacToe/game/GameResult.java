@@ -15,10 +15,14 @@ import static ticTacToe.game.Game.*;
  *  Class for field analyse and winner detecting
  */
 public class GameResult {
+
+    private static ArrayList<Integer[][]> movesLog = new ArrayList<>(); //must be cleared at the end of game!!!
+
     /**
      * Method checks game win and tie for players 1 and 2
      */
     public  void checkGameResult() {
+        movesLog.add(getFieldValues());
         for (int i = 0; i < 2; i++ ){
             if (win(getFieldValues(), i)) {
                 printGameResult(i);
@@ -36,7 +40,7 @@ public class GameResult {
      * @param figure figure for which game result should be checked
      * @return true if winning combination for given figure exists in field
      */
-    public boolean win(int[][] field, int figure) {
+    public boolean win(Integer[][] field, int figure) {
         for (int s = 0; s < getFieldSize(); s++) {
             for(int r = 0; r < getFieldSize(); r++) {
                 if (field[s][r] != figure) {
@@ -135,6 +139,7 @@ public class GameResult {
 
         ComputerRival.learningAlgorithm.writeResults(result);
 
+        movesLog.clear();
         endTheGame();
     }
 
@@ -153,5 +158,10 @@ public class GameResult {
             this.r = row;
             this.rate = 0;
         }
+    }
+
+
+    public static ArrayList<Integer[][]> getMovesLog() {
+        return movesLog;
     }
 }

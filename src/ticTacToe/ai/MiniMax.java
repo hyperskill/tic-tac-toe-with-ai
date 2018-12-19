@@ -23,7 +23,7 @@ public class MiniMax extends GameResult {
      * @param activeFigure figure that should moves now
      * @return cell with best move coordinates and it rate
      */
-    public Cell minimax (int[][] field, int activeFigure) {
+    public Cell minimax (Integer[][] field, int activeFigure) {
         Cell cell = new Cell(0,0);
         int computer;
         int rival;

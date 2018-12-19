@@ -44,7 +44,11 @@ public class GameButton extends JFrame{
      * @see Game
      */
     public void printFieldElement() {
-        int val = getFieldValue(string,row);
+        Integer value = getFieldValue(string,row);
+        int val = 0;
+        if (value != null) {
+            val = value;
+        }
 
         switch (val) {
             case ZERO : {

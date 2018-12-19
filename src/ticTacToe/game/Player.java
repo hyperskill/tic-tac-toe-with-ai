@@ -37,16 +37,12 @@ public class Player {
                 case HARD: ComputerRival.hard(); break;
                 case LEARNING: ComputerRival.learning(); break;
             }
-        } else {
-            return;
         }
-
     }
 
     /**
      * Getters and setters for player settings
      */
-
     public void setFigure(int figure) {
         this.figure = figure;
     }

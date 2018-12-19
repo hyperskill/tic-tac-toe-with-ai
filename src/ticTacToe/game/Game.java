@@ -62,7 +62,7 @@ public class Game {
      *  Contains game field and it's size. Size of array equal to maximum possible size of game field
      */
     private static int fieldSize = 3;
-    private static int[][] fieldValues = new int[6][6];
+    private static Integer[][] fieldValues = new Integer[6][6];
 
     /**
      *  Contains which figure is active now - zero or cross
@@ -201,11 +201,11 @@ public class Game {
         return activeFigure;
     }
 
-    public static int getFieldValue(int string, int row) {
+    public static Integer getFieldValue(Integer string, Integer row) {
         return fieldValues[string][row];
     }
 
-    public static int[][] getFieldValues() {
+    public static Integer[][] getFieldValues() {
         return fieldValues;
     }
 
