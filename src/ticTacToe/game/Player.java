@@ -3,6 +3,8 @@ package ticTacToe.game;
 import ticTacToe.ai.ComputerRival;
 import ticTacToe.ai.MediumLevel;
 
+import static ticTacToe.ui.UserInterface.game;
+
 /**
  * Class implements players specifications
  */
@@ -30,7 +32,7 @@ public class Player {
     }
 
     public void makeMove() {
-        if (computer && Game.isGameStarted()) {
+        if (computer && game.isGameStarted()) {
             switch (level) {
                 case EASY: ComputerRival.easy();break;
                 case MEDIUM: new MediumLevel().medium(); break;
@@ -49,6 +51,10 @@ public class Player {
 
     public void setisComputer(boolean computer) {
         this.computer = computer;
+    }
+
+    public Game.Levels getLevel() {
+        return level;
     }
 
     public void setLevel(Game.Levels level) {

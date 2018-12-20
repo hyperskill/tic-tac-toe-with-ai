@@ -1,12 +1,9 @@
 package ticTacToe.ui;
 
-import ticTacToe.ai.ComputerRival;
 import ticTacToe.game.Game;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static ticTacToe.game.Game.getFieldSize;
 
 /**
  * Class that implements UI
@@ -18,7 +15,9 @@ public class UserInterface extends JFrame {
      * @see GameButton
      * @see Game
      */
-    private static GameButton[][] button = new GameButton[6][6];
+    public static Game game;
+
+    private static GameButton[][] button;
 
     /**
      * Text fields for gamer names and turn indication
@@ -35,13 +34,17 @@ public class UserInterface extends JFrame {
     /**
      * Combo box for field size selection
      */
-    private static JComboBox fieldSizeSetup;
+    private JComboBox fieldSizeSetup;
 
-    public UserInterface() {
+    private int fieldSize;
+
+    public UserInterface(int fieldSize) {
         Dimension dimension = new Dimension(480,610);
 
+        this.fieldSize = fieldSize;
+        game =  new Game(fieldSize);
+        button = new GameButton[fieldSize][fieldSize];
         createField();
-        Game.stopTheGame();
 
         setSize(dimension);
         setResizable(false);
@@ -50,6 +53,9 @@ public class UserInterface extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        game.stopTheGame();
+
     }
 
     /**
@@ -60,10 +66,11 @@ public class UserInterface extends JFrame {
         JPanel topBar = createTopBar();
         JPanel headLabels = new HeadLabels().createHeadLabels();
         JPanel head = new Head().createHead();
-        JPanel[] line = new JPanel[getFieldSize()];
-        int btnSize = GameButton.foundSize(getFieldSize());
-        for ( int i = 0; i < getFieldSize(); i++) {
-            for ( int j = 0; j < getFieldSize(); j++) {
+        JPanel[] line = new JPanel[fieldSize];
+        int btnSize = GameButton.foundSize(fieldSize);
+
+        for ( int i = 0; i < fieldSize; i++) {
+            for ( int j = 0; j < fieldSize; j++) {
                 button[i][j] = new GameButton(i,j, btnSize);
             }
             line[i] = formLine(button[i]);
@@ -86,7 +93,7 @@ public class UserInterface extends JFrame {
         GroupLayout.SequentialGroup sequentialGroup = groupLayout.createSequentialGroup();
         groupLayout.setAutoCreateGaps(true);
 
-        for (int i = 0; i < getFieldSize(); i++) {
+        for (int i = 0; i < fieldSize; i++) {
             GameButton aB = b[i];
             sequentialGroup.addComponent(aB.getButton());
             parallelGroup.addComponent(aB.getButton());
@@ -138,7 +145,7 @@ public class UserInterface extends JFrame {
         String[] items = {"Classic 3x3","Big 4x4","Extra big 5x5","Crazy 6x6"};
         fieldSizeSetup = new JComboBox<>(items);
 
-        fieldSizeSetup.setSelectedIndex(getFieldSize() - 3);
+        fieldSizeSetup.setSelectedIndex(fieldSize - 3);
         fieldSizeSetup.addActionListener( a -> changeFieldSize());
 
         GroupLayout groupLayout = new GroupLayout(topBar);
@@ -160,10 +167,10 @@ public class UserInterface extends JFrame {
     }
 
      private void changeFieldSize() {
-        Game.setFieldSize(fieldSizeSetup.getSelectedIndex() + 3);
+        int newSize = fieldSizeSetup.getSelectedIndex() + 3;
         dispose();
-        new UserInterface();
-        ComputerRival.learningAlgorithm.init();
+        new UserInterface(newSize);
+     //   ComputerRival.learningAlgorithm.init();
     }
 
     public static GameButton getButton(int s, int r) {

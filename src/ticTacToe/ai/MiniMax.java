@@ -1,11 +1,11 @@
 package ticTacToe.ai;
 
-import ticTacToe.game.Game;
 import ticTacToe.game.GameResult;
 
 import java.util.List;
 
 import static ticTacToe.game.Game.*;
+import static ticTacToe.ui.UserInterface.game;
 
 /**
  *  Class that implements algorithm minimax to find the best move *
@@ -33,7 +33,7 @@ public class MiniMax extends GameResult {
         List<Cell> emptyCells = emptyCells();
 
 
-        if ( Game.getCurrentPlayer().getFigure() == CROSS ) {
+        if ( game.getCurrentPlayer().getFigure() == CROSS ) {
             computer = CROSS;
             rival = ZERO;
         } else {

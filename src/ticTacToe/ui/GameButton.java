@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static ticTacToe.game.Game.*;
+import static ticTacToe.ui.UserInterface.game;
 
 /**
  *  Class for Game Button ui element, contains button, and it coordinate according to field matrix
@@ -20,7 +21,7 @@ public class GameButton extends JFrame{
         this.string = string;
         this.row = row;
         int fontSize;
-        switch (Game.getFieldSize()) {
+        switch (game.getFieldSize()) {
             case 3 : fontSize = 140; break;
             case 4 : fontSize = 90; break;
             case 5 : fontSize = 65; break;
@@ -44,7 +45,7 @@ public class GameButton extends JFrame{
      * @see Game
      */
     public void printFieldElement() {
-        Integer value = getFieldValue(string,row);
+        Integer value = game.getFieldValue(string,row);
         int val = 0;
         if (value != null) {
             val = value;
@@ -71,9 +72,9 @@ public class GameButton extends JFrame{
      *  method that process user selection to button
      */
     private void getUserSelection () {
-        if (isGameStarted()) {
+        if (game.isGameStarted()) {
             button.setEnabled(false);
-            nextMove(string,row, getActiveFigure() , true);
+            game.nextMove(string,row, game.getActiveFigure());
         }
     }
 

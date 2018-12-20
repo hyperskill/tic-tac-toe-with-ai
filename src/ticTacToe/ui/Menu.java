@@ -1,11 +1,11 @@
 package ticTacToe.ui;
 
-import ticTacToe.game.Game;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static ticTacToe.game.Game.*;
+import static ticTacToe.ui.UserInterface.game;
 
 /**
  *  Class for menu bar user interface element creation
@@ -41,9 +41,9 @@ import static ticTacToe.game.Game.*;
         JMenuItem restart = new JMenuItem("Restart game");
         JMenuItem stop = new JMenuItem("Stop game");
 
-        start.addActionListener( actionEvent -> startTheGame());
-        restart.addActionListener( actionEvent -> restartTheGame());
-        stop.addActionListener( actionEvent -> stopTheGame());
+        start.addActionListener( actionEvent -> game.startTheGame());
+        restart.addActionListener( actionEvent -> game.restartTheGame());
+        stop.addActionListener( actionEvent -> game.stopTheGame());
 
         file.add(start);
         file.add(restart);
@@ -63,33 +63,33 @@ import static ticTacToe.game.Game.*;
 
         //new Game();
         computerRival.addActionListener(actionEvent ->
-                getPlayer(playerID).setisComputer(computerRival.getState()));
+                game.getPlayer(playerID).setisComputer(computerRival.getState()));
 
         computerRival.setSelected(isComputer);
-        getPlayer(playerID).setisComputer(isComputer);
+        game.getPlayer(playerID).setisComputer(isComputer);
 
-        getPlayer(playerID).setLevel(Levels.MEDIUM);
+        game. getPlayer(playerID).setLevel(Levels.MEDIUM);
         medium.setSelected(true);
         easy.addActionListener( actionEvent -> {
-            getPlayer(playerID).setLevel(Levels.EASY);
+            game.getPlayer(playerID).setLevel(Levels.EASY);
             medium.setSelected(false);
             hard.setSelected(false);
             learning.setSelected(false);
         });
         medium.addActionListener( actionEvent -> {
-            getPlayer(playerID).setLevel(Levels.MEDIUM);
+            game.getPlayer(playerID).setLevel(Levels.MEDIUM);
             easy.setSelected(false);
             hard.setSelected(false);
             learning.setSelected(false);
         });
         hard.addActionListener( actionEvent -> {
-            getPlayer(playerID).setLevel(Levels.HARD);
+            game.getPlayer(playerID).setLevel(Levels.HARD);
             easy.setSelected(false);
             medium.setSelected(false);
             learning.setSelected(false);
         });
         learning.addActionListener( actionEvent -> {
-            getPlayer(playerID).setLevel(Levels.LEARNING);
+            game.getPlayer(playerID).setLevel(Levels.LEARNING);
             easy.setSelected(false);
             medium.setSelected(false);
             hard.setSelected(false);
@@ -116,17 +116,17 @@ import static ticTacToe.game.Game.*;
         random.setSelected(true);
 
         p1.addActionListener( actionEvent -> {
-            setFirstPlayerUserSelection(FirstPlayerSelect.PLAYER1);
+            game.setFirstPlayerUserSelection(FirstPlayerSelect.PLAYER1);
             p2.setSelected(false);
             random.setSelected(false);
         });
         p2.addActionListener( actionEvent -> {
-            setFirstPlayerUserSelection(FirstPlayerSelect.PLAYER2);
+            game.setFirstPlayerUserSelection(FirstPlayerSelect.PLAYER2);
             p1.setSelected(false);
             random.setSelected(false);
         });
         random.addActionListener( actionEvent -> {
-            setFirstPlayerUserSelection(FirstPlayerSelect.RANDOM);
+            game.setFirstPlayerUserSelection(FirstPlayerSelect.RANDOM);
             p1.setSelected(false);
             p2.setSelected(false);
         });

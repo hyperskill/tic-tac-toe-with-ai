@@ -5,6 +5,8 @@ import ticTacToe.game.Player;
 
 import java.awt.*;
 
+import static ticTacToe.ui.UserInterface.game;
+
 /**
  *  Class for indicate which player should moves now
  */
@@ -19,9 +21,9 @@ public class DisplayPlayer {
         Color waiting = new Color(222, 85, 63);
         Color notStarted = new Color(179, 191, 216);
         String activeFigure;
-        Player active = Game.getCurrentPlayer();
+        Player active = game.getCurrentPlayer();
 
-        if (Game.getActiveFigure() == Game.ZERO) {
+        if (game.getActiveFigure() == Game.ZERO) {
             activeFigure = "O";
         } else {
             activeFigure = "X";
@@ -32,7 +34,7 @@ public class DisplayPlayer {
             UserInterface.getPlayer1().getTextField().setBackground(notStarted);
             UserInterface.getPlayer2().getTextField().setBackground(notStarted);
         } else {
-            if (active == Game.getPlayer(1)) {
+            if (active == game.getPlayer(1)) {
                 UserInterface.getWhoMoves().setText(UserInterface.getPlayer1().getText() + " - " + activeFigure);
                 UserInterface.getPlayer1().getTextField().setBackground(moves);
                 UserInterface.getPlayer2().getTextField().setBackground(waiting);

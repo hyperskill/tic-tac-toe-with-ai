@@ -6,8 +6,7 @@ import ticTacToe.ui.UserInterface;
 import java.util.List;
 import java.util.Random;
 
-import static ticTacToe.game.Game.*;
-
+import static ticTacToe.ui.UserInterface.game;
 
 /**
  *  Class for making moves against human
@@ -41,16 +40,14 @@ public class ComputerRival {
             return;
         }
 
-        GameResult.Cell cell = new MiniMax().minimax(getFieldValues(),getActiveFigure());
+        GameResult.Cell cell = new MiniMax().minimax(game.getFieldValues(), game.getActiveFigure());
         dataUpdate(cell.s, cell.r);
     }
 
     public static void learning() {
-        GameResult.Cell cell = learningAlgorithm.makeMove(getFieldValues());
-
+        GameResult.Cell cell = learningAlgorithm.makeMove();
         dataUpdate(cell.s, cell.r);
     }
-
 
     /**
      * This method updates a text inside a button after computer makes a move, and disable it for user
@@ -59,7 +56,7 @@ public class ComputerRival {
      * @param row number in field matrix
      */
     public static void dataUpdate(int string, int row) {
-        nextMove(string, row, getActiveFigure(),true);
+        game.nextMove(string, row, game.getActiveFigure());
         UserInterface.getButton(string, row).printFieldElement();
         UserInterface.getButton(string, row).setButtonEnabled(false);
     }

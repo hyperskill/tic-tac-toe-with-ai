@@ -6,6 +6,8 @@ import ticTacToe.game.GameResult;
 import java.io.*;
 import java.util.*;
 
+import static ticTacToe.ui.UserInterface.game;
+
 public class LearningAlgorithm implements Serializable {
     private static final long serialVersionUID = 123L;
 
@@ -17,7 +19,7 @@ public class LearningAlgorithm implements Serializable {
 
     public void init() {
         File savedFields;
-        switch (Game.getFieldSize()) {
+        switch (game.getFieldSize()) {
             case 3 : {
                 savedFields = new File("fields3x3.tmp");
                 break;
@@ -55,18 +57,17 @@ public class LearningAlgorithm implements Serializable {
     }
 
 
-    public GameResult.Cell makeMove(Integer[][] field){
-        int fieldSize = Game.getFieldSize();
+    public GameResult.Cell makeMove(){
         List<GameResult.Cell> emptyCells = new GameResult().emptyCells();
         int currentRate = Integer.MIN_VALUE;
         int selectedMoveIndex = 0;
-        int activeFigure = Game.getActiveFigure();
+        int activeFigure = game.getActiveFigure();
         GameResult.Cell cell;
-
+        Integer[][] field = game.getFieldValues();
 
         for (int i = 0; i < emptyCells.size(); i++) {
             cell = emptyCells.get(i);
-            field[cell.s][cell.r] = Game.getActiveFigure();
+            field[cell.s][cell.r] = game.getActiveFigure();
             if (fieldsMap != null) {
                 if (fieldsMap.containsKey(field)) {
                     cell.rate = fieldsMap.get(field).getRate(activeFigure);
@@ -80,13 +81,14 @@ public class LearningAlgorithm implements Serializable {
         }
 
         cell = emptyCells.get(selectedMoveIndex);
-        field[cell.s][cell.r] = Game.getActiveFigure();
+        field[cell.s][cell.r] = game.getActiveFigure();
         return cell;
     }
 
     public void writeResults(int result) {
         Rate rate = new Rate();
-        List<Integer[][]> movesLog = GameResult.getMovesLog();
+
+        List<Integer[][]> movesLog = game.getLog().get();
 
         if (result == Game.CROSS) {
             rate.rateX = 1;
@@ -109,7 +111,7 @@ public class LearningAlgorithm implements Serializable {
 
     private void save() {
         File savedFields;
-        switch (Game.getFieldSize()) {
+        switch (game.getFieldSize()) {
             case 3 : {
                 savedFields = new File("fields3x3.tmp");
                 break;

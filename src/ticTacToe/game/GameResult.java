@@ -1,6 +1,5 @@
 package ticTacToe.game;
 
-import ticTacToe.ai.ComputerRival;
 import ticTacToe.ai.MiniMax;
 import ticTacToe.ui.UserInterface;
 
@@ -10,21 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ticTacToe.game.Game.*;
+import static ticTacToe.ui.UserInterface.game;
 
 /**
  *  Class for field analyse and winner detecting
  */
 public class GameResult {
 
-    private static ArrayList<Integer[][]> movesLog = new ArrayList<>(); //must be cleared at the end of game!!!
 
     /**
      * Method checks game win and tie for players 1 and 2
      */
     public  void checkGameResult() {
-        movesLog.add(getFieldValues());
         for (int i = 0; i < 2; i++ ){
-            if (win(getFieldValues(), i)) {
+            if (win(game.getFieldValues(), i)) {
                 printGameResult(i);
                 return;
             }
@@ -41,44 +39,44 @@ public class GameResult {
      * @return true if winning combination for given figure exists in field
      */
     public boolean win(Integer[][] field, int figure) {
-        for (int s = 0; s < getFieldSize(); s++) {
-            for(int r = 0; r < getFieldSize(); r++) {
+        for (int s = 0; s < game.getFieldSize(); s++) {
+            for(int r = 0; r < game.getFieldSize(); r++) {
                 if (field[s][r] != figure) {
                     break;
                 }
-                if (r == getFieldSize() - 1) {
+                if (r == game.getFieldSize() - 1) {
                     return true;
                 }
             }
         }
 
-        for (int r = 0; r < getFieldSize(); r++) {
-            for(int s = 0; s < getFieldSize(); s++) {
+        for (int r = 0; r < game.getFieldSize(); r++) {
+            for(int s = 0; s < game.getFieldSize(); s++) {
                 if (field[s][r] != figure) {
                     break;
                 }
-                if (s == getFieldSize() - 1) {
+                if (s == game.getFieldSize() - 1) {
                     return true;
                 }
             }
         }
 
-        for (int s = 0; s < getFieldSize(); s++) {
+        for (int s = 0; s < game.getFieldSize(); s++) {
             if (field[s][s] != figure) {
                 break;
             }
-            if (s == getFieldSize() - 1) {
+            if (s == game.getFieldSize() - 1) {
                 return true;
             }
         }
 
         int r = 0;
-        for (int s = getFieldSize()-1; s >= 0; s--) {
+        for (int s = game.getFieldSize()-1; s >= 0; s--) {
 
             if (field[s][r] != figure) {
                 break;
             }
-            if (r == getFieldSize() - 1) {
+            if (r == game.getFieldSize() - 1) {
                 return true;
             }
             r++;
@@ -93,9 +91,9 @@ public class GameResult {
      */
     public List<Cell> emptyCells() {
         List<Cell> emptyCells = new ArrayList<>();
-        for (int row = 0; row < getFieldSize(); row++) {
-            for (int string = 0; string < getFieldSize(); string++) {
-                if (getFieldValue(string, row) == EMPTY) {
+        for (int row = 0; row < game.getFieldSize(); row++) {
+            for (int string = 0; string < game.getFieldSize(); string++) {
+                if (game.getFieldValue(string, row) == EMPTY) {
                     emptyCells.add(new Cell(string,row));
                 }
             }
@@ -111,7 +109,7 @@ public class GameResult {
         String winnersName;
         switch (result) {
             case ZERO : {
-                if (getPlayer(1).getFigure() == ZERO) {
+                if (game.getPlayer(1).getFigure() == ZERO) {
                     winnersName = UserInterface.getPlayer1().getText();
                 } else {
                     winnersName = UserInterface.getPlayer2().getText();
@@ -119,7 +117,7 @@ public class GameResult {
                 break;
             }
             case CROSS : {
-                if (getPlayer(1).getFigure() == CROSS) {
+                if (game.getPlayer(1).getFigure() == CROSS) {
                     winnersName = UserInterface.getPlayer1().getText();
                 } else {
                     winnersName = UserInterface.getPlayer2().getText();
@@ -137,10 +135,7 @@ public class GameResult {
         JOptionPane.showMessageDialog(null,
                 winnersName + " wins!!!");
 
-        ComputerRival.learningAlgorithm.writeResults(result);
-
-        movesLog.clear();
-        endTheGame();
+        game.endTheGame(result);
     }
 
     /**
@@ -158,10 +153,5 @@ public class GameResult {
             this.r = row;
             this.rate = 0;
         }
-    }
-
-
-    public static ArrayList<Integer[][]> getMovesLog() {
-        return movesLog;
     }
 }
