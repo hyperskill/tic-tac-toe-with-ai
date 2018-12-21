@@ -98,14 +98,15 @@ public class LearningAlgorithm implements Serializable {
             rate.rate0 = 1;
         }
 
-        for (int i = 0; i < movesLog.size(); i++) {
-            Integer[][] move = movesLog.get(i);
+
+        for (Integer[][] move : movesLog) {
             Rate prevRate = fieldsMap.putIfAbsent(move, rate);
             if (prevRate != null) {
                 prevRate.updateRates(rate);
                 fieldsMap.put(move, prevRate);
             }
         }
+
         save();
     }
 
@@ -147,7 +148,7 @@ public class LearningAlgorithm implements Serializable {
 
             objectOutputStream.writeObject(fieldsMap);
             objectOutputStream.close();
-            System.out.println("Neurons saved to file");
+            System.out.println("Moves saved to file");
 
         } catch (IOException e) {
             e.printStackTrace();

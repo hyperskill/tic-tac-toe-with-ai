@@ -1,13 +1,13 @@
 package ticTacToe.game;
 
-import java.util.Arrays;
-
 public class FieldCopier {
-
-    Integer[][] copy;
-
     public Integer[][]  copy(Integer[][] move) {
-        this.copy = move.clone();
+        Integer[][] copy = new Integer[move.length][move.length];
+
+        for (int s = 0; s < move.length; s++) {
+            System.arraycopy(move[s], 0, copy[s], 0, move.length);
+        }
+
         return copy;
     }
 }
