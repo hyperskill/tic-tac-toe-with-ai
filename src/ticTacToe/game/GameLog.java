@@ -3,18 +3,18 @@ package ticTacToe.game;
 import java.util.ArrayList;
 
 public class GameLog {
-    private ArrayList<Integer[][]> log = new ArrayList<>();
+    private ArrayList<Integer> log = new ArrayList<>();
 
 
-    public void addMove(Integer[][] move) {
-        log.add(move);
+    public void addMove(Integer moveCode) {
+        log.add(moveCode);
     }
 
     public void clear() {
         log.clear();
     }
 
-    public ArrayList<Integer[][]> get() {
+    public ArrayList<Integer> get() {
         return log;
     }
 }

@@ -186,7 +186,7 @@ public class Game {
     public void nextMove(int string, int row, int fieldValue) {
         updateField(string,row,fieldValue);
         UserInterface.getButton(string,row).printFieldElement();
-        gameLog.addMove(new FieldCopier().copy(fieldValues));
+        gameLog.addMove(new FieldCoder().getCode(fieldValues));
 
         new GameResult().checkGameResult();
 

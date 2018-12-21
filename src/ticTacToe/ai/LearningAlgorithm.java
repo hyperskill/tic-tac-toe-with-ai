@@ -1,5 +1,6 @@
 package ticTacToe.ai;
 
+import ticTacToe.game.FieldCoder;
 import ticTacToe.game.Game;
 import ticTacToe.game.GameResult;
 
@@ -11,7 +12,7 @@ import static ticTacToe.ui.UserInterface.game;
 public class LearningAlgorithm implements Serializable {
     private static final long serialVersionUID = 123L;
 
-    private Map<Integer[][],Rate> fieldsMap;
+    private Map<Integer, Rate> fieldsMap;
 
     public LearningAlgorithm() {
         init();
@@ -40,14 +41,14 @@ public class LearningAlgorithm implements Serializable {
         }
 
         if (!savedFields.isFile()) {
-            fieldsMap = new HashMap<>();
+            fieldsMap = new TreeMap<>();
             return;
         }
 
         try {
             FileInputStream fileInputStream = new FileInputStream(savedFields);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            fieldsMap = (Map<Integer[][], Rate>) objectInputStream.readObject();
+            fieldsMap = (Map<Integer, Rate>) objectInputStream.readObject();
             System.out.println("\nFields  are load from file");
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,18 +70,19 @@ public class LearningAlgorithm implements Serializable {
             cell = emptyCells.get(i);
             field[cell.s][cell.r] = game.getActiveFigure();
             if (fieldsMap != null) {
-                if (fieldsMap.containsKey(field)) {
-                    cell.rate = fieldsMap.get(field).getRate(activeFigure);
+                Integer code = new FieldCoder().getCode(field);
+                if (fieldsMap.containsKey(code)) {
+                    cell.rate = fieldsMap.get(code).getRate(activeFigure);
                 }
             }
-
             if (cell.rate > currentRate) {
                 selectedMoveIndex = i;
             }
             field[cell.s][cell.r] = Game.EMPTY;
         }
 
-        cell = emptyCells.get(selectedMoveIndex);
+       // cell = emptyCells.get(selectedMoveIndex);
+        cell = emptyCells.get(0);
         field[cell.s][cell.r] = game.getActiveFigure();
         return cell;
     }
@@ -88,7 +90,7 @@ public class LearningAlgorithm implements Serializable {
     public void writeResults(int result) {
         Rate rate = new Rate();
 
-        List<Integer[][]> movesLog = game.getLog().get();
+        List<Integer> movesLog = game.getLog().get();
 
         if (result == Game.CROSS) {
             rate.rateX = 1;
@@ -99,7 +101,8 @@ public class LearningAlgorithm implements Serializable {
         }
 
 
-        for (Integer[][] move : movesLog) {
+        for (Integer move : movesLog) {
+            fieldsMap.put(move, rate);
             Rate prevRate = fieldsMap.putIfAbsent(move, rate);
             if (prevRate != null) {
                 prevRate.updateRates(rate);
@@ -184,15 +187,5 @@ public class LearningAlgorithm implements Serializable {
             this.rate0 += newRate.rate0;
         }
 
-        public void setRate(int rate, int activeFigure) {
-            if (activeFigure == Game.CROSS) {
-                this.rateX = rate;
-            } else {
-                this.rate0 = rate;
-            }
-        }
     }
-
-
-
 }
