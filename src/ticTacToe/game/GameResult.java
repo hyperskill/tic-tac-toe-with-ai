@@ -27,7 +27,7 @@ public class GameResult {
                 return;
             }
         }
-        if (emptyCells().isEmpty()) {
+        if (emptyCells(game.getFieldValues()).isEmpty()) {
             printGameResult(EMPTY);
         }
     }
@@ -38,7 +38,7 @@ public class GameResult {
      * @param figure figure for which game result should be checked
      * @return true if winning combination for given figure exists in field
      */
-    public boolean win(Integer[][] field, int figure) {
+    public boolean win(int[][] field, int figure) {
         for (int s = 0; s < game.getFieldSize(); s++) {
             for(int r = 0; r < game.getFieldSize(); r++) {
                 if (field[s][r] != figure) {
@@ -89,11 +89,11 @@ public class GameResult {
      *
      * @return list of cells
      */
-    public List<Cell> emptyCells() {
+    public List<Cell> emptyCells(int[][] field) {
         List<Cell> emptyCells = new ArrayList<>();
-        for (int row = 0; row < game.getFieldSize(); row++) {
-            for (int string = 0; string < game.getFieldSize(); string++) {
-                if (game.getFieldValue(string, row) == EMPTY) {
+        for (int row = 0; row < field.length; row++) {
+            for (int string = 0; string < field.length; string++) {
+                if (field[string][row] == EMPTY) {
                     emptyCells.add(new Cell(string,row));
                 }
             }
@@ -134,24 +134,6 @@ public class GameResult {
 
         JOptionPane.showMessageDialog(null,
                 winnersName + " wins!!!");
-
         game.endTheGame(result);
-    }
-
-    /**
-     * Class that contain coordinate and rate of cell(using for minimax algorithm)
-     *
-     * @see MiniMax
-     */
-    public class Cell {
-        public int s;
-        public int r;
-        public int rate;
-
-        public Cell(int string, int row) {
-            this.s = string;
-            this.r = row;
-            this.rate = 0;
-        }
     }
 }

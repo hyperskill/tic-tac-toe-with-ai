@@ -1,6 +1,8 @@
 package ticTacToe.ui;
 
 
+import ticTacToe.ai.LearningAlgorithm;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,14 +42,17 @@ import static ticTacToe.ui.UserInterface.game;
         JMenuItem start = new JMenuItem("Start game");
         JMenuItem restart = new JMenuItem("Restart game");
         JMenuItem stop = new JMenuItem("Stop game");
+        JMenuItem selfLearn = new JMenuItem("Self learning");
 
         start.addActionListener( actionEvent -> game.startTheGame());
         restart.addActionListener( actionEvent -> game.restartTheGame());
         stop.addActionListener( actionEvent -> game.stopTheGame());
+        selfLearn.addActionListener( actionEvent -> new LearningAlgorithm().selfLearning(20000));
 
         file.add(start);
         file.add(restart);
         file.add(stop);
+        file.add(selfLearn);
 
         return file;
     }
@@ -61,12 +66,21 @@ import static ticTacToe.ui.UserInterface.game;
         JMenuItem hard = new JRadioButtonMenuItem("Hard");
         JMenuItem learning = new JRadioButtonMenuItem("Self-learning");
 
-        //new Game();
-        computerRival.addActionListener(actionEvent ->
-                game.getPlayer(playerID).setisComputer(computerRival.getState()));
+        computerRival.addActionListener(actionEvent -> {
+                    game.getPlayer(playerID).setisComputer(computerRival.getState());
+                    easy.setEnabled(computerRival.getState());
+                    medium.setEnabled(computerRival.getState());
+                    hard.setEnabled(computerRival.getState());
+                    learning.setEnabled(computerRival.getState());
+                });
 
         computerRival.setSelected(isComputer);
+        easy.setEnabled(isComputer);
+        medium.setEnabled(isComputer);
+        hard.setEnabled(isComputer);
+        learning.setEnabled(isComputer);
         game.getPlayer(playerID).setisComputer(isComputer);
+
 
         game. getPlayer(playerID).setLevel(Levels.MEDIUM);
         medium.setSelected(true);

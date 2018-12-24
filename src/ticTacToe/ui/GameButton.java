@@ -24,7 +24,7 @@ public class GameButton extends JFrame{
         switch (game.getFieldSize()) {
             case 3 : fontSize = 140; break;
             case 4 : fontSize = 90; break;
-            case 5 : fontSize = 65; break;
+            case 5 : fontSize = 60; break;
             case 6 : fontSize = 45; break;
             default : fontSize = 15; break;
         }
@@ -45,12 +45,7 @@ public class GameButton extends JFrame{
      * @see Game
      */
     public void printFieldElement() {
-        Integer value = game.getFieldValue(string,row);
-        int val = 0;
-        if (value != null) {
-            val = value;
-        }
-
+        int val = game.getFieldValue(string,row);
         switch (val) {
             case ZERO : {
                 button.setText("O");

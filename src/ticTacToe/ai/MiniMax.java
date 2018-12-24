@@ -1,5 +1,6 @@
 package ticTacToe.ai;
 
+import ticTacToe.game.Cell;
 import ticTacToe.game.GameResult;
 
 import java.util.List;
@@ -23,14 +24,14 @@ public class MiniMax extends GameResult {
      * @param activeFigure figure that should moves now
      * @return cell with best move coordinates and it rate
      */
-    public Cell minimax (Integer[][] field, int activeFigure) {
+    public Cell minimax (int[][] field, int activeFigure) {
         Cell cell = new Cell(0,0);
         int computer;
         int rival;
         int nodeRate;
         int bestNodeIndex = 0;
 
-        List<Cell> emptyCells = emptyCells();
+        List<Cell> emptyCells = emptyCells(field);
 
 
         if ( game.getCurrentPlayer().getFigure() == CROSS ) {
@@ -47,7 +48,7 @@ public class MiniMax extends GameResult {
         } else if (win(field, rival)) {
             cell.rate = -10;
             return cell;
-        } else if (emptyCells.isEmpty()) {
+        } else if (emptyCells(field).isEmpty()) {
             cell.rate = 0;
             return cell;
         }

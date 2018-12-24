@@ -1,18 +1,17 @@
 package ticTacToe.ai;
 
-import ticTacToe.game.FieldCoder;
-import ticTacToe.game.Game;
-import ticTacToe.game.GameResult;
+import ticTacToe.game.*;
 
 import java.io.*;
 import java.util.*;
 
+import static ticTacToe.game.Game.EMPTY;
 import static ticTacToe.ui.UserInterface.game;
 
 public class LearningAlgorithm implements Serializable {
     private static final long serialVersionUID = 123L;
 
-    private Map<Integer, Rate> fieldsMap;
+    private Map<Long, Rate> fieldsMap;
 
     public LearningAlgorithm() {
         init();
@@ -41,14 +40,14 @@ public class LearningAlgorithm implements Serializable {
         }
 
         if (!savedFields.isFile()) {
-            fieldsMap = new TreeMap<>();
+            fieldsMap = new HashMap<>();
             return;
         }
 
         try {
             FileInputStream fileInputStream = new FileInputStream(savedFields);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            fieldsMap = (Map<Integer, Rate>) objectInputStream.readObject();
+            fieldsMap = (Map<Long, Rate>) objectInputStream.readObject();
             System.out.println("\nFields  are load from file");
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,54 +57,57 @@ public class LearningAlgorithm implements Serializable {
     }
 
 
-    public GameResult.Cell makeMove(){
-        List<GameResult.Cell> emptyCells = new GameResult().emptyCells();
+    public Cell makeMove(int[][] field){
+        List<Cell> emptyCells = new GameResult().emptyCells(field);
         int currentRate = Integer.MIN_VALUE;
         int selectedMoveIndex = 0;
+        Cell cell;
         int activeFigure = game.getActiveFigure();
-        GameResult.Cell cell;
-        Integer[][] field = game.getFieldValues();
 
         for (int i = 0; i < emptyCells.size(); i++) {
+            long code;
             cell = emptyCells.get(i);
             field[cell.s][cell.r] = game.getActiveFigure();
-            if (fieldsMap != null) {
-                Integer code = new FieldCoder().getCode(field);
-                if (fieldsMap.containsKey(code)) {
-                    cell.rate = fieldsMap.get(code).getRate(activeFigure);
-                }
+            code = new FieldCoder().getCode(field);
+
+            if (fieldsMap.containsKey(code)) {
+                cell.rate = fieldsMap.get(code).getRate(activeFigure);
             }
+
             if (cell.rate > currentRate) {
                 selectedMoveIndex = i;
+                currentRate = cell.rate;
             }
-            field[cell.s][cell.r] = Game.EMPTY;
+
+            field[cell.s][cell.r] = EMPTY;
         }
 
-       // cell = emptyCells.get(selectedMoveIndex);
-        cell = emptyCells.get(0);
+
+        cell = emptyCells.get(selectedMoveIndex);
         field[cell.s][cell.r] = game.getActiveFigure();
         return cell;
     }
 
     public void writeResults(int result) {
-        Rate rate = new Rate();
+        int rateX = 0;
+        int rate0 = 0;
 
-        List<Integer> movesLog = game.getLog().get();
+        List<Long> movesLog = game.getLog().get();
 
         if (result == Game.CROSS) {
-            rate.rateX = 1;
-            rate.rate0 = -1;
-        } else if (result == Game.ZERO){
-            rate.rateX = -1;
-            rate.rate0 = 1;
+            rateX = 1;
+            rate0 = -1;
+        } else if (result == Game.ZERO) {
+            rateX = -1;
+            rate0 = 1;
+        } else if (result == EMPTY) {
+            return;
         }
 
-
-        for (Integer move : movesLog) {
-            fieldsMap.put(move, rate);
-            Rate prevRate = fieldsMap.putIfAbsent(move, rate);
+        for (long move : movesLog) {
+            Rate prevRate = fieldsMap.putIfAbsent(move, new Rate(rateX,rate0));
             if (prevRate != null) {
-                prevRate.updateRates(rate);
+                prevRate.updateRates(new Rate(rateX,rate0));
                 fieldsMap.put(move, prevRate);
             }
         }
@@ -151,12 +153,71 @@ public class LearningAlgorithm implements Serializable {
 
             objectOutputStream.writeObject(fieldsMap);
             objectOutputStream.close();
-            System.out.println("Moves saved to file");
+            System.out.println("Moves saved to file, size" + fieldsMap.keySet().size());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+    public void selfLearning(int iterations) {
+
+        for (int i =0; i < iterations; i++) {
+            game.getLog().clear();
+            selfLearningGame();
+        }
+        System.out.println("Learning with " + iterations + " completed. Fields collection now is " + fieldsMap.keySet().size());
+    }
+
+    private void selfLearningGame() {
+        GameResult gameResult= new GameResult();
+        int[][] field = game.getFieldValues();
+        Cell cell;
+        int avtiveFigure;
+
+        for ( int i = 0; i < field.length; i++) {
+            for ( int j = 0; j < field.length; j++) {
+                field[i][j] = EMPTY;
+            }
+        }
+
+        while (true) {
+
+           // cell = makeMove(field);
+            cell = ComputerRival.easy(field);
+            avtiveFigure = Game.CROSS;
+            field[cell.s][cell.r] = avtiveFigure;
+            game.getLog().addMove(new FieldCoder().getCode(field));
+            if (gameResult.win(field,0)) {
+                writeResults(0);
+                return;
+            } else if (gameResult.win(field,1)) {
+                writeResults(1);
+                return;
+            } else if (gameResult.emptyCells(field).isEmpty()) {
+                return;
+            }
+
+            avtiveFigure = Game.ZERO;
+            cell = ComputerRival.easy(field);
+            field[cell.s][cell.r] = avtiveFigure;
+            game.getLog().addMove(new FieldCoder().getCode(field));
+            if (gameResult.win(field,0)) {
+                writeResults(0);
+                return;
+            } else if (gameResult.win(field,1)) {
+                writeResults(1);
+                return;
+            } else if (gameResult.emptyCells(field).isEmpty()) {
+                return;
+            }
+        }
+    }
+
+
+
+
 
     private class Rate implements Serializable{
         private int rateX;

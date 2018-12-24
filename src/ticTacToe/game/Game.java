@@ -1,10 +1,10 @@
 package ticTacToe.game;
 
 import ticTacToe.ai.ComputerRival;
+import ticTacToe.ai.MiniMax;
 import ticTacToe.ui.DisplayPlayer;
 import ticTacToe.ui.UserInterface;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -66,7 +66,7 @@ public class Game {
      */
     private  int fieldSize;
 
-    private  Integer[][] fieldValues;
+    private  int[][] fieldValues;
 
     /**
      *  Contains which figure is active now - zero or cross
@@ -78,7 +78,7 @@ public class Game {
         this.player2 = new Player(ZERO);
         this.firstPlayerUserSelection = FirstPlayerSelect.RANDOM;
         this.gameStarted = false;
-        this.fieldValues = new Integer[fieldSize][fieldSize];
+        this.fieldValues = new int[fieldSize][fieldSize];
         this.fieldSize = fieldSize;
         this.activeFigure = CROSS;
     }
@@ -88,9 +88,9 @@ public class Game {
      */
     public  void startTheGame(){
         if (!gameStarted) {
-
             gameStarted = true;
             activeFigure = CROSS;
+            gameLog.clear();
 
             switch (firstPlayerUserSelection) {
                 case PLAYER1 : {
@@ -161,10 +161,7 @@ public class Game {
      * @see GameResult
      */
     public void endTheGame(int result){
-        if (player1.getLevel() == Levels.LEARNING || player2.getLevel() == Levels.LEARNING) {
-            ComputerRival.learningAlgorithm.writeResults(result);
-        }
-        gameLog.clear();
+        ComputerRival.learningAlgorithm.writeResults(result);
         gameStarted = false;
         currentPlayer = null;
         DisplayPlayer.display();
@@ -220,11 +217,11 @@ public class Game {
         return activeFigure;
     }
 
-    public  Integer getFieldValue(Integer string, Integer row) {
+    public  int getFieldValue(Integer string, Integer row) {
         return fieldValues[string][row];
     }
 
-    public  Integer[][] getFieldValues() {
+    public  int[][] getFieldValues() {
         return fieldValues;
     }
 
@@ -255,5 +252,6 @@ public class Game {
     public GameLog getLog() {
         return gameLog;
     }
+
 
 }

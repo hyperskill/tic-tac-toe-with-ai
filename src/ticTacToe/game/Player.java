@@ -1,7 +1,6 @@
 package ticTacToe.game;
 
 import ticTacToe.ai.ComputerRival;
-import ticTacToe.ai.MediumLevel;
 
 import static ticTacToe.ui.UserInterface.game;
 
@@ -32,14 +31,17 @@ public class Player {
     }
 
     public void makeMove() {
+        Cell cell = new Cell(0,0);
         if (computer && game.isGameStarted()) {
             switch (level) {
-                case EASY: ComputerRival.easy();break;
-                case MEDIUM: new MediumLevel().medium(); break;
-                case HARD: ComputerRival.hard(); break;
-                case LEARNING: ComputerRival.learning(); break;
+                case EASY: cell = ComputerRival.easy(game.getFieldValues());break;
+                case MEDIUM: cell = ComputerRival.medium(); break;
+                case HARD: cell = ComputerRival.hard(); break;
+                case LEARNING: cell = ComputerRival.learning(); break;
             }
+            ComputerRival.dataUpdate(cell.s, cell.r);
         }
+
     }
 
     /**
@@ -53,6 +55,10 @@ public class Player {
         this.computer = computer;
     }
 
+    public boolean isComputer() {
+        return computer;
+    }
+
     public Game.Levels getLevel() {
         return level;
     }
@@ -64,4 +70,5 @@ public class Player {
     public int getFigure() {
         return figure;
     }
+
 }

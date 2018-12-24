@@ -1,11 +1,14 @@
 package ticTacToe.ai;
 
+import ticTacToe.game.Cell;
 import ticTacToe.game.GameResult;
 import ticTacToe.ui.UserInterface;
 
 import java.util.List;
 import java.util.Random;
 
+import static ticTacToe.game.Game.CROSS;
+import static ticTacToe.game.Game.ZERO;
 import static ticTacToe.ui.UserInterface.game;
 
 /**
@@ -18,35 +21,57 @@ public class ComputerRival {
      /**
      * Easy level method - randomly selects cell in field
      */
-    public static void easy() {
-        List<GameResult.Cell> emptyCells = new GameResult().emptyCells();
-        GameResult.Cell cell;
+    public static Cell easy(int[][] field) {
+        List<Cell> emptyCells = new GameResult().emptyCells(field);
         int size = emptyCells.size();
         if (size > 0) {
-            cell = emptyCells.get(new Random().nextInt(size));
+            return emptyCells.get(new Random().nextInt(size));
         } else {
-            return;
+            return null;
+        }
+    }
+
+    /**
+     * method calls scanning of sequence, if it not found making a random move
+     * @see ComputerRival
+     */
+    public static Cell medium() {
+        MediumLevel mediumLevel = new MediumLevel();
+        int valueOfComputer = game.getActiveFigure();
+        int valueOfHuman;
+        Cell cell = mediumLevel.scan(valueOfComputer);
+        if (cell != null) {
+            return cell;
         }
 
-        dataUpdate(cell.s, cell.r);
+        if (valueOfComputer == CROSS) {
+            valueOfHuman = ZERO;
+        } else {
+            valueOfHuman = CROSS;
+        }
+
+        cell = mediumLevel.scan(valueOfHuman);
+        if (cell != null) {
+            return cell;
+        }
+
+        return ComputerRival.easy(game.getFieldValues());
     }
 
     /**
      *  Hard Level makes first move randomly, in others used minimax algorithm
      */
-    public static void hard() {
-        if (new GameResult().emptyCells().size() > 8) {
-            easy();
-            return;
+    public static Cell hard() {
+        if (new GameResult().emptyCells(game.getFieldValues()).size() > 8) {
+            return easy(game.getFieldValues());
         }
 
-        GameResult.Cell cell = new MiniMax().minimax(game.getFieldValues(), game.getActiveFigure());
-        dataUpdate(cell.s, cell.r);
+        Cell cell = new MiniMax().minimax(game.getFieldValues(), game.getActiveFigure());
+        return cell;
     }
 
-    public static void learning() {
-        GameResult.Cell cell = learningAlgorithm.makeMove();
-        dataUpdate(cell.s, cell.r);
+    public static Cell learning() {
+        return learningAlgorithm.makeMove(game.getFieldValues());
     }
 
     /**
@@ -56,8 +81,8 @@ public class ComputerRival {
      * @param row number in field matrix
      */
     public static void dataUpdate(int string, int row) {
-        game.nextMove(string, row, game.getActiveFigure());
         UserInterface.getButton(string, row).printFieldElement();
         UserInterface.getButton(string, row).setButtonEnabled(false);
+        game.nextMove(string, row, game.getActiveFigure());
     }
 }
