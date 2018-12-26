@@ -1,7 +1,9 @@
 package ticTacToe;
 
+import ticTacToe.ui.UserInterface;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.print("Hello world!");
+        new UserInterface(3);
     }
 }

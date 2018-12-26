@@ -28,3 +28,6 @@ git.properties
 
 #IDEA Project Files
 .idea/
+
+#Temporary files
+*.tmp
