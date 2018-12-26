@@ -3,7 +3,6 @@ package ticTacToe.ai;
 import ticTacToe.game.Cell;
 
 import static ticTacToe.game.Game.*;
-import static ticTacToe.game.Game.CROSS;
 import static ticTacToe.ui.UserInterface.game;
 
 /**
@@ -16,19 +15,19 @@ public class MediumLevel {
     /**
      * method scanning field upside down, left to right and diagonals to find sequence in field that could lead to win
      * of any player
-     * @param value which combination should be checked
+     * @param figure which combination should be checked
      */
-    public Cell scan(int value) {
+    public Cell scan(int figure) {
 
-        Cell cell = scanDown(value);
+        Cell cell = scanDown(figure);
         if (cell != null) {
             return cell;
         }
-        cell = scanRight(value);
+        cell = scanRight(figure);
         if (cell != null) {
             return cell;
         }
-        cell = scanDiagonal(value);
+        cell = scanDiagonal(figure);
         if (cell != null) {
             return cell;
         }

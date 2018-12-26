@@ -1,10 +1,11 @@
 package ticTacToe.ui;
 
 
-import ticTacToe.ai.LearningAlgorithm;
+import ticTacToe.ai.SelfLearning;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Scanner;
 
 import static ticTacToe.game.Game.*;
 import static ticTacToe.ui.UserInterface.game;
@@ -16,12 +17,16 @@ import static ticTacToe.ui.UserInterface.game;
  class Menu extends JPanel{
     private Font font = new Font(null,Font.BOLD,15);
 
-    JMenuBar menuCreator(){
+    /**
+     * Method creates menu bar with next menus - game, move, player1, player2
+     * @return bar
+     */
+    public JMenuBar menuCreator(){
         JMenuBar menuBar = new JMenuBar();
         JMenu game = menuGameCreator();
         JMenu p1 = menuPlayerCreator("Player 1  |",1,false);
         JMenu p2 = menuPlayerCreator("Player 2", 2, true);
-        JMenu first = firstMoveCreator();
+        JMenu first = moveCreator();
 
         game.setFont(font);
         p1.setFont(font);
@@ -36,27 +41,36 @@ import static ticTacToe.ui.UserInterface.game;
         return menuBar;
     }
 
+    /**
+     * Method creates game menu
+     * @return game menu
+     */
     private JMenu menuGameCreator(){
         JMenu file = new JMenu("Game  |");
 
         JMenuItem start = new JMenuItem("Start game");
         JMenuItem restart = new JMenuItem("Restart game");
         JMenuItem stop = new JMenuItem("Stop game");
-        JMenuItem selfLearn = new JMenuItem("Self learning");
+
 
         start.addActionListener( actionEvent -> game.startTheGame());
         restart.addActionListener( actionEvent -> game.restartTheGame());
         stop.addActionListener( actionEvent -> game.stopTheGame());
-        selfLearn.addActionListener( actionEvent -> new LearningAlgorithm().selfLearning(20000));
 
         file.add(start);
         file.add(restart);
         file.add(stop);
-        file.add(selfLearn);
 
         return file;
     }
 
+    /**
+     * Method creates player menu
+     * @param name
+     * @param playerID
+     * @param isComputer
+     * @return player menu
+     */
     private JMenu menuPlayerCreator(String name, int playerID, boolean isComputer){
         JMenu file = new JMenu(name);
 
@@ -67,12 +81,12 @@ import static ticTacToe.ui.UserInterface.game;
         JMenuItem learning = new JRadioButtonMenuItem("Self-learning");
 
         computerRival.addActionListener(actionEvent -> {
-                    game.getPlayer(playerID).setisComputer(computerRival.getState());
-                    easy.setEnabled(computerRival.getState());
-                    medium.setEnabled(computerRival.getState());
-                    hard.setEnabled(computerRival.getState());
-                    learning.setEnabled(computerRival.getState());
-                });
+            game.getPlayer(playerID).setisComputer(computerRival.getState());
+            easy.setEnabled(computerRival.getState());
+            medium.setEnabled(computerRival.getState());
+            hard.setEnabled(computerRival.getState());
+            learning.setEnabled(computerRival.getState());
+        });
 
         computerRival.setSelected(isComputer);
         easy.setEnabled(isComputer);
@@ -89,6 +103,7 @@ import static ticTacToe.ui.UserInterface.game;
             medium.setSelected(false);
             hard.setSelected(false);
             learning.setSelected(false);
+
         });
         medium.addActionListener( actionEvent -> {
             game.getPlayer(playerID).setLevel(Levels.MEDIUM);
@@ -119,10 +134,31 @@ import static ticTacToe.ui.UserInterface.game;
         return file;
     }
 
-    private JMenu firstMoveCreator(){
+    /**
+     * Menu move creator
+     * @return menu move
+     */
+    private JMenu moveCreator(){
         JMenu file = new JMenu("Move   |");
 
-        JLabel label = new JLabel("  First move select");
+        JMenu firstMoveSubmenu = firstMoveSubmenu();
+        JMenu selfLearnSubmenu = selfLearnSubmenu();
+
+
+        file.add(firstMoveSubmenu);
+        file.add(selfLearnSubmenu);
+
+        return file;
+    }
+
+    /**
+     * method creates submenu which using for selecting which player should go first
+     * @return first move submenu
+     */
+    private JMenu firstMoveSubmenu(){
+        JMenu submenu = new JMenu("First move selection");
+
+        JLabel label = new JLabel("  First move player selection");
         JMenuItem p1 = new JRadioButtonMenuItem("Player 1");
         JMenuItem p2 = new JRadioButtonMenuItem("Player 2");
         JMenuItem random = new JRadioButtonMenuItem("Random");
@@ -144,13 +180,62 @@ import static ticTacToe.ui.UserInterface.game;
             p1.setSelected(false);
             p2.setSelected(false);
         });
+        submenu.add(label);
+        submenu.addSeparator();
+        submenu.add(p1);
+        submenu.add(p2);
+        submenu.add(random);
+        return submenu;
+    }
 
-        file.add(label);
-        file.addSeparator();
-        file.add(p1);
-        file.add(p2);
-        file.add(random);
+    /**
+     * Method creates submenu for control selflearn process
+     * @return
+     */
+    private JMenu selfLearnSubmenu(){
+        JMenu submenu = new JMenu("Self-learning");
 
-        return file;
+        JMenuItem startSelfLearn = new JMenuItem("Start self-learning");
+        JMenuItem stopSelfLearn = new JMenuItem("Stop self-learning");
+
+        startSelfLearn.addActionListener( actionEvent -> startLearning());
+
+        stopSelfLearn.addActionListener( actionEvent ->  game.setLearningInProcess(false));
+
+        submenu.add(startSelfLearn);
+        submenu.add(stopSelfLearn);
+        return submenu;
+    }
+
+    /**
+     *  method starts learning process thread if it's not already started and nobody playing at this moment
+     */
+    private void startLearning() {
+        if (game.isGameStarted()) {
+            JOptionPane.showMessageDialog(null,
+                    "Please, finish game first");
+            return;
+        }
+
+        if (game.isLearningInProcess()) {
+            JOptionPane.showMessageDialog(null,
+                    "Please, wait while previous learn will be finished");
+            return;
+        }
+        int iterations = 50000;
+        String iterationsGot = JOptionPane.showInputDialog(null,
+                "Please, select learning iterations number. By default is 50000.");
+
+        if ( iterationsGot == null) {
+            return;
+        }
+
+        Scanner sc = new Scanner(iterationsGot);
+
+        if (sc.hasNextInt()) {
+            iterations = sc.nextInt();
+        }
+
+        new SelfLearning(iterations).start();
     }
 }

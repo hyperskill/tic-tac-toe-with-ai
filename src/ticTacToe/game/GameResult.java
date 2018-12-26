@@ -1,6 +1,5 @@
 package ticTacToe.game;
 
-import ticTacToe.ai.MiniMax;
 import ticTacToe.ui.UserInterface;
 
 import javax.swing.*;
@@ -15,7 +14,6 @@ import static ticTacToe.ui.UserInterface.game;
  *  Class for field analyse and winner detecting
  */
 public class GameResult {
-
 
     /**
      * Method checks game win and tie for players 1 and 2
@@ -86,7 +84,7 @@ public class GameResult {
 
     /**
      * Method creates list of cells free to move
-     *
+     * @param field field to check
      * @return list of cells
      */
     public List<Cell> emptyCells(int[][] field) {
@@ -134,6 +132,6 @@ public class GameResult {
 
         JOptionPane.showMessageDialog(null,
                 winnersName + " wins!!!");
-        game.endTheGame(result);
+        game.endTheGame();
     }
 }

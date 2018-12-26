@@ -1,10 +1,10 @@
 package ticTacToe.game;
 
-import ticTacToe.ai.ComputerRival;
-import ticTacToe.ai.MiniMax;
+import ticTacToe.ai.LearningAlgorithm;
 import ticTacToe.ui.DisplayPlayer;
 import ticTacToe.ui.UserInterface;
 
+import javax.swing.*;
 import java.util.Random;
 
 /**
@@ -12,10 +12,13 @@ import java.util.Random;
  */
 public class Game {
 
-    private GameLog gameLog = new GameLog();
+    /**
+     *  Instance of learning algorithm class using in game.
+     */
+    public LearningAlgorithm learningAlgorithm;
 
     /**
-     *  Used for game setting who moves first
+     *  Using for game setting who moves first
      */
     public enum FirstPlayerSelect {
         PLAYER1,
@@ -24,7 +27,7 @@ public class Game {
     }
 
     /**
-     *  Used for game level identification
+     *  Using for game level identification
      */
     public enum Levels {
         EASY,
@@ -62,17 +65,27 @@ public class Game {
     private boolean gameStarted;
 
     /**
-     *  Contains game field and it's size. Size of array equal to maximum possible size of game field
+     *  Contains game field and it's size.
      */
     private  int fieldSize;
-
     private  int[][] fieldValues;
+
+    /**
+     *  field contains information about learning process. is it active or not. To avoid problems with multiply
+     *  threading
+     */
+    private boolean learningInProcess;
 
     /**
      *  Contains which figure is active now - zero or cross
      */
     private int activeFigure;
 
+    /**
+     *  Construvtor of class
+     * @param fieldSize size of game field, configured by UI
+     * @see UserInterface
+     */
     public Game(int fieldSize) {
         this.player1 = new Player(CROSS);
         this.player2 = new Player(ZERO);
@@ -81,59 +94,71 @@ public class Game {
         this.fieldValues = new int[fieldSize][fieldSize];
         this.fieldSize = fieldSize;
         this.activeFigure = CROSS;
+        this.learningAlgorithm = new LearningAlgorithm(fieldSize);
+        this.learningAlgorithm.start();
     }
 
     /**
      *  method that configure game to a start position depending of game settings
      */
     public  void startTheGame(){
-        if (!gameStarted) {
-            gameStarted = true;
-            activeFigure = CROSS;
-            gameLog.clear();
+        if (gameStarted) {
+            JOptionPane.showMessageDialog(null,"Game already started!");
+            return;
+        }
 
-            switch (firstPlayerUserSelection) {
-                case PLAYER1 : {
-                    currentPlayer = player1;
-                    player1.setFigure(CROSS);
-                    player2.setFigure(ZERO);
-                    break;
-                }
-                case PLAYER2 : {
+        if (learningInProcess && (player1.getLevel() == Levels.LEARNING ||  player2.getLevel() == Levels.LEARNING)) {
+
+            JOptionPane.showMessageDialog(null,"Learning in process. " +
+                    "Please change game level to any another, or wait while learning will be finished.");
+            return;
+        }
+
+        gameStarted = true;
+        activeFigure = CROSS;
+
+        switch (firstPlayerUserSelection) {
+            case PLAYER1 : {
+                currentPlayer = player1;
+                player1.setFigure(CROSS);
+                player2.setFigure(ZERO);
+                break;
+            }
+            case PLAYER2 : {
+                currentPlayer = player2;
+                player1.setFigure(ZERO);
+                player2.setFigure(CROSS);
+                break;
+            }
+            case RANDOM : {
+                if (new Random().nextBoolean()) {
                     currentPlayer = player2;
                     player1.setFigure(ZERO);
                     player2.setFigure(CROSS);
-                    break;
+                } else {
+                    currentPlayer = player1;
+                    player1.setFigure(CROSS);
+                    player2.setFigure(ZERO);
                 }
-                case RANDOM : {
-                    if (new Random().nextBoolean()) {
-                        currentPlayer = player2;
-                        player1.setFigure(ZERO);
-                        player2.setFigure(CROSS);
-                    } else {
-                        currentPlayer = player1;
-                        player1.setFigure(CROSS);
-                        player2.setFigure(ZERO);
-                    }
-                    break;
-                }
+                break;
             }
-            DisplayPlayer.display();
-
-            for ( int i = 0; i < fieldSize; i++) {
-                for ( int j = 0; j < fieldSize; j++) {
-                    updateField(i,j, EMPTY);
-                    UserInterface.getButton(i,j).printFieldElement();
-                    UserInterface.getButton(i,j).setButtonEnabled(true);
-                }
-            }
-
-            currentPlayer.makeMove();
         }
+
+        new DisplayPlayer().display();
+
+        for ( int i = 0; i < fieldSize; i++) {
+            for ( int j = 0; j < fieldSize; j++) {
+                updateField(i,j, EMPTY);
+                UserInterface.getButton(i,j).printFieldElement();
+                UserInterface.getButton(i,j).setButtonEnabled(true);
+            }
+        }
+
+        currentPlayer.makeMove();
     }
 
     /**
-     *  method updating ui to the start condition
+     *  method restarting the game
      */
     public void restartTheGame(){
         gameStarted = false;
@@ -146,7 +171,7 @@ public class Game {
     public void stopTheGame(){
         gameStarted = false;
         currentPlayer = null;
-        DisplayPlayer.display();
+        new DisplayPlayer().display();
         for ( int i = 0; i < fieldSize; i++) {
             for ( int j = 0; j < fieldSize; j++) {
                 updateField(i,j, EMPTY);
@@ -160,11 +185,10 @@ public class Game {
      *
      * @see GameResult
      */
-    public void endTheGame(int result){
-        ComputerRival.learningAlgorithm.writeResults(result);
+    public void endTheGame(){
         gameStarted = false;
         currentPlayer = null;
-        DisplayPlayer.display();
+        new DisplayPlayer().display();
         for ( int i = 0; i < fieldSize; i++) {
             for ( int j = 0; j < fieldSize; j++) {
                 UserInterface.getButton(i,j).setWaitingForGame();
@@ -175,15 +199,17 @@ public class Game {
 
     /**
      * method for update field matrix with new value and current game turn
+     * changing active player, displaying it and making next move
      *
      * @param string string number in matrix
      * @param row row number in matrix
      * @param fieldValue value which should be write
+     * @see Player
+     * @see DisplayPlayer
      */
     public void nextMove(int string, int row, int fieldValue) {
         updateField(string,row,fieldValue);
         UserInterface.getButton(string,row).printFieldElement();
-        gameLog.addMove(new FieldCoder().getCode(fieldValues));
 
         new GameResult().checkGameResult();
 
@@ -199,13 +225,19 @@ public class Game {
             currentPlayer = player1;
         }
 
-        DisplayPlayer.display();
+        new DisplayPlayer().display();
 
         if (currentPlayer != null) {
             currentPlayer.makeMove();
         }
     }
 
+    /**
+     * method updates cell in field by given coordinates
+     * @param string number of string
+     * @param row number of row
+     * @param fieldValue valuethat should be written
+     */
     public void updateField(int string, int row, int fieldValue) {
         fieldValues[string][row] = fieldValue;
     }
@@ -249,8 +281,12 @@ public class Game {
         return fieldSize;
     }
 
-    public GameLog getLog() {
-        return gameLog;
+    public boolean isLearningInProcess() {
+        return learningInProcess;
+    }
+
+    public void setLearningInProcess(boolean learningInProcess) {
+        this.learningInProcess = learningInProcess;
     }
 
 

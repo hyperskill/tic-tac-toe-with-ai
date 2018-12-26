@@ -3,9 +3,10 @@ package ticTacToe.game;
 import ticTacToe.ai.MiniMax;
 
 /**
- * Class that contain coordinate and rate of cell(using for minimax algorithm)
+ * Class that contain coordinate and rate of cell of field
  *
  * @see MiniMax
+ * @see ticTacToe.ai.SelfLearning
  */
 public class Cell {
     public int s;

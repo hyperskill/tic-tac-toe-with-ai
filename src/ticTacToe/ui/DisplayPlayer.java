@@ -16,7 +16,7 @@ public class DisplayPlayer {
      *  Base method which changed name of active player in text field "Now moves"
      *  and coloring names of players depending of game turn
      */
-    public static void display() {
+    public void display() {
         Color moves = new Color(69, 222, 111);
         Color waiting = new Color(222, 85, 63);
         Color notStarted = new Color(179, 191, 216);

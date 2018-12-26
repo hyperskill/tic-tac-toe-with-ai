@@ -12,16 +12,16 @@ import static ticTacToe.game.Game.ZERO;
 import static ticTacToe.ui.UserInterface.game;
 
 /**
- *  Class for making moves against human
- */
+ *  Class for making moves against human or another computer
+*/
 public class ComputerRival {
-
-    public static LearningAlgorithm learningAlgorithm = new LearningAlgorithm();
 
      /**
      * Easy level method - randomly selects cell in field
+      * @param field where should be found a coordinate of move
+      * @return move coordinate Cell
      */
-    public static Cell easy(int[][] field) {
+    public Cell easy(int[][] field) {
         List<Cell> emptyCells = new GameResult().emptyCells(field);
         int size = emptyCells.size();
         if (size > 0) {
@@ -33,9 +33,10 @@ public class ComputerRival {
 
     /**
      * method calls scanning of sequence, if it not found making a random move
+     * @return move coordinate Cell
      * @see ComputerRival
      */
-    public static Cell medium() {
+    public Cell medium() {
         MediumLevel mediumLevel = new MediumLevel();
         int valueOfComputer = game.getActiveFigure();
         int valueOfHuman;
@@ -55,23 +56,42 @@ public class ComputerRival {
             return cell;
         }
 
-        return ComputerRival.easy(game.getFieldValues());
+        return easy(game.getFieldValues());
     }
 
     /**
-     *  Hard Level makes first move randomly, in others used minimax algorithm
+     *  Hard level using minimax algorithm at small field sizes
+     * @param field where should be found a coordinate of move
+     * @param activeFigure figure which should moves now
+     * @param playerFigure is a figure of player which considering
+     *                     mininmax algorithm
+     * @return move coordinate Cell
      */
-    public static Cell hard() {
+    public Cell hard(int[][] field, int activeFigure, int playerFigure) {
+
         if (new GameResult().emptyCells(game.getFieldValues()).size() > 8) {
             return easy(game.getFieldValues());
         }
 
-        Cell cell = new MiniMax().minimax(game.getFieldValues(), game.getActiveFigure());
+
+        Cell cell = new MiniMax().minimax(field, activeFigure, playerFigure);
         return cell;
     }
 
-    public static Cell learning() {
-        return learningAlgorithm.makeMove(game.getFieldValues());
+    /**
+     *  If learning algorithm now is free and loaded it used.
+     *  @return move coordinate Cell
+     */
+    public Cell learning() {
+        if (game.isLearningInProcess()) {
+            return hard(game.getFieldValues(), game.getActiveFigure(), game.getActiveFigure());
+        } else {
+            if ( game.learningAlgorithm.isLoadedFromFile()) {
+                return game.learningAlgorithm.makeMove(game.getFieldValues());
+            } else {
+                return hard(game.getFieldValues(), game.getActiveFigure(), game.getActiveFigure());
+            }
+        }
     }
 
     /**

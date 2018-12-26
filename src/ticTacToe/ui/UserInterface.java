@@ -11,12 +11,15 @@ import java.awt.*;
 public class UserInterface extends JFrame {
 
     /**
+     *  Instance of game class which would be controlled via this UI
+     */
+    public static Game game;
+
+    /**
      *  buttons matrix that bound to field with matrix values
      * @see GameButton
      * @see Game
      */
-    public static Game game;
-
     private static GameButton[][] button;
 
     /**
@@ -35,16 +38,19 @@ public class UserInterface extends JFrame {
      * Combo box for field size selection
      */
     private JComboBox fieldSizeSetup;
-
     private int fieldSize;
 
+    /**
+     * Constructor of class that creating UI and starts app
+     * @param fieldSize
+     */
     public UserInterface(int fieldSize) {
         Dimension dimension = new Dimension(480,610);
 
         this.fieldSize = fieldSize;
         game =  new Game(fieldSize);
         button = new GameButton[fieldSize][fieldSize];
-        createField();
+        createGameField();
 
         setSize(dimension);
         setResizable(false);
@@ -59,10 +65,9 @@ public class UserInterface extends JFrame {
     }
 
     /**
-     * Methods bounds buttons to matrix, creates bars of menu,labels, players name and buttons
-     *
+     * Methods bounds buttons to matrix, creates bars of menu,labels, players name and buttons     *
      */
-    private void createField() {
+    private void createGameField() {
         JPanel topBar = createTopBar();
         JPanel headLabels = new HeadLabels().createHeadLabels();
         JPanel head = new Head().createHead();
@@ -107,8 +112,7 @@ public class UserInterface extends JFrame {
 
 
     /**
-     * creates layout compiling table of stings :
-     *
+     * creates layout compiling table of stings
      */
     private void createLayout(JComponent[] lines, JComponent... component) {
         Container pane = getContentPane();
@@ -137,6 +141,11 @@ public class UserInterface extends JFrame {
 
     }
 
+    /**
+     * Method creates a top bar which contains a menu and a combo box for fields size select
+     *
+     * @return top bar
+     */
     public JPanel createTopBar() {
         JPanel topBar = new JPanel();
 
@@ -166,13 +175,18 @@ public class UserInterface extends JFrame {
         return topBar;
     }
 
+    /**
+     * This method runs new app with given game field size
+     */
      private void changeFieldSize() {
-        int newSize = fieldSizeSetup.getSelectedIndex() + 3;
-        dispose();
-        new UserInterface(newSize);
-     //   ComputerRival.learningAlgorithm.init();
-    }
+         int newSize = fieldSizeSetup.getSelectedIndex() + 3;
+         dispose();
+         new UserInterface(newSize);
+     }
 
+    /**
+     * getters of class
+     */
     public static GameButton getButton(int s, int r) {
         return button[s][r];
     }

@@ -8,6 +8,7 @@ import static ticTacToe.ui.UserInterface.game;
  * Class implements players specifications
  */
 public class Player {
+    ComputerRival computerRival = new ComputerRival();
 
     /**
      * for which figure player is playing 0 or X
@@ -34,10 +35,10 @@ public class Player {
         Cell cell = new Cell(0,0);
         if (computer && game.isGameStarted()) {
             switch (level) {
-                case EASY: cell = ComputerRival.easy(game.getFieldValues());break;
-                case MEDIUM: cell = ComputerRival.medium(); break;
-                case HARD: cell = ComputerRival.hard(); break;
-                case LEARNING: cell = ComputerRival.learning(); break;
+                case EASY: cell = computerRival.easy(game.getFieldValues());break;
+                case MEDIUM: cell = computerRival.medium(); break;
+                case HARD: cell = computerRival.hard(game.getFieldValues(), game.getActiveFigure(), this.figure); break;
+                case LEARNING: cell = computerRival.learning(); break;
             }
             ComputerRival.dataUpdate(cell.s, cell.r);
         }
@@ -53,10 +54,6 @@ public class Player {
 
     public void setisComputer(boolean computer) {
         this.computer = computer;
-    }
-
-    public boolean isComputer() {
-        return computer;
     }
 
     public Game.Levels getLevel() {
