@@ -3,19 +3,37 @@ package ticTacToe;
 public class Main {
     public static void main(String[] args) {
         int width = 3;
-        Field(width);
+        char[][] field = Field(width);
+        IfWinner(field, width);
     }
 
-    static void Field(int width) {
+    static char[][] Field(int width) {
         char[][] field = new char[width][width];
+        System.out.print("  -");
+        for (int i=1; i<=width; i++) {
+            System.out.print("--");
+        }
+        System.out.println();
+
         for (int i=0; i<width; i++) {
+            System.out.print((width-i) + "| ");
             for (var j = 0; j < width; j++) {
                 field[i][j] = GenerateXorO();
-                System.out.print(field[i][j]);
+                System.out.print(field[i][j] + " ");
             }
-            System.out.println();
+            System.out.println("|");
+         }
+        System.out.print("  -");
+        for (int i=1; i<=width; i++) {
+            System.out.print("--");
         }
-        IfWinner(field, width);
+        System.out.println();
+        System.out.print("   ");
+        for (int i=1; i<=width; i++) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        return field;
     }
 
     static char GenerateXorO () {
