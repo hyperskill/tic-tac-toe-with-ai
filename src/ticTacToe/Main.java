@@ -11,15 +11,10 @@ public class Main {
         field.DrawField();
 
         while (continue_game) {
-            human.InputValue();
-            field.SetValue(human.getFirst(), human.getSecond(), human.pic);
+            field.SetValue(human.pic);
             field.DrawField();
             continue_game = field.IfWinner(human.pic);
         }
 
     }
-
-
-
-
 }
