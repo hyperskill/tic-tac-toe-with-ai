@@ -8,20 +8,21 @@ class Player {
     private int second;
 
     Player(char pic) {
+        this.pic = pic;
     }
 
     void InputValue() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Куда поставить " + pic + "?");
+        System.out.print("Куда поставить " + pic + "? Ваши значения через пробел-> ");
         first = sc.nextInt();
         second = sc.nextInt();
     }
 
-    public int getFirst() {
+    private int getFirst() {
         return first;
     }
 
-    public int getSecond() {
+    private int getSecond() {
         return second;
     }
 

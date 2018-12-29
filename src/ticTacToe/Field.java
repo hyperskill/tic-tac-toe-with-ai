@@ -43,8 +43,81 @@ class Field {
         System.out.println();
     }
 
-    void SetValue(int i, int j, char x_or_o) {
-        xo_positions[i][j] = x_or_o;
-    } //Метод добавляет значение на поле, локальная переменная x_or_o - символ выбранный пользователем в качестве крестика или нолика
+    void SetValue(int i, int j, char x_or_o) { //Метод добавляет значение на поле, локальная переменная x_or_o - символ выбранный пользователем в качестве крестика или нолика
+        xo_positions[width - i][j - 1] = x_or_o;
+    }
+
+    boolean IfWinner(char x_or_o) { //Метод проверяет есть ли победитель с текущим состоянием игрового поля
+        int count_x = 0;
+        int count_o = 0;
+        boolean posibilities = false;
+
+        for (int i = 0; i < width; i++) {
+            if (xo_positions[i][i] == x_or_o) count_x++;
+            if (xo_positions[i][i] == x_or_o) count_o++;
+        }
+        if (!(count_x > 0 && count_o > 0)) posibilities = true;
+        if (ChekingWinner(count_x, count_o, x_or_o)) return false;
+
+        count_x = 0;
+        count_o = 0;
+
+
+        for (int i = width - 1; i >= 0; i--) {
+            if (xo_positions[i][width - 1 - i] == x_or_o) count_x++;
+            if (xo_positions[i][width - 1 - i] == x_or_o) count_o++;
+        }
+        if (!(count_x > 0 && count_o > 0)) posibilities = true;
+        if (ChekingWinner(count_x, count_o, x_or_o)) return false;
+
+        count_x = 0;
+        count_o = 0;
+
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < width; j++) {
+                if (xo_positions[i][j] == x_or_o) count_x++;
+                if (xo_positions[i][j] == x_or_o) count_o++;
+            }
+            if (!(count_x > 0 && count_o > 0)) posibilities = true;
+            if (ChekingWinner(count_x, count_o, x_or_o)) return false;
+            count_x = 0;
+            count_o = 0;
+
+        }
+
+
+        for (int j = 0; j < width; j++) {
+            for (int i = 0; i < width; i++) {
+                if (xo_positions[i][j] == x_or_o) count_x++;
+                if (xo_positions[i][j] == x_or_o) count_o++;
+            }
+            if (!(count_x > 0 && count_o > 0)) posibilities = true;
+            if (ChekingWinner(count_x, count_o, x_or_o)) return false;
+            count_x = 0;
+            count_o = 0;
+
+        }
+
+        if (posibilities) {
+            System.out.println();
+            return true;
+        }
+
+        System.out.println("Draw");
+        return false;
+    }
+
+    private boolean ChekingWinner(int count_x, int count_o, char x_or_o) {
+        if (count_x == width) {
+            System.out.println(x_or_o + " wins!");
+            return true;
+        }
+        if (count_o == width) {
+            System.out.println(x_or_o + " wins!");
+            return true;
+        }
+        return false;
+    }
 
 }
