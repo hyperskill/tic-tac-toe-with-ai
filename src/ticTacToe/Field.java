@@ -2,7 +2,7 @@ package ticTacToe;
 
 class Field {
 
-    char[][] xo_positions;
+    static char[][] xo_positions;
     int width;
 
 

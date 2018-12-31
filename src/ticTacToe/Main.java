@@ -27,9 +27,9 @@ public class Main {
 
             System.out.println("\nNow enter parameters separated by spaces:\n" +
                     "\tField width: 3 or 5;\n" +
-                    "\tPlayer type: human or computer AI level: easy/middle/hard;\n" +
-                    "\tSymbol for player: any character, e.g. X or O or ♥;\n" +
-                    "\tOrder: " +
+                    "\tPlayer type: 'human' or computer AI level: 'easy/middle/hard';\n" +
+                    "\tSymbol for player: any character, e.g. X or O or ♥ or ♡;\n" +
+                    "\tEntering order: " +
                     "\t<field width> <1st player type> <its symbol> <2nd player type> <its symbol>\n\n");
 
             do {
@@ -69,20 +69,25 @@ public class Main {
             System.out.println();
 
         while (continue_game) {
-
-
+            //1st Player turn start
             do {
                 turn1.InputValue(field.width, player1);
             } while (field.SetValue(turn1.GetFirst(), turn1.GetSecond(), turn1.pic, player1) == false);
             field.DrawField();
             continue_game = field.IfWinner(turn1.pic, turn2.pic);
-
             if (continue_game == false) break;
+            //1st Player turn ends
+
+            //********************
+
+            //2nd Player turn start
             do {
                 turn2.InputValue(field.width, player2);
+
             } while (field.SetValue(turn2.GetFirst(), turn2.GetSecond(), turn2.pic, player2) == false);
             field.DrawField();
             continue_game = field.IfWinner(turn1.pic, turn2.pic);
+            //2nd Player turn end
         }
         }
 
