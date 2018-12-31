@@ -44,21 +44,15 @@ class Field {
         System.out.println();
     }
 
-    boolean SetValueHuman(int i, int j, char pic) { //Метод добавляет значение на поле, локальная переменная pic - символ выбранный пользователем в качестве крестика или нолика
+    boolean SetValue(int i, int j, char pic, String mode) { //Метод добавляет значение на поле, локальная переменная pic - символ выбранный пользователем в качестве крестика или нолика
             if (xo_positions[i][j] != ' ') {
-                System.out.println("This cell is occupied! Choose another one!");
+                if (mode.equals("human")) System.out.println("This cell is occupied! Choose another one!");
                 return false;
             }
             xo_positions[i][j] = pic; //если тест прошел, то присваиваем значения
-        return true;
-    }
-
-    boolean SetValueComp(int i, int j, char pic, String mode) { //Метод добавляет значение на поле, локальная переменная pic - символ выбранный пользователем в качестве крестика или нолика
-        if (xo_positions[i][j] != ' ') {
-            return false;
+        if (!mode.equals("human")) {
+            System.out.println("Making move level \"" + mode + "\"");
         }
-        xo_positions[i][j] = pic; //если тест прошел, то присваиваем значения
-        System.out.println("Making move level \"" + mode + "\":");
         return true;
     }
 
