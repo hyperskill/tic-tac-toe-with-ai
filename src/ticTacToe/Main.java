@@ -1,10 +1,16 @@
 package ticTacToe;
 
+import java.util.Arrays;
+
 public class Main {
-    public static void main(String[] args)
-    {
-        System.out.print(" X O X\n" +
-                         " O X O\n" +
-                         " X X O");
+    public static void main(String[] args) {
+        char[] state = {'X', 'O', ' ', 'O', ' ', 'X', 'X', 'X', 'O'};
+
+        for (int i = 0; i < state.length; i++) {
+            System.out.print(state[i] + " ");
+            if ((i+1)%3 == 0){
+                System.out.println();
+            }
+        }
     }
 }
