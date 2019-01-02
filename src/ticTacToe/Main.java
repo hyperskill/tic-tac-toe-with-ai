@@ -1,18 +1,37 @@
 package ticTacToe;
+import java.io.Reader;
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int n = 3;
         char [][]state = new char[][] {
-                        {' ', ' ', ' '},
-                        {' ', ' ', ' '},
-                        {' ', ' ', ' '}
+                        {' ', ' ', 'X'},
+                        {' ', 'O', ' '},
+                        {' ', ' ', 'X'}
         };
+        int indexI;
+        int indexJ;
+
         drawState(state,n);
-        System.out.println("Enter he coordinates: ");
-        int indexI = scan.nextInt() - 1;
-        int indexJ = scan.nextInt() - 1;
+
+        do{
+            System.out.println("Enter he coordinates: ");
+            while (!scan.hasNextInt()) {
+                String input = scan.next();
+                System.out.println("You should enter numbers!");
+            }
+            indexI =  scan.nextInt() - 1;
+            while (!scan.hasNextInt()) {
+                String input = scan.next();
+                System.out.println("You should enter numbers!");
+            }
+            indexJ =  scan.nextInt() - 1;
+            if(checkSell(state,indexI,indexJ)){
+                break;
+            }
+
+        }while (true);
         state[indexI][indexJ] = 'X';
         drawState(state,n);
     }
@@ -28,4 +47,17 @@ public class Main {
         }
         System.out.println("---------");
     }
+
+    static boolean checkSell(char[][] state, int indexI, int indexJ){
+        if(indexI < 0 || indexI >= 3 || indexJ < 0 || indexJ >= 3){
+            System.out.println("Coordinates should be from 1 to 3!");
+            return false;
+        }
+        if (state[indexI][indexJ] != ' '){
+            System.out.println("This cell is occupied! Choose another one!");
+            return false;
+        }
+        return true;
+    }
+
 }
