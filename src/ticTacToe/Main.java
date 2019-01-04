@@ -1,63 +1,19 @@
 package ticTacToe;
-import java.io.Reader;
-import java.util.Scanner;
+import java.util.*;
+
 public class Main {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int n = 3;
-        char [][]state = new char[][] {
-                        {' ', ' ', 'X'},
-                        {' ', 'O', ' '},
-                        {' ', ' ', 'X'}
-        };
-        int indexI;
-        int indexJ;
+        Scanner scanner = new Scanner(System.in);
 
-        drawState(state,n);
-
-        do{
-            System.out.println("Enter he coordinates: ");
-            while (!scan.hasNextInt()) {
-                String input = scan.next();
-                System.out.println("You should enter numbers!");
-            }
-            indexI =  scan.nextInt() - 1;
-            while (!scan.hasNextInt()) {
-                String input = scan.next();
-                System.out.println("You should enter numbers!");
-            }
-            indexJ =  scan.nextInt() - 1;
-            if(checkSell(state,indexI,indexJ)){
-                break;
-            }
-
-        }while (true);
-        state[indexI][indexJ] = 'X';
-        drawState(state,n);
-    }
-
-    static void drawState(char[][] state, int size){
-        System.out.println("---------");
-        for (int i = 0; i < size; i++){
-            System.out.print("| ");
-            for (int j = 0; j < size; j++){
-                System.out.print(state[i][j] + " ");
-            }
-            System.out.println("|");
+        int N = scanner.nextInt();
+        int A = scanner.nextInt();
+        int B = scanner.nextInt();
+        Random random = new Random(A + B);
+        int sum = 0;
+        for(int i = 0; i < N; i++){     //0 - 5
+            sum += random.nextInt(B - A + 1) + A;
         }
-        System.out.println("---------");
+        System.out.print(sum);
+        // write your code here
     }
-
-    static boolean checkSell(char[][] state, int indexI, int indexJ){
-        if(indexI < 0 || indexI >= 3 || indexJ < 0 || indexJ >= 3){
-            System.out.println("Coordinates should be from 1 to 3!");
-            return false;
-        }
-        if (state[indexI][indexJ] != ' '){
-            System.out.println("This cell is occupied! Choose another one!");
-            return false;
-        }
-        return true;
-    }
-
 }
