@@ -62,6 +62,7 @@ public class Main {
                 break;
             }
 
+            
         }while (true);
         state[indexI][indexJ] = 'X';
         drawState(state,n);
