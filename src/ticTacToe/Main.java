@@ -7,6 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         System.out.println("Hello! This is Tic-Tac-Toe game! \n" +
                 "You can play vs other player or vs computer AI\n" +
                 "or make two AI fight against each other.");
@@ -15,7 +16,7 @@ public class Main {
         while (InputCommand().equals("start")) {
 
 
-            boolean continue_game = true;
+            int continue_game = 0;
 
             int param1 = 0;
             char param2 = ' ';
@@ -62,34 +63,37 @@ public class Main {
             } while (test == false);
 
 
-            Field field = new Field(param1);
+
             Player turn1 = new Player(param2);
             Player turn2 = new Player(param3);
-            field.DrawField();
+            Field.pic1 = turn1.pic;
+            Field.pic2 = turn2.pic;
+            Field.GenerateEmptyField(param1);
+            Field.DrawField();
             System.out.println();
 
-        while (continue_game) {
+            while (continue_game == 0) {
             //1st Player turn start
             do {
-                turn1.InputValue(field.width, player1);
-            } while (field.SetValue(turn1.GetFirst(), turn1.GetSecond(), turn1.pic, player1) == false);
-            field.DrawField();
-            continue_game = field.IfWinner(turn1.pic, turn2.pic);
-            if (continue_game == false) break;
+                turn1.InputValue(Field.width, player1, turn1.pic, turn2.pic);
+            } while (Field.SetValue(turn1.GetFirst(), turn1.GetSecond(), turn1.pic, player1, false) == false);
+                Field.DrawField();
+                continue_game = Field.IfWinner(false);
+                if (continue_game != 0) break;
             //1st Player turn ends
 
             //********************
 
             //2nd Player turn start
             do {
-                turn2.InputValue(field.width, player2);
-
-            } while (field.SetValue(turn2.GetFirst(), turn2.GetSecond(), turn2.pic, player2) == false);
-            field.DrawField();
-            continue_game = field.IfWinner(turn1.pic, turn2.pic);
+                turn2.InputValue(Field.width, player2, turn2.pic, turn1.pic);
+            } while (Field.SetValue(turn2.GetFirst(), turn2.GetSecond(), turn2.pic, player2, false) == false);
+                Field.DrawField();
+                continue_game = Field.IfWinner(false);
             //2nd Player turn end
         }
         }
+
 
     }
 
@@ -105,7 +109,7 @@ public class Main {
         } while (!param1.equals("exit") && !param1.equals("start"));
 
         return param1;
+
+
     }
-
-
 }

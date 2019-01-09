@@ -8,12 +8,15 @@ class Player {
     char pic;
     int first;
     int second;
+    int max = 0;
+    int result = 0;
+    char aiPlayer;
 
     Player(char pic) {
         this.pic = pic;
     }
 
-    void InputValue(int width, String mode) {
+    void InputValue(int width, String mode, char pic1, char pic2) {
         if (mode.equals("human")) {
             boolean test = false;
             while (!test) {
@@ -36,7 +39,6 @@ class Player {
                 }
                 first = width - first;
                 second = second - 1;
-                test = true;
                 return;
             }
         }
@@ -74,7 +76,7 @@ class Player {
 
             for (int i = width - 1; i >= 0; i--) {
                 if (Field.xo_positions[i][width - 1 - i] == pic) count_pic++;
-                if (Field.xo_positions[i][i] == ' ') {
+                if (Field.xo_positions[i][width - 1 - i] == ' ') {
                     count_space++;
                     space_first = i;
                     space_second = width - 1 - i;
@@ -136,8 +138,73 @@ class Player {
                 count_space = 0;
             }
         }
+        if (mode.equals("hard")) {
+            TestMiniMaxStart(pic1, pic2);
+        }
 
     }
+
+    void TestMiniMaxStart(char pic1, char pic2) {
+        aiPlayer = pic1;
+        Field.xo_positions_simulator = Field.xo_positions.clone();
+        TestMiniMax(pic1, pic2);
+    }
+
+    int TestMiniMax(char pic1, char pic2) {
+        int k = 0;
+        int[][] score = new int[3][Field.width * Field.width];
+        for (int i = 0; i < Field.width; i++) {
+            for (int j = 0; j < Field.width; j++) {
+
+                if (Field.xo_positions_simulator[i][j] == ' ') {
+                    Field.SetValue(i, j, pic1, "hard", true);
+                    result = Field.IfWinner(true);
+                    if ((aiPlayer == Field.pic2) && (result == 10 || result == -10)) {
+                        result = -1 * result;
+                    }
+                    if (result == 0) {
+                        result = TestMiniMax(pic2, pic1);
+
+
+                    }
+                    Field.xo_positions_simulator[i][j] = ' ';
+
+                    score[0][k] = i;
+                    score[1][k] = j;
+                    score[2][k] = result;
+
+
+                    k++;
+                    result = 0;
+
+                }
+            }
+        }
+
+
+        max = 0;
+        for (int i = 0; i < k; i++) { //ищем высший рейтинг хода
+
+            if (pic1 == aiPlayer) {
+
+                if (score[2][i] <= score[2][max]) {
+                    max = i;
+                }
+
+            } else {
+
+                if (score[2][i] >= score[2][max]) {
+                    max = i;
+                }
+            }
+        }
+
+
+        first = score[0][max];
+        second = score[1][max];
+        return score[2][max];
+    }
+
 
     int GetFirst() {
         return first;
