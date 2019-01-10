@@ -11,6 +11,7 @@ class Player {
     int max = 0;
     int result = 0;
     char aiPlayer;
+    int hardfirst = 0;
 
     Player(char pic) {
         this.pic = pic;
@@ -39,7 +40,9 @@ class Player {
                 }
                 first = width - first;
                 second = second - 1;
+                hardfirst++;
                 return;
+
             }
         }
 
@@ -53,6 +56,7 @@ class Player {
             int count_pic = 0;
             int count_space = 0;
             int space_first = 0, space_second = 0;
+            hardfirst++;
 
             for (int i = 0; i < width; i++) {
                 if (Field.xo_positions[i][i] == pic) count_pic++;
@@ -137,9 +141,13 @@ class Player {
                 count_pic = 0;
                 count_space = 0;
             }
+
         }
         if (mode.equals("hard")) {
-            TestMiniMaxStart(pic1, pic2);
+            if (this.hardfirst != 0) {
+                TestMiniMaxStart(pic1, pic2);
+            }
+            hardfirst++;
         }
 
     }
