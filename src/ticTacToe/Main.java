@@ -16,11 +16,19 @@ public class Main
                 .playerTwo(playerTwo)
                 .build();
         game.play();
+        System.out.println(board);
     }
 
     public enum Element
     {
-        X, O
+        X, O,
+        EMPTY {
+            @Override
+            public String toString()
+            {
+                return " ";
+            }
+        }
     }
 
     public static class Player
@@ -65,9 +73,14 @@ public class Main
             board.setElementToPosition(1, 2, playerOne.getElement());
             board.setElementToPosition(2, 0, playerTwo.getElement());
             board.setElementToPosition(2, 1, playerTwo.getElement());
-            System.out.println(board);
+
         }
 
+
+        public Board getBoard()
+        {
+            return board;
+        }
 
         static class Builder
         {
@@ -129,11 +142,11 @@ public class Main
         @Override
         public String toString()
         {
-            StringBuilder sb = new StringBuilder();
-
-            return String.join(System.lineSeparator(), Stream.of(lines)
-                    .map(Line::toString)
-                    .collect(Collectors.toList()));
+            return String.join(System.lineSeparator(),
+                    Stream.of(lines)
+                            .map(Line::toString)
+                            .collect(Collectors.toList())
+            );
         }
     }
 
@@ -143,7 +156,7 @@ public class Main
 
         public Line()
         {
-            this.line = new Element[3];
+            this.line = new Element[]{Element.EMPTY, Element.EMPTY, Element.EMPTY};
         }
 
         public void setElementToIndex(int index, Element element)
@@ -157,12 +170,11 @@ public class Main
         @Override
         public String toString()
         {
-            StringBuilder sb = new StringBuilder();
-            for (Element element : line) {
-                sb.append(element == null ? " " : element.toString());
-                sb.append(" ");
-            }
-            return sb.substring(0, 5);
+            return String.join(" ",
+                    Stream.of(line)
+                            .map(Element::toString)
+                            .collect(Collectors.toList())
+            );
         }
     }
 }
