@@ -12,61 +12,127 @@ public class Main
 //        O O
 //        O
 //        X wins
-        play(
-                new Position(1, 0),
-                new Position(0, 0),
-                new Position(1, 1),
-                new Position(0, 1),
-                new Position(2, 1),
-                new Position(0, 2)
-        );
+//        play(
+//                new Position(1, 0),
+//                new Position(0, 0),
+//                new Position(1, 1),
+//                new Position(0, 1),
+//                new Position(2, 1),
+//                new Position(0, 2)
+//        );
 //        X O O
 //        O X O
 //        X X O
 //        O wins
-        play(
-                new Position(1, 0),
-                new Position(0, 0),
-                new Position(2, 2),
-                new Position(2, 0),
-                new Position(0, 2),
-                new Position(1, 1),
-                new Position(0, 1),
-                new Position(2, 1),
-                new Position(1, 2)
-        );
-
+//        play(
+//                new Position(1, 0),
+//                new Position(0, 0),
+//                new Position(2, 2),
+//                new Position(2, 0),
+//                new Position(0, 2),
+//                new Position(1, 1),
+//                new Position(0, 1),
+//                new Position(2, 1),
+//                new Position(1, 2)
+//        );
+        play();
     }
 
     public static void play(Position... positions)
     {
         Player playerOne = new Player(Element.O);
         Player playerTwo = new Player(Element.X);
+        Scanner scanner = new Scanner(System.in);
         Board board = new Board();
         Game game = new Game.Builder()
                 .board(board)
                 .playerOne(playerOne)
                 .playerTwo(playerTwo)
                 .build();
-        game.play(positions);
-        printResult(game);
+
+        Gui gui = new Gui(game);
+        game.addSubcriber(gui);
+
+        while (!game.isFinished()) {
+            game.turn(new Turn(scanner).readCoordinates().toPosition());
+        }
+        gui.printResult();
     }
 
-    public static void printResult(Game game)
+    public static class Turn
     {
-        System.out.println(game.getBoard());
-        String result;
-        switch (game.getStatus()) {
-            case FINISHED:
-                result = game.getWinnerElement() + " wins";
-                break;
-            case DRAW:
-                result = "Draw";
-                break;
-            default:
-                result = "Game not finished";
+        private Scanner scanner;
+        private int readRow;
+        private int readColumn;
+        private static final int MAX_NUMBER = 3;
+
+        public Turn(Scanner scanner)
+        {
+            this.scanner = scanner;
         }
-        System.out.println(result);
+
+        public Turn readCoordinates()
+        {
+            System.out.print("Enter the coordinates: ");
+            String[] coords = scanner.nextLine().split(" ");
+            readRow = Integer.valueOf(coords[0]);
+            readColumn = Integer.valueOf(coords[1]);
+            return this;
+        }
+
+        public Position toPosition()
+        {
+            return new Position(MAX_NUMBER - readRow, readColumn - 1);
+        }
+
+    }
+
+    public interface Subscription
+    {
+        void update();
+    }
+
+    public static class Gui implements Subscription
+    {
+        private Game game;
+
+        public Gui(Game game)
+        {
+            this.game = game;
+        }
+
+        @Override
+        public void update()
+        {
+            printCurrentBoardState();
+        }
+
+        private void printCurrentBoardState()
+        {
+            print(game.getBoard());
+        }
+
+        public void printResult()
+        {
+            printCurrentBoardState();
+            String result;
+            switch (game.getStatus()) {
+                case FINISHED:
+                    result = game.getWinnerElement() + " wins";
+                    break;
+                case DRAW:
+                    result = "Draw";
+                    break;
+                default:
+                    result = "Game not finished";
+            }
+            print(result);
+        }
+
+        private void print(Object object)
+        {
+            System.out.println(object);
+        }
     }
 
     public static class Position
@@ -109,8 +175,7 @@ public class Main
         @Override
         public String toString()
         {
-            return "P" + row +
-                    "," + column;
+            return "P" + row + "," + column;
         }
     }
 
@@ -141,9 +206,9 @@ public class Main
         {
             if (isWinner) {
                 isWinner = false;
-                Element element = Element.valueOf(winnerElement.name());
+                Element cloneWinner = Element.valueOf(winnerElement.name());
                 winnerElement = Element.EMPTY;
-                return element;
+                return cloneWinner;
             }
             throw new RuntimeException("There is no winner");
         }
@@ -265,6 +330,7 @@ public class Main
         private static final WinnerPositions winnerPositions = WinnerPositions.getInstance();
         private Element winnerElement;
         private GameStatus status;
+        private List<Subscription> subscribers;
 
         private Game(Board board, Player playerOne, Player playerTwo)
         {
@@ -272,6 +338,7 @@ public class Main
             this.playerOne = playerOne;
             this.playerTwo = playerTwo;
             status = GameStatus.NOT_FINISHED;
+            subscribers = new ArrayList<>();
         }
 
         public void play(Position... turns)
@@ -284,7 +351,17 @@ public class Main
             }
         }
 
-        private boolean isFinished()
+        public void addSubcriber(Subscription subscription)
+        {
+            subscribers.add(subscription);
+        }
+
+        public void removeSubcriber(Subscription subscription)
+        {
+            subscribers.remove(subscription);
+        }
+
+        public boolean isFinished()
         {
             return status == GameStatus.FINISHED || status == GameStatus.DRAW;
         }
@@ -294,13 +371,19 @@ public class Main
             Player player = wasFirstPlayerTurn ? playerTwo : playerOne;
             board.setElementToPosition(position, player.getElement());
             wasFirstPlayerTurn = !wasFirstPlayerTurn;
+            notifySubscribers();
 
             checkWinner();
         }
 
+        private void notifySubscribers()
+        {
+            subscribers.forEach(Subscription::update);
+        }
+
         private void checkWinner()
         {
-            if (++turnsCount > MIN_TURNS_COUNT_FOR_CHECK) {
+            if (++turnsCount >= MIN_TURNS_COUNT_FOR_CHECK) {
                 boolean isFinished = winnerPositions.getPossibleWinnerPositions().stream()
                         .anyMatch(winnerPosition -> {
                             boolean isWinnerForBoard = winnerPosition.isWinnerForBoard(board);
@@ -417,11 +500,13 @@ public class Main
         @Override
         public String toString()
         {
-            return String.join(System.lineSeparator(),
-                    Stream.of(lines)
-                            .map(Line::toString)
-                            .collect(Collectors.toList())
-            );
+            String border = "---------";
+            return border + System.lineSeparator() +
+                    String.join(System.lineSeparator(),
+                            Stream.of(lines)
+                                    .map(Line::toString)
+                                    .collect(Collectors.toList())
+                    ) + System.lineSeparator() + border;
         }
     }
 
@@ -461,11 +546,13 @@ public class Main
         @Override
         public String toString()
         {
-            return String.join(" ",
-                    Stream.of(line)
-                            .map(Element::toString)
-                            .collect(Collectors.toList())
-            );
+            return "| " +
+                    String.join(" ",
+                            Stream.of(line)
+                                    .map(Element::toString)
+                                    .collect(Collectors.toList())
+                    )
+                    + " |";
         }
     }
 }
