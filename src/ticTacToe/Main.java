@@ -51,10 +51,16 @@ public class Main
                 .build();
 
         Gui gui = new Gui(game);
-        game.addSubcriber(gui);
+        game.addSubscriber(gui);
 
         while (!game.isFinished()) {
-            game.turn(new Turn(scanner).readCoordinates().toPosition());
+            try {
+                game.turn(new Turn(scanner).readCoordinates().toPosition());
+            } catch (OccupiedException e) {
+                gui.print("This cell is occupied! Choose another one!");
+            } catch (ReadCoordinatesException e) {
+                gui.print("You should enter numbers!");
+            }
         }
         gui.printResult();
     }
@@ -71,12 +77,16 @@ public class Main
             this.scanner = scanner;
         }
 
-        public Turn readCoordinates()
+        public Turn readCoordinates() throws ReadCoordinatesException
         {
             System.out.print("Enter the coordinates: ");
-            String[] coords = scanner.nextLine().split(" ");
-            readRow = Integer.valueOf(coords[0]);
-            readColumn = Integer.valueOf(coords[1]);
+            try {
+                String[] coords = scanner.nextLine().split(" ");
+                readRow = Integer.parseInt(coords[0]);
+                readColumn = Integer.parseInt(coords[1]);
+            } catch (Exception e) {
+                throw new ReadCoordinatesException();
+            }
             return this;
         }
 
@@ -129,7 +139,7 @@ public class Main
             print(result);
         }
 
-        private void print(Object object)
+        public void print(Object object)
         {
             System.out.println(object);
         }
@@ -341,7 +351,7 @@ public class Main
             subscribers = new ArrayList<>();
         }
 
-        public void play(Position... turns)
+        public void play(Position... turns) throws OccupiedException
         {
             for (Position position : turns) {
                 if (isFinished()) {
@@ -351,12 +361,12 @@ public class Main
             }
         }
 
-        public void addSubcriber(Subscription subscription)
+        public void addSubscriber(Subscription subscription)
         {
             subscribers.add(subscription);
         }
 
-        public void removeSubcriber(Subscription subscription)
+        public void removeSubscriber(Subscription subscription)
         {
             subscribers.remove(subscription);
         }
@@ -366,7 +376,7 @@ public class Main
             return status == GameStatus.FINISHED || status == GameStatus.DRAW;
         }
 
-        public void turn(Position position)
+        public void turn(Position position) throws OccupiedException
         {
             Player player = wasFirstPlayerTurn ? playerTwo : playerOne;
             board.setElementToPosition(position, player.getElement());
@@ -484,17 +494,25 @@ public class Main
                     .anyMatch(element -> Element.EMPTY == element);
         }
 
-        public void setElementToPosition(Position position, Element element)
+        public void setElementToPosition(Position position, Element element) throws OccupiedException
         {
             if (position.getRow() < 0 || position.getRow() >= lines.length) {
                 throw new RuntimeException("Incorrect index");
             }
+            isOccuped(position);
             lines[position.getRow()].setElementToIndex(position.getColumn(), element);
         }
 
         public Element getElementByPosition(Position position)
         {
             return lines[position.getRow()].getElementByIndex(position.getColumn());
+        }
+
+        private void isOccuped(Position position) throws OccupiedException
+        {
+            if (getElementByPosition(position) != Element.EMPTY) {
+                throw new OccupiedException();
+            }
         }
 
         @Override
@@ -508,6 +526,15 @@ public class Main
                                     .collect(Collectors.toList())
                     ) + System.lineSeparator() + border;
         }
+    }
+
+    public static class OccupiedException extends Exception
+    {
+    }
+
+    public static class ReadCoordinatesException extends Exception
+    {
+
     }
 
     public static class Line
