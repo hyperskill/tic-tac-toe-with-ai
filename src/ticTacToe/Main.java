@@ -5,10 +5,12 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    private static char[][] fieldValues = init();
+
     public static void main(String[] args) {
         boolean gameOver = false;
         String result;
-        char[][] fieldValues = init();
+
         Scanner scanner = new Scanner(System.in);
 
         while (!gameOver) {
@@ -16,9 +18,11 @@ public class Main {
             result = checkState(fieldValues);
             if ("Game not finished.".equals(result)) {
                 System.out.print("Enter the coordinates: ");
-                int x = scanner.nextInt() - 1;
-                int y = scanner.nextInt() - 1;
-                fieldValues = humanMove(x, y, fieldValues);
+                String input = scanner.nextLine();
+                while (!checkUserInput(input, fieldValues)) {
+                    System.out.print("Enter the coordinates: ");
+                    input = scanner.nextLine();
+                }
             } else {
                 System.out.println();
                 System.out.println(result);
@@ -26,7 +30,6 @@ public class Main {
             }
         }
     }
-
     private static char[][] init() {
         Random random = new Random();
         char[][] fieldValues = new char[3][3];
@@ -41,13 +44,41 @@ public class Main {
         return  fieldValues;
     }
 
-    private static char[][] humanMove(int x, int y, char[][] fieldValues) {
-        if (fieldValues[x][y] == ' ') {
-            fieldValues[x][y] = 'X';
-        } else {
-            System.out.println("Incorrect input. Try again.");
+    private static boolean checkUserInput(String input, char[][] fieldValues) {
+        input = input.replaceAll(" ", "");
+        System.out.println();
+
+        if (input.length() > 2) {
+            System.out.println("Enter two numbers separated by space");
+            return false;
         }
-        return fieldValues;
+
+        for (int i = 0; i < input.length(); i++) {
+            if (!Character.isDigit(input.charAt(i))) {
+                System.out.println("You should enter numbers!");
+                return false;
+            }
+        }
+
+        int x = Character.getNumericValue(input.charAt(0)) - 1;
+        int y = Character.getNumericValue(input.charAt(1)) - 1;
+
+        if ((x > 2 || y > 2) || (x < 0 || y < 0)) {
+            System.out.println("Coordinates should be from 1 to 3!");
+            return false;
+        }
+
+        if (fieldValues[x][y] != ' ') {
+            System.out.println("This cell is occupied! Choose another one!");
+            return false;
+        }
+
+        humanMove(x, y);
+        return true;
+    }
+
+    private static void humanMove(int x, int y) {
+        fieldValues[x][y] = 'X';
     }
 
     private static String checkState(char[][] fieldValues) {
@@ -112,9 +143,10 @@ public class Main {
     }
 
     private static void draw(char[][] fieldValues) {
-        System.out.println("\t---------");
+        System.out.println("\t\t1 2 3 ");
+        System.out.println("\t  ---------");
         for (int i = 0; i < 3; i++) {
-            System.out.print("\t| ");
+            System.out.print("\t" + (i + 1) + " | ");
             for (int j = 0; j < 3; j++) {
                 if (j < 2) {
                     System.out.print(fieldValues[i][j] + " ");
@@ -125,6 +157,8 @@ public class Main {
             System.out.print(" |");
             System.out.println();
         }
-        System.out.println("\t---------");
+        System.out.println("\t  ---------");
     }
+
+
 }

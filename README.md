@@ -2,4 +2,14 @@
 
 Project: Tic-Tac-Toe with AI
 
-Go to the *src* directory, change *Main.java* and put your *.java* file(s) in it.
+Completed:
+
+Stage #1: Print a state of the game field
+
+Stage #2: Create a simple game field
+
+Stage #3: Print the game state
+
+Stage #4: Create a human move
+
+Stage #5: Find errors in user input
