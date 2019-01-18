@@ -13,3 +13,5 @@ Stage #3: Print the game state
 Stage #4: Create a human move
 
 Stage #5: Find errors in user input
+
+Stage #6: Make an "easy" difficulty level

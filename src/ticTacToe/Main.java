@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 public class Main {
     private static char[][] fieldValues = init();
+    private static final char CROSS = 'X';
+    private static final char ZERO = 'O';
 
     public static void main(String[] args) {
         boolean gameOver = false;
@@ -14,41 +16,39 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (!gameOver) {
-            draw(fieldValues);
-            result = checkState(fieldValues);
+            draw();
+            result = checkState();
             if ("Game not finished.".equals(result)) {
                 System.out.print("Enter the coordinates: ");
                 String input = scanner.nextLine();
-                while (!checkUserInput(input, fieldValues)) {
+                while (!checkUserInput(input)) {
                     System.out.print("Enter the coordinates: ");
                     input = scanner.nextLine();
                 }
+                draw();
             } else {
                 System.out.println();
                 System.out.println(result);
                 gameOver = true;
             }
-        }
-    }
-    private static char[][] init() {
-        Random random = new Random();
-        char[][] fieldValues = new char[3][3];
-        String values = "XO ";
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                int index = random.nextInt(3);
-                fieldValues[i][j] = values.charAt(index);
+            result = checkState();
+            if ("Game not finished.".equals(result)) {
+                computerMoveEasyLevel();
             }
         }
+    }
+
+    private static char[][] init() {
+        char[][] fieldValues = {{' ', ' ', ' '},{' ', ' ', ' '},{' ', ' ', ' '},};
         return  fieldValues;
     }
 
-    private static boolean checkUserInput(String input, char[][] fieldValues) {
+    private static boolean checkUserInput(String input) {
         input = input.replaceAll(" ", "");
         System.out.println();
 
-        if (input.length() > 2) {
+        if (input.length() != 2) {
             System.out.println("Enter two numbers separated by space");
             return false;
         }
@@ -73,15 +73,15 @@ public class Main {
             return false;
         }
 
-        humanMove(x, y);
+        move(x, y, CROSS);
         return true;
     }
 
-    private static void humanMove(int x, int y) {
-        fieldValues[x][y] = 'X';
+    private static void move(int x, int y, char type) {
+        fieldValues[x][y] = type;
     }
 
-    private static String checkState(char[][] fieldValues) {
+    private static String checkState() {
 
 
         for (int i = 0; i < 3; i++) {
@@ -142,7 +142,7 @@ public class Main {
         return "Draw.";
     }
 
-    private static void draw(char[][] fieldValues) {
+    private static void draw() {
         System.out.println("\t\t1 2 3 ");
         System.out.println("\t  ---------");
         for (int i = 0; i < 3; i++) {
@@ -160,5 +160,23 @@ public class Main {
         System.out.println("\t  ---------");
     }
 
+    private static void computerMoveEasyLevel() {
+        Random random = new Random();
 
+        while (true) {
+            int x = random.nextInt(3);
+            int y = random.nextInt(3);
+
+            if (fieldValues[x][y] == ' ') {
+                System.out.println("Making move level \"easy\"...");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                move(x, y, ZERO);
+                break;
+            }
+        }
+    }
 }
