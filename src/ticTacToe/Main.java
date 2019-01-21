@@ -83,6 +83,7 @@ public class Main {
                         break;
 
                     case "medium":
+                        generateMedium(state, n, 'X');
                         //for medium bot
                         break;
 
@@ -104,6 +105,7 @@ public class Main {
                     break;
 
                 case "medium":
+                    generateMedium(state, n, 'O');
                     //for medium bot
                     break;
 
@@ -140,6 +142,7 @@ public class Main {
                     break;
 
                 case "medium":
+                    generateMedium(state, n, 'O');
                     //for medium bot
                     break;
 
@@ -155,6 +158,7 @@ public class Main {
                         break;
 
                     case "medium":
+                        generateMedium(state, n, 'X');
                         //for medium bot
                         break;
 
@@ -199,6 +203,84 @@ public class Main {
         System.out.println("Making move level \"easy\"");
         Random random = new Random();
         do {
+            int randI = random.nextInt(3);
+            int randJ = random.nextInt(3);
+
+            if(state[randI][randJ] == ' '){
+                state[randI][randJ] = XO;
+                break;
+            }
+        }while (true);
+    }
+
+    private static void generateMedium(char[][]state, int n, char XO){
+        drawState(state, n);
+        System.out.println("Making move level \"medium\"");
+        int cell1 = ' ' + 'X' + 'X';
+        int cell2 = ' ' + 'O' + 'O';
+
+        Random random = new Random();
+        point:
+        do {
+            int sumD1 = 0;
+            int sumD2 = 0;
+            for (int i = 0; i < n; i++){
+                for (int j = 0; j < n; j++){
+                    if (i == j) {
+                        sumD1 += state[i][j];
+                    }
+                    if (i + j == 2){
+                        sumD2 += state[i][j];
+                    }
+                }
+            }
+            if (sumD1 == cell1 || sumD1 == cell2){
+                for (int i = 0; i < n;i++){
+                    if (state[i][i] == ' '){
+                        state[i][i] = XO;
+                        break point;
+                    }
+                }
+            }else if (sumD2 == cell1 || sumD2 == cell2){
+                for (int i = 0; i < n; i++){
+                    for (int j = 0; j < n; j++){
+                        if (i + j == 2 && state[i][j] == ' '){
+                            state[i][j] = XO;
+                            break point;
+                        }
+                    }
+                }
+            }
+
+
+
+
+            for (int i = 0; i < n; i++){
+                int sum1 = 0, sum2 = 0;
+
+                for (int j = 0; j < n; j++) {
+                    sum1 += state[i][j];
+                    sum2 += state[j][i];
+                }
+
+                if (sum1 == cell1 || sum1 == cell2){
+                    for (int j = 0; j < n; j++){
+                        if (state[i][j] == ' '){
+                            state[i][j] = XO;
+                            break point;
+                        }
+                    }
+                }
+                else if(sum2 == cell1 || sum2 == cell2){
+                    for (int j = 0; j < n; j++){
+                        if (state[j][i] == ' '){
+                            state[j][i] = XO;
+                            break point;
+                        }
+                    }
+                }
+            }
+
             int randI = random.nextInt(3);
             int randJ = random.nextInt(3);
 
@@ -278,6 +360,19 @@ public class Main {
             if (flag) {
                 break;
             }
+        }
+        int num = 0;
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                if (state[i][j] == ' '){
+                    num++;
+                }
+            }
+        }
+        if (num == 0){
+            drawState(state,3);
+            System.out.println("\na draw");
+            flag = true;
         }
 
         return flag;
