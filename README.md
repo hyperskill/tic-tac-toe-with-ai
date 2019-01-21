@@ -15,3 +15,7 @@ Stage #4: Create a human move
 Stage #5: Find errors in user input
 
 Stage #6: Make an "easy" difficulty level
+
+Stage #7: Create a game loop
+
+Stage #8: Create a start menu
