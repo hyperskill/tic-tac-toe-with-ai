@@ -2,71 +2,187 @@ package ticTacToe;
 
 import java.util.Random;
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int n = 3;
-        char [][]state = new char[][] {
-                {' ', ' ', ' '},
-                {' ', ' ', ' '},
-                {' ', ' ', ' '}
-        };
-
-        System.out.println("Choose level of game: \n" +
-                "1.Easy\n" +
-                "2.Medium\n" +
-                "3.Hard");
-        int choose;
-        do {
-            System.out.print("Your select: ");
-            while (!scan.hasNextInt()) {
-                String input = scan.next();
-                System.out.println("You should enter numbers!");
-            }
-            choose =  scan.nextInt();
-        }while (choose < 1 || choose > 3);
-
-        if (choose == 1){
-            easyGame(state, n);
-        }
-        else if (choose == 2){
-            //medium
-        }
-        else {
-            //hard
-        }
-
+        menuGame();
     }
 
-    private static void easyGame(char[][]state, int n){
+    private static void menuGame(){
+        Scanner scan = new Scanner(System.in);
+
+        String chooseActionGame;
+        String firstPlayer;
+        String secondPlayer;
+
+        do {
+            int n = 3;
+            char [][]state = new char[][] {
+                    {' ', ' ', ' '},
+                    {' ', ' ', ' '},
+                    {' ', ' ', ' '}
+            };
+            System.out.print("Input command: ");
+
+            chooseActionGame = scan.next();
+            if (chooseActionGame.equals("start")) {
+                boolean flag = true;
+                firstPlayer = scan.next();
+                secondPlayer = scan.next();
+
+                switch (firstPlayer){
+                    case "user": case "easy": case "medium": case "hard": break;
+                    default:
+                        System.out.println("Bad parameters");
+                        flag = false;
+                        break;
+                }
+
+                if (flag){
+                    switch (secondPlayer){
+                        case "user": case "easy": case "medium": case "hard": break;
+                        default:
+                            System.out.println("Bad parameters");
+                            flag = false;
+                            break;
+                    }
+                }
+                if (flag) {
+                    startGame(state, firstPlayer, secondPlayer);
+                }
+            }
+            scan.nextLine();
+        }while (!chooseActionGame.equals("exit"));
+        scan.close();
+    }
+
+    private static void startGame(char[][]state, String player1, String player2){
+        if (player1.equals("user") && player2.equals("user")){
+            userUser(state, 3);
+        }
+        else if (player1.equals("user")){
+            userBot(state, player2, 3);
+        }
+        else if (player2.equals("user")){
+            botUser(state, player1, 3);
+        }
+        else {
+            botBot(state, player1, player2, 3);
+        }
+    }
+
+    private static void userBot(char[][]state, String player2, int n){
         boolean flag;
         do {
-            inputHuman(state, n);
+            inputHuman(state, n, 'O');
             flag = checkGame(state,n);
             if (!flag) {
-                generateEasy(state, n);
+                switch (player2){
+                    case "easy":
+                        generateEasy(state, n, 'X');//for easy bot
+                        break;
+
+                    case "medium":
+                        //for medium bot
+                        break;
+
+                    case "hard":
+                        //for hard bot
+                        break;
+                }
                 flag = checkGame(state,n);
-
             }
-
         }while (!flag);
     }
 
-    private static void inputHuman(char[][]state, int n){
+    private static void botUser(char[][]state, String player1, int n){
+        boolean flag;
+        do {
+            switch (player1){
+                case "easy":
+                    generateEasy(state, n, 'O');//for easy bot
+                    break;
+
+                case "medium":
+                    //for medium bot
+                    break;
+
+                case "hard":
+                    //for hard bot
+                    break;
+            }
+            flag = checkGame(state,n);
+            if (!flag) {
+                inputHuman(state, n, 'X');
+                flag = checkGame(state,n);
+            }
+        }while (!flag);
+    }
+
+    private static void userUser(char[][]state, int n){
+        boolean flag;
+        do {
+            inputHuman(state, n, 'O');
+            flag = checkGame(state,n);
+            if (!flag) {
+                inputHuman(state, n, 'X');
+                flag = checkGame(state,n);
+            }
+        }while (!flag);
+    }
+
+    private static void botBot(char[][]state, String player1, String player2, int n){
+        boolean flag;
+        do {
+            switch (player1){
+                case "easy":
+                    generateEasy(state, n, 'O');//for easy bot
+                    break;
+
+                case "medium":
+                    //for medium bot
+                    break;
+
+                case "hard":
+                    //for hard bot
+                    break;
+            }
+            flag = checkGame(state,n);
+            if (!flag) {
+                switch (player2){
+                    case "easy":
+                        generateEasy(state, n, 'X');//for easy bot
+                        break;
+
+                    case "medium":
+                        //for medium bot
+                        break;
+
+                    case "hard":
+                        //for hard bot
+                        break;
+                }
+                flag = checkGame(state,n);
+            }
+        }while (!flag);
+    }
+
+    private static void inputHuman(char[][]state, int n, char XO){
         Scanner scan = new Scanner(System.in);
         int indexI;
         int indexJ;
         drawState(state,n);
 
         do{
-            System.out.println("Enter he coordinates: ");
+            System.out.println("Enter the coordinates: ");
+
             while (!scan.hasNextInt()) {
-                String input = scan.next();
+                scan.nextLine();
                 System.out.println("You should enter numbers!");
             }
             indexI =  scan.nextInt() - 1;
             while (!scan.hasNextInt()) {
-                String input = scan.next();
+                scan.nextLine();
                 System.out.println("You should enter numbers!");
             }
             indexJ = scan.nextInt() - 1;
@@ -74,12 +190,11 @@ public class Main {
                 break;
             }
 
-
-        }while (true);
-        state[indexI][indexJ] = 'X';
+        } while (true);
+        state[indexI][indexJ] = XO;
     }
 
-    private static void generateEasy(char[][]state, int n){
+    private static void generateEasy(char[][]state, int n, char XO){
         drawState(state, n);
         System.out.println("Making move level \"easy\"");
         Random random = new Random();
@@ -88,7 +203,7 @@ public class Main {
             int randJ = random.nextInt(3);
 
             if(state[randI][randJ] == ' '){
-                state[randI][randJ] = 'O';
+                state[randI][randJ] = XO;
                 break;
             }
         }while (true);
