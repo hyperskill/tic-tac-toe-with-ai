@@ -1,9 +1,11 @@
 package ticTacToe;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+
+    private static char huPlayer = 'O';
+    private static char aiPlayer = 'X';
     public static void main(String[] args) {
         menuGame();
     }
@@ -88,6 +90,7 @@ public class Main {
                         break;
 
                     case "hard":
+                        generateHard(state, n, 'X');
                         //for hard bot
                         break;
                 }
@@ -110,6 +113,7 @@ public class Main {
                     break;
 
                 case "hard":
+                    generateHard(state, n, 'O');
                     //for hard bot
                     break;
             }
@@ -147,6 +151,7 @@ public class Main {
                     break;
 
                 case "hard":
+                    generateHard(state, n, 'O');
                     //for hard bot
                     break;
             }
@@ -163,6 +168,7 @@ public class Main {
                         break;
 
                     case "hard":
+                        generateHard(state, n, 'X');
                         //for hard bot
                         break;
                 }
@@ -402,4 +408,154 @@ public class Main {
         System.out.println("---------");
     }
 
+    private static boolean winning(char[][] state, char player){
+        int winSum = player * 3;
+        return
+                (state[0][0] + state[0][1] + state[0][2] == winSum) ||
+                (state[1][0] + state[1][1] + state[1][2] == winSum) ||
+                (state[2][0] + state[2][1] + state[2][2] == winSum) ||
+                (state[0][0] + state[1][0] + state[2][0] == winSum) ||
+                (state[0][1] + state[1][1] + state[2][1] == winSum) ||
+                (state[0][2] + state[1][2] + state[2][2] == winSum) ||
+                (state[0][0] + state[1][1] + state[2][2] == winSum) ||
+                (state[0][2] + state[1][1] + state[2][0] == winSum);
+    }
+
+    private static List<Integer> emptyIndexes(char[][]state, int size){
+        List<Integer> arrayIndex = new ArrayList<Integer>();
+        int temp = 1;
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                if (state[i][j] == ' '){
+                    arrayIndex.add(temp);
+                    //arrayIndex.add(j);
+                }
+                temp++;
+            }
+        }
+        return arrayIndex;
+    }
+
+    private static int[] minimax(char[][]newState, char player, int size){
+
+        List <Integer> empty = new ArrayList<>(emptyIndexes(newState, size));
+        int []n = new int[2];
+        if (winning(newState, huPlayer)){
+            n[0] = -10;
+            n[1] = 0;
+            return  n;//виграла людина
+        }
+        else if (winning(newState, aiPlayer)){
+            n[0] = 10;
+            n[1] = 0;
+            return  n;//виграв АІ
+        }
+        else if (empty.size() == 0){
+            n[0] = 0;
+            n[1] = 0;
+            return  n;//нічия
+        }
+
+        List <Integer> moves = new ArrayList<>();
+
+        for (int i = 0; i < empty.size(); i++){
+                //List <Integer> move = new ArrayList<Integer>();
+                int temp = empty.get(i);
+                int k = 1;
+                int temp1 = 0, temp2 = 0;
+
+                out:
+                for (int z = 0; z < size; z++){
+                    for (int j = 0; j < size; j++){
+                        if (temp == k){
+                            temp1 = z;
+                            temp2 = j;
+                            break out;
+                        }
+                        k++;
+                    }
+                }
+                moves.add(temp);
+                newState[temp1][temp2] = player;
+                int scores;
+                if (player == aiPlayer){
+                    int []result = new int[2];
+                    result = minimax(newState, huPlayer, 3);
+                    scores = result[0];
+                }
+                else{
+                    int []result = new int[2];
+                    result = minimax(newState, aiPlayer, 3);
+                    scores = result[0];
+                }
+
+                newState[temp1][temp2] = ' ';
+                //System.out.println(scores);
+                moves.add(scores);
+        }
+//        System.out.println(moves);
+
+        int bestMove = 0;
+        int []ret = new int[2];
+        if(player == aiPlayer){
+            int bestScore = -10000;
+
+            for(int i = 0; i < moves.size(); i = i + 2){
+                if(moves.get(i+1) > bestScore){
+                    bestScore = moves.get(i+1);
+                    bestMove = moves.get(i);//вибираємо номер кращого руху
+                    ret[0] = bestScore;
+                }
+            }
+        }else{
+            int bestScore = 10000;
+
+            for(int i = 0; i < moves.size(); i = i + 2){
+                if(moves.get(i+1) < bestScore){
+                    bestScore = moves.get(i+1);
+                    bestMove = moves.get(i);
+                    ret[0] = bestScore;
+                }
+            }
+        }
+
+
+        ret[1] = bestMove;
+// return the chosen move (object) from the moves array
+        return ret;
+    }
+
+    private static void generateHard(char[][]state, int n, char XO){
+        drawState(state, n);
+        System.out.println("Making move level \"hard\"");
+        if (emptyIndexes(state,n).size() == 9){
+            Random random = new Random();
+            state[random.nextInt(3)][random.nextInt(3)] = XO;
+            return;
+        }
+        if (XO == 'O') {
+            aiPlayer = 'O';
+            huPlayer = 'X';
+        }else {
+            aiPlayer = 'X';
+            huPlayer = 'O';
+        }
+
+        int k = minimax(state, XO, n)[1];
+        int m = 1;
+        int tempI = 0;
+        int tempJ = 0;
+        out:
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                if (k == m){
+                    tempI = i;
+                    tempJ = j;
+                    break out;
+                }
+                m++;
+            }
+        }
+        state[tempI][tempJ] = XO;
+    }
 }
