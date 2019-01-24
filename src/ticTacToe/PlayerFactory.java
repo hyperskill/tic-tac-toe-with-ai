@@ -9,7 +9,7 @@ public class PlayerFactory {
             return new PlayerEasy(figure);
         }
         if (Players.MEDIUM == player) {
-            return new PlayerEasy(figure);
+            return new PlayerMedium(figure);
         }
         if (Players.HARD == player) {
             return new PlayerEasy(figure);

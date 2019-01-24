@@ -11,7 +11,7 @@ public class PlayerEasy implements Player {
     }
 
     @Override
-    public char[][] move(char[][] fieldValues) {
+    public char[][] move(char[][] fieldValues, String message) {
         Random random = new Random();
 
         while (true) {
@@ -19,12 +19,7 @@ public class PlayerEasy implements Player {
             int y = random.nextInt(3);
 
             if (fieldValues[x][y] == ' ') {
-                System.out.println("Making move level \"easy\"...");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                System.out.println(message);
                 fieldValues[x][y] = getFigure();
                 break;
             }
@@ -33,6 +28,7 @@ public class PlayerEasy implements Player {
         return fieldValues;
     }
 
+    @Override
     public char getFigure() {
         return figure;
     }

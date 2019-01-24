@@ -12,11 +12,18 @@ public class PlayerHuman implements Player {
     }
 
     @Override
-    public char[][] move(char[][] fieldValues) {
+    public char[][] move(char[][] fieldValues, String message) {
 
-        System.out.print("Enter the coordinates: ");
+        System.out.print(message);
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//
+//        try {
+//            System.out.println(reader.readLine());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        String input = scanner.nextLine();
+        String input = scanner.next();
 
         while (!checkUserInput(input, fieldValues)) {
             System.out.print("Enter the coordinates: ");
@@ -74,6 +81,7 @@ public class PlayerHuman implements Player {
         return true;
     }
 
+    @Override
     public char getFigure() {
         return figure;
     }

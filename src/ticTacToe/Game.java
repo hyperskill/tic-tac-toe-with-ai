@@ -6,21 +6,47 @@ import java.util.Scanner;
 
 public class Game implements Runnable {
 
+    private final String MESSAGE_EASY_AI = "Making move level \"easy\"...";
+    private final String MESSAGE_MEDIUM_AI = "Making move level \"medium\"...";
+    private final String MESSAGE_HARD_AI = "Making move level \"hard\"...";
+    private final String MESSAGE_PLAYER = "Enter the coordinates: ";
+
     private char[][] fieldValues;
     private boolean gameOver = false;
     private Player playerOne;
     private Player playerTwo;
+    private String messagePlayerOne;
+    private String messagePlayerTwo;
 
     @Override
     public void run() {
+        System.out.println("Игра крестики нолики.\n" +
+                "\n" +
+                "    1. Ввести команду \"start\" с двумя аргументами через пробел(например - start user easy):\n" +
+                "        а. \"user\" - оппонент человек,\n" +
+                "        b. \"easy\" - оппонент компьютер уровень сложности легкий,\n" +
+                "        c. \"medium\" - оппонент компьютер уровень сложности средний,\n" +
+                "        d. \"hard\" - оппонент компьютер уровень сложности тяжелый.\n" +
+                "    2. Ввести координаты - две цифры через пробел.\n" +
+                "    3. Выйграть или проиграть.\n" +
+                "    4. Ввести exit для выхода из программы.\n" +
+                "\n" +
+                "    Подсказка по координатам:\n" +
+                "    ------------\n" +
+                "    | 11 12 13 |\n" +
+                "    | 21 22 23 |\n" +
+                "    | 31 32 33 |\n" +
+                "    ------------\n");
+
         String result;
         fieldValues = init();
+        draw();
+
         while (!gameOver) {
-            draw();
             result = checkState();
 
             if ("Game not finished.".equals(result)) {
-                fieldValues = playerOne.move(fieldValues);
+                fieldValues = playerOne.move(fieldValues, messagePlayerOne);
                 draw();
             } else {
                 System.out.println();
@@ -31,7 +57,8 @@ public class Game implements Runnable {
             result = checkState();
 
             if ("Game not finished.".equals(result)) {
-                fieldValues = playerTwo.move(fieldValues);
+                fieldValues = playerTwo.move(fieldValues, messagePlayerTwo);
+                draw();
             }
         }
     }
@@ -47,14 +74,13 @@ public class Game implements Runnable {
             userInput = Arrays.asList(scanner.nextLine().split(" "));
 
             if ("exit".equals(userInput.get(0))) {
-                System.out.println();
                 System.out.println("Game over");
                 System.exit(0);
             }
 
             if ("start".equals(userInput.get(0)) && userInput.size() == 3) {
                 if (userChoose(userInput)) {
-                    System.out.println(playerOne.getFigure() + " " + playerTwo.getFigure());
+                    System.out.println("\nThe game has begun\n");
                     break;
                 } else {
                     System.out.println("Bad parameters!");
@@ -76,15 +102,19 @@ public class Game implements Runnable {
             switch (userInput.get(i)) {
                 case "easy":
                     player = PlayerFactory.getInstance(Players.EASY, figure);
+                    setMessage(Players.EASY, MESSAGE_EASY_AI, i);
                     break;
                 case "medium":
                     player = PlayerFactory.getInstance(Players.MEDIUM, figure);
+                    setMessage(Players.EASY, MESSAGE_MEDIUM_AI, i);
                     break;
                 case "hard":
                     player = PlayerFactory.getInstance(Players.HARD, figure);
+                    setMessage(Players.EASY, MESSAGE_HARD_AI, i);
                     break;
                 case "user":
                     player = PlayerFactory.getInstance(Players.USER, figure);
+                    setMessage(Players.EASY, MESSAGE_PLAYER, i);
                     break;
                 default:
                     player = null;
@@ -171,9 +201,16 @@ public class Game implements Runnable {
                     System.out.print(fieldValues[i][j]);
                 }
             }
-            System.out.print(" |");
-            System.out.println();
+            System.out.print(" |\n");
         }
         System.out.println("\t  ---------");
+    }
+
+    private void setMessage(Enum player, String message, int i) {
+        if (i == 1) {
+            messagePlayerOne = message;
+        } else {
+            messagePlayerTwo = message;
+        }
     }
 }

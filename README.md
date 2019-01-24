@@ -19,3 +19,5 @@ Stage #6: Make an "easy" difficulty level
 Stage #7: Create a game loop
 
 Stage #8: Create a start menu
+
+Stage #9: Make a "medium" difficulty level
