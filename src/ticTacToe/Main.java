@@ -1,6 +1,7 @@
 package ticTacToe;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     static public char[][] arr = new char[3][3];
@@ -24,7 +25,21 @@ public class Main {
                 }
             }
         }
+        outSchem();
+        int wHNow = whatHappening();
+        outWH(wHNow);
+        if (wHNow==0) {
+            int[] coords = enterCoords();
+            arr[coords[1]][coords[0]] = 'X';
+            outSchem();
+            outWH(whatHappening());
+        }
 
+
+
+    }
+
+    public static void outSchem() {
         for (int i = 0; i<3; i++) {
             for (int j = 0; j<3; j++) {
                 if (j!=2) {
@@ -35,23 +50,38 @@ public class Main {
             }
             System.out.println("");
         }
-        switch (whatHappening()) {
-            case 0:
-                System.out.println("Game not finished");
-                break;
-            case 1:
-                System.out.println("X wins");
-                break;
-            case 2:
-                System.out.println("O wins");
-                break;
-            case 3:
-                System.out.println("Draw");
-                break;
-            default:
-                break;
-        }
+    }
 
+    public static int[] enterCoords() {
+        int[] coord = new int[2];
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print("Enter coords: ");
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            x = x-1;
+            switch (y) {
+                case 1:
+                    y = 2;
+                    break;
+                case 2:
+                    y = 1;
+                    break;
+                case 3:
+                    y = 0;
+                    break;
+                default:
+                    break;
+            }
+            if (arr[y][x]==' '){
+                coord[0] = x;
+                coord[1] = y;
+                break;
+            } else {
+                System.out.println("Wrong coords");
+            }
+        }
+        return coord;
     }
 
     public static int whatHappening() {
@@ -70,6 +100,25 @@ public class Main {
         }
 
         return 3;
+    }
+
+    public static void outWH(int wHNow) {
+        switch (wHNow) {
+            case 0:
+                System.out.println("Game not finished");
+                break;
+            case 1:
+                System.out.println("X wins");
+                break;
+            case 2:
+                System.out.println("O wins");
+                break;
+            case 3:
+                System.out.println("Draw");
+                break;
+            default:
+                break;
+        }
     }
 
     private static boolean isWin(char str){
