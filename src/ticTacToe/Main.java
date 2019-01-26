@@ -1,7 +1,9 @@
-package ticTacToe;
+//package ticTacToe;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.print("Hello world!");
+        System.out.println("X" + " "+ "O" + " " + "X");
+        System.out.println("O" + " "+ "X" + " " + "o");
+        System.out.println("X" + " "+ "O" + " " + "X");
     }
 }
