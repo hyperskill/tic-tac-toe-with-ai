@@ -36,8 +36,7 @@ public class PlayerMedium implements Player {
         return this.fieldValues;
     }
 
-    @Override
-    public char getFigure() {
+    private char getFigure() {
         return figure;
     }
 

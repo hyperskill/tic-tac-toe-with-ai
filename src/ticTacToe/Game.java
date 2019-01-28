@@ -36,7 +36,9 @@ public class Game implements Runnable {
                 "    | 11 12 13 |\n" +
                 "    | 21 22 23 |\n" +
                 "    | 31 32 33 |\n" +
-                "    ------------\n");
+                "    ------------");
+
+        System.out.println("\n");
 
         String result;
         fieldValues = init();
@@ -64,7 +66,7 @@ public class Game implements Runnable {
     }
 
     private char[][] init() {
-        char[][] fieldValues = {{' ', ' ', ' '},{' ', ' ', ' '},{' ', ' ', ' '},};
+        char[][] fieldValues = {{' ', ' ', ' '},{' ', ' ', ' '},{' ', ' ', ' '}};
 
         Scanner scanner = new Scanner(System.in);
         List<String> userInput;
@@ -102,19 +104,19 @@ public class Game implements Runnable {
             switch (userInput.get(i)) {
                 case "easy":
                     player = PlayerFactory.getInstance(Players.EASY, figure);
-                    setMessage(Players.EASY, MESSAGE_EASY_AI, i);
+                    setMessage(MESSAGE_EASY_AI, i);
                     break;
                 case "medium":
                     player = PlayerFactory.getInstance(Players.MEDIUM, figure);
-                    setMessage(Players.EASY, MESSAGE_MEDIUM_AI, i);
+                    setMessage(MESSAGE_MEDIUM_AI, i);
                     break;
                 case "hard":
                     player = PlayerFactory.getInstance(Players.HARD, figure);
-                    setMessage(Players.EASY, MESSAGE_HARD_AI, i);
+                    setMessage(MESSAGE_HARD_AI, i);
                     break;
                 case "user":
                     player = PlayerFactory.getInstance(Players.USER, figure);
-                    setMessage(Players.EASY, MESSAGE_PLAYER, i);
+                    setMessage(MESSAGE_PLAYER, i);
                     break;
                 default:
                     player = null;
@@ -206,7 +208,7 @@ public class Game implements Runnable {
         System.out.println("\t  ---------");
     }
 
-    private void setMessage(Enum player, String message, int i) {
+    private void setMessage(String message, int i) {
         if (i == 1) {
             messagePlayerOne = message;
         } else {

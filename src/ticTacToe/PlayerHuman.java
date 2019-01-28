@@ -15,13 +15,6 @@ public class PlayerHuman implements Player {
     public char[][] move(char[][] fieldValues, String message) {
 
         System.out.print(message);
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//
-//        try {
-//            System.out.println(reader.readLine());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         String input = scanner.next();
 
@@ -81,8 +74,7 @@ public class PlayerHuman implements Player {
         return true;
     }
 
-    @Override
-    public char getFigure() {
+    private char getFigure() {
         return figure;
     }
 }

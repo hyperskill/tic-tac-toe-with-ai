@@ -28,8 +28,7 @@ public class PlayerEasy implements Player {
         return fieldValues;
     }
 
-    @Override
-    public char getFigure() {
+    private char getFigure() {
         return figure;
     }
 }
