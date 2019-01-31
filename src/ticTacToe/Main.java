@@ -8,10 +8,15 @@ public class Main {
     public static Scanner scanner = new Scanner(System.in);
     public static int fieldSize = 3;
     public static char[][] field = new char[fieldSize][fieldSize];
-
+    public static char computer = 'O';
+    public static char human = 'X';
     /**
      * Functions
      */
+
+    /**
+     * Check
+    */
     public static boolean checkDiagonal(char symb){
         boolean flag = true;
         for(int i = 0; i < fieldSize; i++){
@@ -70,13 +75,29 @@ public class Main {
         }
         System.out.println();
     }
+    /**
+     * Move
+     */
+    public static void humanMove(){
+        System.out.print("Enter the coordinates: ");
+        int x = scanner.nextInt() - 1;
+        int y = scanner.nextInt() - 1;
+
+        field[x][y ] = human;
+}
+    /**
+     *Show
+     */
     public static void showField(){
+        System.out.println("---------");
         for(int i =0; i < fieldSize; i++){
+            System.out.print("| ");
             for(int j = 0; j < fieldSize; j++){
                 System.out.print(field[i][j] + " ");
             }
-            System.out.println();
+            System.out.println("|");
         }
+        System.out.println("---------");
     }
 
     /**
@@ -84,14 +105,16 @@ public class Main {
      */
     public static void main(String[] args) {
         char[][] arr = {
-                {'X', 'X', 'X'},
-                {'O', 'O', ' '},
-                {' ', 'O', ' '}
+                {'X', ' ', 'X'},
+                {' ', 'O', ' '},
+                {' ', ' ', ' '}
         };
         field = arr;
         showField();
-        isWin();
-        char[][] arr1 = {
+        humanMove();
+        showField();
+        //isWin();
+       /* char[][] arr1 = {
                 {'X', 'O', 'X'},
                 {'O', 'X', 'O'},
                 {'X', 'X', 'O'}
@@ -122,6 +145,6 @@ public class Main {
         };
         field = arr4;
         showField();
-        isWin();
+        isWin();*/
    }
 }
