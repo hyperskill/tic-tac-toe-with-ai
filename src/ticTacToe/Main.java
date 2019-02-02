@@ -1,6 +1,7 @@
 package ticTacToe;
 
 import java.util.Scanner;
+import java.util.Random;
 public class Main {
     /* ---Variables--- */
     public static Scanner scanner = new Scanner(System.in);
@@ -9,14 +10,28 @@ public class Main {
     public static char computer = 'O';
     public static char human = 'X';
     /*-----*/
+    public static void main(String[] args) {
+        char[][] arr = {
+            {' ', ' ', 'X'},
+            {'O', ' ', ' '},
+            {'O', 'X', ' '}
+        };
+        field = arr;
+        /*for(int i = 0; i < 9; ++i) {
+            humanMove();*/
+            easyLevel();
+           /* isWin();
+        }*/
+   }
+
     /* ----Functions--- */
     /* Check for winnings*/
     public static boolean checkDiagonal(char symb){
         boolean flag = true;
         for(int i = 0; i < fieldSize; i++){
-                if(field[i][i] != symb || field[i][fieldSize - i -1] != symb){
-                    flag =  false;
-                }
+            if(field[i][i] != symb){
+                flag =  false;
+            }
         }
         if(flag){
             return true;
@@ -24,7 +39,7 @@ public class Main {
         flag = true;
         for(int i = 0; i < fieldSize; i++){
             if(field[i][fieldSize - i -1] != symb){
-               return  false;
+                return  false;
             }
         }
         return true;
@@ -85,6 +100,7 @@ public class Main {
     /*-----*/
     /* Move */
     public static void humanMove(){
+        showField();
         int x;
         int y;
         do {
@@ -105,8 +121,27 @@ public class Main {
             }
 
         }while(true);
+        showField();
     }
     /*-----*/
+    /* Level Difficulty */
+    public static void easyLevel(){
+        showField();
+        System.out.println("Making move level \"easy\"");
+        Random random = new Random();
+        int indexI;
+        int indexJ;
+        while(true){
+            indexI = random.nextInt(3);
+            indexJ = random.nextInt(3);
+            if(field[indexI][indexJ] == ' '){
+                field[indexI][indexJ] = computer;
+                break;
+            }
+        }
+        showField();
+    }
+    /* ----- */
     /* Show */
     public static void showField(){
         System.out.println("---------");
@@ -120,16 +155,4 @@ public class Main {
         System.out.println("---------");
     }
     /*----------*/
-    public static void main(String[] args) {
-        char[][] arr = {
-            {' ', 'X', 'X'},
-            {'O', 'O', ' '},
-            {'O', 'X', ' '}
-        };
-        field = arr;
-        showField();
-        humanMove();
-        showField();
-        //isWin();
-   }
 }
