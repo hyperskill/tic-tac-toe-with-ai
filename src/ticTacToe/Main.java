@@ -1,27 +1,54 @@
 package ticTacToe;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 public class Main {
     private static char[][] field;
-
-    public static void main(String[] args) {
-
+    private static char turn = 'X';
+    private static boolean isGame = true;
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
         field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
         print();
+        while (isGame){
+            System.out.println("ENTER COORDINATES: ");
+            shoot(scanner.nextByte(),scanner.nextByte());
+            print();
+        }
+
+        int i = System.in.read();
 
     }
 
-    static void print() {
+    private static void shoot(int i, int j) {
+        if (turn == 'X' && field[i][j] == ' ') {
+            field[i][j] = 'X';
+            turn = 'O';
+        }
+        if (turn == 'O' && field[i][j] == ' ') {
+            field[i][j] = 'O';
+            turn = 'X';
+        }
+    }
+
+    private static void print() {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                System.out.print(field[i][j] + " ");
+                System.out.print(field[i][j] + ((j!=2) ? " | " : "" ));
             }
-            System.out.println();
+            System.out.println(i != 2 ? "\n_________" : "\n");
         }
-        System.out.println(gameStatus());
+        String gs = getGameStatus();
+        System.out.println(gs);
+        if (gs.contains("WINS")){
+            isGame = false;
+        }
     }
 
-    static String gameStatus() {
+
+    private static String getGameStatus() {
         for (int i = 0; i < 3; i++) {
 
             if (field[i][0] == field[i][1] && field[i][1] == field[i][2] && field[i][0] != ' ') {
@@ -31,7 +58,7 @@ public class Main {
             }
         }
         if (field[1][1] == field[0][0] && field[1][1] == field[2][2] || field[1][1] == field[0][2] && field[1][1] == field[2][0]) {
-            return field[1][1] == 'X' ? "X WINS!" : field[1][1] == 'O' ? "O WINS!" : "GAME IS RUNNING";
-        } else return "GAME IS RUNNING";
+            return field[1][1] == 'X' ? "X WINS!" : field[1][1] == 'O' ? "O WINS!" : "GAME IS RUNNING! " + turn + " is playing...";
+        } else return "GAME IS RUNNING! " + turn + " is playing...";
     }
 }
