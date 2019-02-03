@@ -12,8 +12,19 @@ public class Main {
         field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
         print();
         while (isGame){
+            String a1 = scanner.next();
+            String b1 = scanner.next();
             System.out.println("ENTER COORDINATES: ");
-            shoot(scanner.nextByte(),scanner.nextByte());
+            try {
+                int a = Integer.parseInt(a1);
+                int b = Integer.parseInt(b1);
+                if(a>=0&&a<3&&b<3&&b>=0)
+                shoot(a, b);
+                else System.out.println("ILLEGAL COORDINATE, TRY AGAIN");
+            }
+            catch (Exception e){
+                System.out.println("ILLEGAL COORDINATE, TRY AGAIN");
+            }
             print();
         }
 
