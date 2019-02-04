@@ -15,16 +15,36 @@ public class Main {
     public static char human = 'X';
     /*-----*/
     public static void main(String[] args) {
-        do{
-            humanMove();
-            if(isWin()){ break;}
-            easyLevel();
-            if(isWin()){ break;}
-        }while(true);
+       startMenu();
    }
 
     /* ----Functions--- */
-    /* Check for winnings*/
+    /* Menu */
+    public static void startMenu(){
+        String command;
+        String firstPlayer;
+        String secondPlayer;
+        do{
+            System.out.print("Input command: ");
+            command = scanner.next();
+            if(command.equals("start")){
+                firstPlayer = scanner.next();
+                secondPlayer = scanner.next();
+                if(checkMenuInput(firstPlayer) && checkMenuInput(secondPlayer)){
+                    startGame(firstPlayer, secondPlayer);
+                }
+                else{
+                    System.out.println("Bad parameters");
+                }
+            }
+            else if(!command.equals("exit")){
+                System.out.println("Bad parameters");
+                scanner.nextLine();
+            }
+        }while(!command.equals("exit"));
+    }
+    /*-----*/
+    /*Check for winnings*/
     public static boolean checkDiagonal(char symb){
         boolean flag = true;
         for(int i = 0; i < fieldSize; i++){
@@ -85,7 +105,7 @@ public class Main {
         return false;
     }
     /*-----*/
-    /* Check field */
+    /* Check */
     public static boolean checkField(int x, int y){
         if(x < 0 || x >= 3 || y < 0 || y >= 3) {
             System.out.println("Coordinates should be from 1 to 3!");
@@ -97,9 +117,69 @@ public class Main {
         }
         return true;
     }
+    public static boolean checkMenuInput(String str){
+        switch (str){
+            case "user":
+                return true;
+            case "easy":
+                return true;
+            case "medium":
+                return true;
+            case "hard":
+                return true;
+            default:
+                return false;
+        }
+    }
     /*-----*/
+    /*Start*/
+    public static void startGame(String firstMode, String secondMode){
+        clearField();
+        if (firstMode.equals("user") && secondMode.equals("user")){
+            huamanVsUser();
+        }
+        else if (firstMode.equals("user")){
+            huamanVsSBot(secondMode);
+        }
+        else if (secondMode.equals("user")){
+            botVsHuaman(firstMode);
+        }
+        else {
+            botVsBot(firstMode, secondMode);
+        }
+    }
+    /*Game modes*/
+    public static void huamanVsUser(){
+        do{
+            humanMove('X');
+            if(isWin()){ break;}
+            humanMove('O');
+        }while(!isWin());
+    }
+    public static void huamanVsSBot(String mode){
+        do{
+            humanMove('X');
+            if(isWin()){ break;}
+            easyLevel('O');
+        }while(!isWin());
+    }
+    public static void botVsHuaman(String mode){
+        do{
+            easyLevel('X');
+            if(isWin()){ break;}
+            humanMove('O');
+        }while(!isWin());
+    }
+    public static void botVsBot(String firstMode, String secondMode){
+        do{
+            easyLevel('X');
+            if(isWin()){ break;}
+            easyLevel('O');
+        }while(!isWin());
+    }
+    /* ----- */
     /* Move */
-    public static void humanMove(){
+    public static void humanMove(char symb){
         showField();
         int x;
         int y;
@@ -115,7 +195,7 @@ public class Main {
                 x = scanner.nextInt() - 1;
                 y = scanner.nextInt() - 1;
                 if(checkField(x, y)){
-                    field[x][y] = human;
+                    field[x][y] = symb;
                     break;
                 }
             }
@@ -125,7 +205,7 @@ public class Main {
     }
     /*-----*/
     /* Level Difficulty */
-    public static void easyLevel(){
+    public static void easyLevel(char symb){
         showField();
         System.out.println("Making move level \"easy\"");
         Random random = new Random();
@@ -135,13 +215,21 @@ public class Main {
             indexI = random.nextInt(3);
             indexJ = random.nextInt(3);
             if(field[indexI][indexJ] == ' '){
-                field[indexI][indexJ] = computer;
+                field[indexI][indexJ] = symb;
                 break;
             }
         }
         showField();
     }
     /* ----- */
+    /*Clear Field*/
+    public static void clearField(){
+        char[][] temp = {
+                {' ', ' ', ' '},
+                {' ', ' ', ' '},
+                {' ', ' ', ' '} };
+        field = temp;
+    }
     /* Show */
     public static void showField(){
         System.out.println("---------");
