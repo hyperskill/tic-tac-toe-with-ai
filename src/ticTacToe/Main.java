@@ -2,26 +2,25 @@ package ticTacToe;
 
 import java.util.Scanner;
 import java.util.Random;
+
 public class Main {
     /* ---Variables--- */
     public static Scanner scanner = new Scanner(System.in);
     public static int fieldSize = 3;
-    public static char[][] field = new char[fieldSize][fieldSize];
+    public static char[][] field = {
+                                    {' ', ' ', ' '},
+                                    {' ', ' ', ' '},
+                                    {' ', ' ', ' '} };
     public static char computer = 'O';
     public static char human = 'X';
     /*-----*/
     public static void main(String[] args) {
-        char[][] arr = {
-            {' ', ' ', 'X'},
-            {'O', ' ', ' '},
-            {'O', 'X', ' '}
-        };
-        field = arr;
-        /*for(int i = 0; i < 9; ++i) {
-            humanMove();*/
+        do{
+            humanMove();
+            if(isWin()){ break;}
             easyLevel();
-           /* isWin();
-        }*/
+            if(isWin()){ break;}
+        }while(true);
    }
 
     /* ----Functions--- */
@@ -59,7 +58,7 @@ public class Main {
         return false;
     }
     public static boolean checkDraw(){
-        for(int i =0; i < fieldSize; i++){
+        for(int i = 0; i < fieldSize; i++){
             for(int j = 0; j < fieldSize; j++){
                 if(field[i][j] == ' '){
                     return false;
@@ -69,20 +68,21 @@ public class Main {
         }
         return true;
     }
-    public static void isWin(){
+    public static boolean isWin(){
         if(checkLine('X') || checkDiagonal('X')){
             System.out.println("X wins");
+            return true;
         }
         else if(checkLine('O') || checkDiagonal('O')){
             System.out.println("O wins");
+            return true;
         }
         else if(checkDraw()){
             System.out.println("Draw");
-        }
-        else{
-            System.out.println("Game not finished");
+            return true;
         }
         System.out.println();
+        return false;
     }
     /*-----*/
     /* Check field */
