@@ -6,71 +6,142 @@ import java.util.Scanner;
 
 public class Main {
     private static char[][] field;
-    private static char turn = 'X';
-    private static boolean isFirst = true;
+    private static int turn = 1;
+    private static int first = 0;
+    private static int second = 0;
     private static boolean isGame = false;
-    private static int mode=0;
     static private Scanner scanner = new Scanner(System.in);
+    private static int turns = 0;
+
     public static void main(String[] args) {
-        field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-        while (!isGame){
 
+//        while (!isGame){
+//
+//            try {
+//                System.out.println("1 - TWO PLAYERS MODE\n2 - EASY PLAYER&AI MODE\n3 - HARD PLAYER&AI MODE\n4 - CUSTOM MODE\n5 - QUIT");
+//                int i = scanner.nextInt();
+//
+//                switch (i){
+//                    case 1:field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}}; mode = 1;print(); isGame = true; game(); break;
+//                    case 2:
+//                        field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+//                        mode = 2;
+//                        System.out.println("SELECT (X/O): ");
+//                        if (scanner.next().equalsIgnoreCase("o")) isFirst = false;
+//                        print();
+//                        isGame = true;
+//                        game();
+//
+//                        break;
+//                    case 3:
+//                        field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+//                        mode = 3;
+//                        print();
+//                        System.out.println("SELECT (X/O): ");
+//                        isGame = true;
+////                        hardGame();
+//                        break;
+//                    case 4:
+//
+//                    case 5:
+//                        System.exit(0);
+//                        break;
+//                    default: throw new IOException();
+//                }
+//            } catch (IOException ignored){
+//                System.out.println("I/O error, try again...\n");
+//            }
+//        }
+        while (!isGame) {
             try {
-                System.out.println("1 - TWO PLAYERS MODE\n2 - EASY AI MODE\n3 - HARD AI MODE\n4 - QUIT");
-                int i = scanner.nextInt();
-                
-                switch (i){
-                    case 1:field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}}; mode = 1;print(); isGame = true; game(); break;
-                    case 2:
-                        field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-                        mode = 2;
-                        System.out.println("SELECT (X/O): ");
-                        if (scanner.next().equalsIgnoreCase("o")) isFirst = false;
-                        print();
-                        isGame = true;
-                        game();
-
-                        break;
-                    case 3:
-                        field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-                        mode = 3;
-                        print();
-                        System.out.println("SELECT (X/O): ");
-                        isGame = true;
-//                        hardGame();
-                        break;
-                    case 4:
-                        System.exit(0);
-                    default: throw new IOException();
+                first = 0;
+                second = 0;
+                System.out.print("TicTacToe > ");
+                String[] line = scanner.nextLine().toLowerCase().split(" ");
+                if (line.length == 0 || line.length > 2) {
+                    throw new IOException();
                 }
-            } catch (IOException ignored){
-                System.out.println("I/O error, try again...\n");
+                for (int i = 0; i < line.length; i++) {
+                    switch (line[i]) {
+                        case "p":
+                        case "player":
+
+                            if (i == 0) first = 1;
+                            else if (i == 1) second = 1;
+                            else throw new IOException("1");
+
+                            break;
+                        case "e":
+                        case "easy":
+
+                            if (i == 0) first = 2;
+                            else if (i == 1) second = 2;
+                            else throw new IOException("2");
+
+                            break;
+                        case "h":
+                        case "hard":
+
+                            if (i == 0) first = 3;
+                            else if (i == 1) second = 3;
+                            else throw new IOException("3");
+
+                            break;
+                        case "q":
+                        case "exit":
+                        case "quit":
+                            System.exit(0);
+                            break;
+                        default:
+                            throw new IOException("default");
+                    }
+                }
+                if (first != 0 && second != 0) {
+                    isGame = true;
+                    field = new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+                    print();
+                    game();
+                }
+            } catch (IOException ignored) {
+
             }
         }
     }
-    private static int turns=0;
+
     private static boolean shoot(int i, int j) {
-        if (turn == 'X' && field[i][j] == ' ') {
+        if (turn == 1 && field[i][j] == ' ') {
             field[i][j] = 'X';
-            turn = 'O';
+            turn = 2;
             turns++;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return true;
         }
-        if (turn == 'O' && field[i][j] == ' ') {
+        if (turn == 2 && field[i][j] == ' ') {
             field[i][j] = 'O';
-            turn = 'X';
+            turn = 1;
             turns++;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return false;
     }
-    private static void game(){
+
+    private static void game() {
         Random r = new Random();
         while (isGame) {
-            if (isFirst && turn == 'X'||!isFirst && turn == 'O') {
+            if (turn == 1 && first == 1 || turn == 2 && second == 1) {
+                System.out.println("ENTER COORDINATES: ");
                 String a1 = scanner.next();
                 String b1 = scanner.next();
-                System.out.println("ENTER COORDINATES: ");
+
                 try {
                     int a = Integer.parseInt(a1);
                     int b = Integer.parseInt(b1);
@@ -82,12 +153,12 @@ public class Main {
                 }
 
             } else {
-                if (mode==2){
+                if (turn == 1 && first == 2 || turn == 2 && second == 2) {
                     boolean ok = false;
-                    while (!ok){
+                    while (!ok) {
                         int a = r.nextInt(3);
                         int b = r.nextInt(3);
-                        ok = shoot(a,b);
+                        ok = shoot(a, b);
                     }
                 }
             }
@@ -95,20 +166,17 @@ public class Main {
         }
     }
 
-   static void getCoord(){
-
-   }
 
     private static void print() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                System.out.print(field[i][j] + ((j!=2) ? " | " : "" ));
+                System.out.print(field[i][j] + ((j != 2) ? " | " : ""));
             }
             System.out.println(i != 2 ? "\n_________" : "\n");
         }
         String gs = getGameStatus();
         System.out.println(gs);
-        if (gs.contains("WINS")){
+        if (gs.contains("WINS")) {
             isGame = false;
         }
         System.out.println();
@@ -116,10 +184,7 @@ public class Main {
 
 
     private static String getGameStatus() {
-        if (turns==9){
-            isGame=false;
-            return "DROW";
-        }
+
         for (int i = 0; i < 3; i++) {
             if (field[i][0] == field[i][1] && field[i][1] == field[i][2] && field[i][0] != ' ') {
                 return field[i][0] == 'X' ? "X WINS!" : "O WINS!";
@@ -129,6 +194,12 @@ public class Main {
         }
         if (field[1][1] == field[0][0] && field[1][1] == field[2][2] || field[1][1] == field[0][2] && field[1][1] == field[2][0]) {
             return field[1][1] == 'X' ? "X WINS!" : field[1][1] == 'O' ? "O WINS!" : "GAME IS RUNNING! " + turn + " is playing...";
+        } else if (turns == 9) {
+            isGame = false;
+            return "DROW";
         } else return "GAME IS RUNNING! " + turn + " is playing...";
+
+
     }
 }
+
