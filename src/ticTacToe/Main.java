@@ -1,9 +1,21 @@
 package ticTacToe;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("X O X ");
-        System.out.println("O X O ");
-        System.out.println("X X O ");
+
+    private static char[] field = {'X', ' ', 'O', 'X', 'O', ' ', 'O', ' ', 'X'};
+
+    private static void printField() {
+        for (int i = 0; i < 9; i++) {
+            System.out.print(field[i]+" ");
+            if (i == 2 || i == 5) {
+                System.out.println();
+            }
+        }
     }
+
+    public static void main(String[] args) {
+        printField();
+    }
+
+
 }
