@@ -1,7 +1,7 @@
 package ticTacToe;
 
 import java.util.Scanner;
-
+import java.util.InputMismatchException;
 public class Main {
     private static Scanner sc = new Scanner(System.in);
 
@@ -56,7 +56,7 @@ public class Main {
         }
     }
 
-    private static void turn(int x, int y) {
+    private static boolean turn(int x, int y) {
         int curCell = 0;
         if (y == 1) {
             curCell = 5 + x;
@@ -69,21 +69,52 @@ public class Main {
         }
         if (field[curCell] == ' ') {
             field[curCell] = 'X';
+            return true;
         }
+        return false;
     }
 
     public static void main(String[] args) {
         printField();
-        System.out.print("Enter the coordinates: ");
-        int x = sc.nextInt();
-        int y = sc.nextInt();
-        if (x <= 3 && x >= 1 && y <= 3 && y >= 1) {
-            turn(x, y);
-            printField();
-        } else{
-            System.out.println("Incorrect input");
+
+
+        boolean isTurn = true;
+        while (isTurn) {
+            System.out.print("Enter the coordinates: ");
+
+            int x ;
+            int y;
+
+            try {
+                x = sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("You should enter numbers!");
+                sc.next();
+                continue;
+            }
+
+            try {
+                y = sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("You should enter numbers!");
+                sc.next();
+                continue;
+            }
+
+            if (x <= 3 && x >= 1 && y <= 3 && y >= 1) {
+                if (turn(x, y)) {
+                    printField();
+                    isTurn = false;
+                } else {
+                    System.out.println("This cell is occupied! Choose another one!");
+                    continue;
+                }
+            } else {
+                System.out.println("Coordinates should be from 1 to 3!");
+                continue;
+            }
+            checkField();
         }
-        checkField();
     }
 
 
