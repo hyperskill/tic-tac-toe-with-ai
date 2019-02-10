@@ -1,7 +1,9 @@
 package ticTacToe;
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.InputMismatchException;
+
 public class Main {
     private static Scanner sc = new Scanner(System.in);
 
@@ -74,21 +76,18 @@ public class Main {
         return false;
     }
 
-    public static void main(String[] args) {
-        printField();
-
-
+    private static void playerTurn() {
         boolean isTurn = true;
         while (isTurn) {
             System.out.print("Enter the coordinates: ");
 
-            int x ;
+            int x;
             int y;
 
             try {
                 x = sc.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("You should enter numbers!");
+                System.out.println("\nYou should enter numbers!");
                 sc.next();
                 continue;
             }
@@ -96,7 +95,7 @@ public class Main {
             try {
                 y = sc.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("You should enter numbers!");
+                System.out.println("\nYou should enter numbers!");
                 sc.next();
                 continue;
             }
@@ -115,6 +114,32 @@ public class Main {
             }
             checkField();
         }
+    }
+
+    private static void easyAiTurn() {
+        int variants = 0;
+        int[] empties = new int[field.length];
+        int curEmp = 0;
+        for (int i = 0; i < field.length; i++) {
+            if (field[i] == ' ') {
+                empties[curEmp] = i;
+                curEmp++;
+                variants++;
+            }
+        }
+
+        int turnCell = empties[new Random().nextInt(variants)];
+        field[turnCell] = 'X';
+        System.out.println("Making move level \"easy\"");
+        printField();
+    }
+
+    public static void main(String[] args) {
+        printField();
+        easyAiTurn();
+        playerTurn();
+
+
     }
 
 
