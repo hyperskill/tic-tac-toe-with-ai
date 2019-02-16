@@ -1,6 +1,7 @@
 package ticTacToe;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     private static char X = 'X';
@@ -20,21 +21,27 @@ public class Main {
         char[][] matrix = new char[Main.COL][Main.ROW];
         randomFill(matrix);
         printMatrix(matrix);
+        userReuest(matrix);
+        printMatrix(matrix);
         System.out.print(detectState(matrix));
     }
     private static void printMatrix(char[][] matrix){
+        System.out.println("---------");
         for (int y = 0; y < Main.ROW; y++) {
+            System.out.print("| ");
             for (int x = 0; x < matrix[y].length; x++) {
                 System.out.print(matrix[x][y]);
-                System.out.print("\t");
+                System.out.print(" ");
             }
+            System.out.print("|");
             System.out.println();
         }
+        System.out.println("---------");
     }
     private static void randomFill(char[][] matrix){
-        matrix[0] = new char[]{'O', 'O', 'X'};
-        matrix[1] = new char[]{'X', 'X', 'O'};
-        matrix[2] = new char[]{'X', 'X', 'O'};
+        matrix[0] = new char[]{' ', 'O', 'X'};
+        matrix[1] = new char[]{'X', ' ', 'O'};
+        matrix[2] = new char[]{' ', ' ', ' '};
         /*
         int stepsAmount= rnd.nextInt(Main.SIZE);
         for (int x = 0; x < matrix.length; x++) {
@@ -116,5 +123,26 @@ public class Main {
             sameCounter = cell == el ? sameCounter+1 : sameCounter;
         }
         return sameCounter;
+    }
+
+    private static void userReuest(char[][] matrix){
+        Scanner sc = new Scanner(System.in);
+        int x, y;
+        System.out.print("Enter the coordinates:");
+        int counter = 0;
+//        while(counter < 2)
+//        {
+        x = sc.nextInt() - 1;
+        y = sc.nextInt() - 1;
+        if(x >= 0 && y >= 0 && x <= Main.COL && y <= Main.ROW){
+            set(matrix, x, y, Main.X);
+        }
+    }
+
+    private static void set(char[][]matrix, int x, int y, char el){
+        y = Main.ROW - y - 1;
+        if(matrix[x][y] == Main.EMPTY){
+            matrix[x][y] = el;
+        }
     }
 }
