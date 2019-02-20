@@ -1,75 +1,55 @@
 package ticTacToe;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        char[][] arr1 = {
-            {'X', 'X', 'X'},
-            {'O', 'O', ' '},
-            {' ', 'O', ' '}
+        Scanner sc = new Scanner(System.in);
+
+        char[][] arr = {
+            {'X', ' ', 'X'},
+            {' ', 'O', ' '},
+            {' ', ' ', ' '}
         };
 
-        char[][] arr2 = {
-            {'X', 'O', 'X'},
-            {'O', 'X', 'O'},
-            {'X', 'X', 'O'}
-        };
-
-        char[][] arr3 = {
-            {'X', 'O', 'O'},
-            {'O', 'X', 'O'},
-            {'X', 'X', 'O'}
-        };
-
-        char[][] arr4 = {
-            {'X', 'O', 'X'},
-            {'O', 'O', 'X'},
-            {'X', 'X', 'O'}
-        };
-
-        char[][] arr5 = {
-            {'X', 'O', ' '},
-            {'O', 'O', 'X'},
-            {' ', 'X', ' '}
-        };
+        System.out.println("---------");
 
         for (int i = 0; i < 3; i++) {
+            System.out.print('|');
             for (int j = 0; j < 3; j++) {
-                System.out.print(arr1[i][j] + " ");
+                System.out.print(" " + arr[i][j]);
             }
-            System.out.println();
+            System.out.print(" ");
+            System.out.println('|');
         }
-        System.out.println("X wins" + '\n');
+
+        System.out.println("---------");
+
+        System.out.print("Enter the coordinates: ");
+        int x = sc.nextInt();
+        int y = sc.nextInt();
+
+        if (x == 1) x = 2;
+        if (x == 2) x = 1;
+        if (x == 3) x = 0;
+
+        if (y == 1) y = 2;
+        if (y == 2) y = 1;
+        if (y == 3) y = 0;
+
+        arr[x][y ] = 'X';
+
+        System.out.println("---------");
 
         for (int i = 0; i < 3; i++) {
+            System.out.print('|');
             for (int j = 0; j < 3; j++) {
-                System.out.print(arr2[i][j] + " ");
+                System.out.print(" " + arr[i][j]);
             }
-            System.out.println();
+            System.out.print(" ");
+            System.out.println('|');
         }
-        System.out.println("X wins" + '\n');
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(arr3[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("O wins" + '\n');
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(arr4[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("Draw" + '\n');
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(arr5[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("Game not finished" + '\n');
+        System.out.println("---------");
     }
 }
