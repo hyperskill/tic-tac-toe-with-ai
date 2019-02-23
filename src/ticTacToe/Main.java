@@ -1,5 +1,6 @@
 package ticTacToe;
 
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -21,7 +22,8 @@ public class Main {
         char[][] matrix = new char[Main.COL][Main.ROW];
         randomFill(matrix);
         printMatrix(matrix);
-        userReuest(matrix);
+        while(!userReuest(matrix));
+//        userReuest(matrix);
         printMatrix(matrix);
         System.out.print(detectState(matrix));
     }
@@ -125,24 +127,36 @@ public class Main {
         return sameCounter;
     }
 
-    private static void userReuest(char[][] matrix){
+    private static boolean userReuest(char[][] matrix){
         Scanner sc = new Scanner(System.in);
         int x, y;
         System.out.print("Enter the coordinates:");
         int counter = 0;
 //        while(counter < 2)
 //        {
-        x = sc.nextInt() - 1;
-        y = sc.nextInt() - 1;
-        if(x >= 0 && y >= 0 && x <= Main.COL && y <= Main.ROW){
-            set(matrix, x, y, Main.X);
+        try{
+            x = sc.nextInt() - 1;
+            y = sc.nextInt() - 1;
+            if(x >= 0 && y >= 0 && x <= Main.COL && y <= Main.ROW){
+                return set(matrix, x, y, Main.X);
+            } else{
+                System.out.println("Coordinates should be from 1 to 3!");
+            }
+            return false;
+        } catch (InputMismatchException e){
+            System.out.println("You should enter numbers!");
+            return false;
         }
     }
 
-    private static void set(char[][]matrix, int x, int y, char el){
+    private static boolean set(char[][]matrix, int x, int y, char el){
         y = Main.ROW - y - 1;
         if(matrix[x][y] == Main.EMPTY){
             matrix[x][y] = el;
+            return true;
+        }else{
+            System.out.println("This cell is occupied! Choose another one!");
+            return false;
         }
     }
 }
