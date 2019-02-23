@@ -22,8 +22,8 @@ public class Main {
         char[][] matrix = new char[Main.COL][Main.ROW];
         randomFill(matrix);
         printMatrix(matrix);
-        while(!userReuest(matrix));
-//        userReuest(matrix);
+        aiRequest(matrix);
+//        while(!userRequest(matrix));
         printMatrix(matrix);
         System.out.print(detectState(matrix));
     }
@@ -127,17 +127,16 @@ public class Main {
         return sameCounter;
     }
 
-    private static boolean userReuest(char[][] matrix){
+    private static boolean userRequest(char[][] matrix){
         Scanner sc = new Scanner(System.in);
         int x, y;
         System.out.print("Enter the coordinates:");
         int counter = 0;
-//        while(counter < 2)
-//        {
         try{
             x = sc.nextInt() - 1;
             y = sc.nextInt() - 1;
             if(x >= 0 && y >= 0 && x <= Main.COL && y <= Main.ROW){
+                y = Main.ROW - y - 1;
                 return set(matrix, x, y, Main.X);
             } else{
                 System.out.println("Coordinates should be from 1 to 3!");
@@ -148,9 +147,23 @@ public class Main {
             return false;
         }
     }
+    private static boolean aiRequest(char[][] matrix){
+        int x, y;
+        int[][] emptyCells = getEmptyCoords(matrix);
+        Random rnd = new Random();
+        if(emptyCells .length > 0){
+            int[] coord = emptyCells[rnd.nextInt(emptyCells.length)];
+            boolean res = set(matrix, coord[0], coord[1], Main.X);
+            if (res){
+                System.out.println("Making move level \"easy\"");
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static boolean set(char[][]matrix, int x, int y, char el){
-        y = Main.ROW - y - 1;
+
         if(matrix[x][y] == Main.EMPTY){
             matrix[x][y] = el;
             return true;
@@ -158,5 +171,24 @@ public class Main {
             System.out.println("This cell is occupied! Choose another one!");
             return false;
         }
+    }
+
+    private static int[][] getEmptyCoords(char[][] matrix){
+        int[][] arr = new int[Main.SIZE][2];
+        int counter = 0;
+        for (int x = 0; x < matrix.length; x++) {
+            for (int y = 0; y < matrix[x].length; y++) {
+                if(matrix[x][y] == Main.EMPTY){
+                    arr[counter++] = new int[]{x,y};
+                }
+            }
+        }
+        //clear
+        counter--;
+        int[][] resArr = new int[counter][2];
+        for (int i = 0; i < counter; i++) {
+            resArr[i] = arr[i];
+        }
+        return resArr;
     }
 }
