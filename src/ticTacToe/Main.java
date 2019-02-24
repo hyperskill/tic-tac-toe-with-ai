@@ -20,11 +20,20 @@ public class Main {
 
     public static void main(String[] args) {
         char[][] matrix = new char[Main.COL][Main.ROW];
-        randomFill(matrix);
+//        randomFill(matrix);
+        fill(matrix, Main.EMPTY);
         printMatrix(matrix);
-        aiRequest(matrix);
-//        while(!userRequest(matrix));
-        printMatrix(matrix);
+        char aiType = Main.O;
+        char userType = Main.X;
+        while(detectState(matrix).equals(Main.STATE_NOT_FINISHED)){
+            while(!userRequest(matrix, userType));
+            printMatrix(matrix);
+            if(!detectState(matrix).equals(Main.STATE_NOT_FINISHED)) {
+                break;
+            }
+            aiRequest(matrix, aiType);
+            printMatrix(matrix);
+        }
         System.out.print(detectState(matrix));
     }
     private static void printMatrix(char[][] matrix){
@@ -55,6 +64,15 @@ public class Main {
             }
         }
         */
+
+    }
+    private static void fill(char[][] matrix, char type){
+        for (int x = 0; x < matrix.length; x++) {
+            for (int y = 0; y < matrix.length; y++) {
+                matrix[x][y] = type;
+            }
+        }
+
 
     }
     private static String detectState(char[][] matrix){
@@ -127,7 +145,7 @@ public class Main {
         return sameCounter;
     }
 
-    private static boolean userRequest(char[][] matrix){
+    private static boolean userRequest(char[][] matrix, char type){
         Scanner sc = new Scanner(System.in);
         int x, y;
         System.out.print("Enter the coordinates:");
@@ -137,7 +155,7 @@ public class Main {
             y = sc.nextInt() - 1;
             if(x >= 0 && y >= 0 && x <= Main.COL && y <= Main.ROW){
                 y = Main.ROW - y - 1;
-                return set(matrix, x, y, Main.X);
+                return set(matrix, x, y, type);
             } else{
                 System.out.println("Coordinates should be from 1 to 3!");
             }
@@ -147,13 +165,13 @@ public class Main {
             return false;
         }
     }
-    private static boolean aiRequest(char[][] matrix){
+    private static boolean aiRequest(char[][] matrix, char type){
         int x, y;
         int[][] emptyCells = getEmptyCoords(matrix);
         Random rnd = new Random();
         if(emptyCells .length > 0){
             int[] coord = emptyCells[rnd.nextInt(emptyCells.length)];
-            boolean res = set(matrix, coord[0], coord[1], Main.X);
+            boolean res = set(matrix, coord[0], coord[1], type);
             if (res){
                 System.out.println("Making move level \"easy\"");
                 return true;
@@ -163,7 +181,6 @@ public class Main {
     }
 
     private static boolean set(char[][]matrix, int x, int y, char el){
-
         if(matrix[x][y] == Main.EMPTY){
             matrix[x][y] = el;
             return true;
