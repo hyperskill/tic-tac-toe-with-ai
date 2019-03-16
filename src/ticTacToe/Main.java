@@ -64,9 +64,11 @@ public class Main {
         return false;
     }
     private static Player createPlayer(String type, char symbol){
-        switch (type.toLowerCase()){
+        type = type.toLowerCase();
+        switch (type){
             case "easy":
-                return new AiPlayer(symbol);
+            case "medium":
+                return new AiPlayer(symbol, type);
             case "user":
                 return new UserPlayer(symbol);
             default:
