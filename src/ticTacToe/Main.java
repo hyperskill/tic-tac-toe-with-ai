@@ -136,7 +136,7 @@ public class Main {
             return Main.STATE_WIN_X;
         }
         if(isDiag1Full(matrix, Main.O) || isDiag2Full(matrix, Main.O)){
-            return Main.STATE_WIN_X;
+            return Main.STATE_WIN_O;
         }
 
         int emptyCell = 0;
