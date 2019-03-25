@@ -11,10 +11,10 @@ public class Main {
     public final static int ROW = 3;
     public final static int COL = ROW;
     public final static int SIZE = ROW * COL;
-    private final static String STATE_NOT_FINISHED = "Game not finished";
-    private final static String STATE_DRAW = "Draw";
-    private final static String STATE_WIN_X = "X wins";
-    private final static String STATE_WIN_O = "O wins";
+    public final static String STATE_NOT_FINISHED = "Game not finished";
+    public final static String STATE_DRAW = "Draw";
+    public final static String STATE_WIN_X = "X wins";
+    public final static String STATE_WIN_O = "O wins";
     private final static Random rnd = new Random();
     private final static String BAD_PARAMS = "Bad parameters!";
 
@@ -68,6 +68,7 @@ public class Main {
         switch (type){
             case "easy":
             case "medium":
+            case "hard":
                 return new AiPlayer(symbol, type);
             case "user":
                 return new UserPlayer(symbol);
@@ -114,7 +115,7 @@ public class Main {
 
 
     }
-    private static String detectState(char[][] matrix){
+    public static String detectState(char[][] matrix){
         for (int i = 0; i < Main.ROW; i++) {
             if(isRowFull(matrix, i, Main.X)){
                return Main.STATE_WIN_X;

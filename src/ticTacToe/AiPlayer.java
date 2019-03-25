@@ -1,6 +1,7 @@
 package ticTacToe;
 
 import ticTacToe.hardlevels.EasyLevelStrategy;
+import ticTacToe.hardlevels.HardLevelStrategy;
 import ticTacToe.hardlevels.LevelStrategy;
 import ticTacToe.hardlevels.MediumLevelStrategy;
 
@@ -22,6 +23,9 @@ public class AiPlayer extends Player {
                 break;
             case "medium":
                 this.strategy = new MediumLevelStrategy();
+                break;
+            case "hard":
+                this.strategy = new HardLevelStrategy();
                 break;
         }
     }
